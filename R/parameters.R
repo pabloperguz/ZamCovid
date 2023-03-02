@@ -53,8 +53,8 @@ zamcovid_parameters <- function(model_end,
     }
 
   } else {
-    population <- read.csv("data/population.csv", stringsAsFactors = FALSE)
-    contact_matrix <- read.csv("data/matrix.csv", stringsAsFactors = FALSE)
+    population <- read.csv("inst/extdata/population.csv", stringsAsFactors = FALSE)
+    contact_matrix <- read.csv("inst/extdata/matrix.csv", stringsAsFactors = FALSE)
   }
 
   pop <- as.numeric(population$n)
