@@ -2,13 +2,24 @@
 % Please edit documentation in R/compare.R
 \name{zamcovid_compare}
 \alias{zamcovid_compare}
-\title{Title}
+\title{Compare function for basic ZamCovid model.}
 \usage{
 zamcovid_compare(state, observed, pars = NULL)
 }
 \arguments{
-\item{pars}{}
+\item{state}{State variable outputs from particle filter of generated
+ZamCovid model.}
+
+\item{observed}{Space variables from data used for particle filter.}
+
+\item{pars}{A \code{list} of \code{mcstate::pmcmc_parameters} to fit. Note these cannot
+be directly supplied to the function, but rather as an argument to
+\code{mcstate::pmcmc()}.}
+}
+\value{
+A numerical value for the negative log=likelihood of the
+state-space model.
 }
 \description{
-Title
+Compare function for basic ZamCovid model.
 }

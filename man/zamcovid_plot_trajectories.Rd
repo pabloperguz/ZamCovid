@@ -2,13 +2,18 @@
 % Please edit documentation in R/plot.R
 \name{zamcovid_plot_trajectories}
 \alias{zamcovid_plot_trajectories}
-\title{Title}
+\title{Plot basic ZamCovid model state outputs.}
 \usage{
 zamcovid_plot_trajectories(samples, data)
 }
 \arguments{
-\item{data}{}
+\item{samples}{A \code{list} of model state outputs.}
+
+\item{data}{A \code{data.frame} of the data used for model fitting.}
+}
+\value{
+A plot of fitted model trajectories.
 }
 \description{
-Title
+Plot basic ZamCovid model state outputs.
 }

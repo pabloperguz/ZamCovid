@@ -1,8 +1,11 @@
-#' Title
+#' Plot basci ZamCovid pMCMC traces.
 #'
-#' @param samples
+#' @param samples A `list` object containing the sample outputs of a basic
+#'    model run.
 #'
-#' @return
+#' @return A base R plot of the pMCMC chains for fitted parameters and
+#'    log-likelihood.
+#'
 #' @export
 #'
 #' @examples
@@ -56,12 +59,14 @@ zamcovid_plot_traces <- function(samples) {
 }
 
 
-#' Title
+#' Plot basic ZamCovid model state outputs.
 #'
-#' @param samples
-#' @param data
+#' @param samples A `list` of model state outputs.
 #'
-#' @return
+#' @param data A `data.frame` of the data used for model fitting.
+#'
+#' @return A plot of fitted model trajectories.
+#'
 #' @export
 #'
 #' @examples

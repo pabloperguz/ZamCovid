@@ -2,13 +2,18 @@
 % Please edit documentation in R/plot.R
 \name{zamcovid_plot_traces}
 \alias{zamcovid_plot_traces}
-\title{Title}
+\title{Plot basci ZamCovid pMCMC traces.}
 \usage{
 zamcovid_plot_traces(samples)
 }
 \arguments{
-\item{samples}{}
+\item{samples}{A \code{list} object containing the sample outputs of a basic
+model run.}
+}
+\value{
+A base R plot of the pMCMC chains for fitted parameters and
+log-likelihood.
 }
 \description{
-Title
+Plot basci ZamCovid pMCMC traces.
 }

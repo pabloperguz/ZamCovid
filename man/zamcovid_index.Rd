@@ -2,13 +2,16 @@
 % Please edit documentation in R/parameters.R
 \name{zamcovid_index}
 \alias{zamcovid_index}
-\title{Title}
+\title{Index function for basic ZamCovid model}
 \usage{
 zamcovid_index(info)
 }
 \arguments{
-\item{info}{}
+\item{info}{A \code{list} object containing \code{info} from generated ZamCovid model.}
+}
+\value{
+A \code{list} with elements \code{run} and \code{state}
 }
 \description{
-Title
+Index function for basic ZamCovid model
 }
