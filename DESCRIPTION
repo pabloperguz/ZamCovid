@@ -22,7 +22,10 @@ Imports:
     dust (>= 0.12.9),
     eigen1 (>= 0.1.1),
     mcstate (>= 0.9.12),
-    socialmixr
+    socialmixr,
+    ggplot2,
+    dplyr,
+    tidyr
 LinkingTo:
     cpp11 (>= 0.2.1),
     dust (>= 0.12.9)

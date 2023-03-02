@@ -1,3 +1,9 @@
+##' ##' "Basic" ZamCovid SEIR model. This is a dust model.
+##' @name basic
+##' @title The basic ZamCovid model
+##' @export basic
+NULL
+
 #' Define ZamCovid basic model parameters
 #'
 #' @param model_end A positive integer, greated than `model_start` for the model
@@ -53,8 +59,8 @@ zamcovid_parameters <- function(model_end,
     }
 
   } else {
-    population <- read.csv("inst/extdata/population.csv", stringsAsFactors = FALSE)
-    contact_matrix <- read.csv("inst/extdata/matrix.csv", stringsAsFactors = FALSE)
+    population <- read_csv(zamcovid_file("extdata/population.csv"))
+    contact_matrix <- read_csv(zamcovid_file("extdata/matrix.csv"))
   }
 
   pop <- as.numeric(population$n)
@@ -225,7 +231,16 @@ parameters_piecewise_linear <- function (date, value, dt) {
 }
 
 
-get_new_pars <- function(samples, priors) {
+#' Recover fitted parameters model samples
+#'
+#' @param samples A `samples` object from a pMCMC model run.
+#' @param priors `list` of priors used for model run.
+#'
+#' @return A `list` of new model priors and vcv matrix.
+#' @export
+#'
+#' @examples
+zamcovid_new_pars <- function(samples, priors) {
 
   i <- which.max(samples$probabilities[, "log_posterior"])
   initial <- samples$pars[i, ]
@@ -233,7 +248,7 @@ get_new_pars <- function(samples, priors) {
   vcv <- cov(samples$pars)
   dimnames(vcv) <- NULL
 
-  for (i in seq_len(priors)) {
+  for (i in names(priors)) {
     nm <- priors[[i]]$name
     priors[[i]]$initial <- initial[[nm]]
   }
