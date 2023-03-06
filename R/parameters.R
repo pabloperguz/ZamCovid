@@ -1,10 +1,148 @@
-##' ##' "Basic" ZamCovid SEIR model. This is a dust model.
+##' ##' "Basic" SEIR model. This is a dust model.
 ##' @name basic
-##' @title The basic ZamCovid model
+##' @title The basic SEIR model
 ##' @export basic
 NULL
 
-#' Define ZamCovid basic model parameters
+##' ##' Main ZamCovid SEIR model. This is a dust model.
+##' @name ZamCovid
+##' @title The main ZamCovid model
+##' @export ZamCovid
+NULL
+
+
+#' Define ZamCovid model parameters
+#'
+#' @param start_date A positive integer, greated than `model_start` for the model
+#'    end time.
+#'
+#' @param steps_per_day A positive integer for the number of steps per day to
+#'    run the model.
+#'
+#' @param model_start Either 0 or a positive integer for the initial start time
+#'    for the model.
+#'
+#' @param contact_matrix Either `NULL` or a `data.frame` of a symmetric
+#'    individual-to-individual contact rate matrix. If `NULL` defaults to
+#'    nationally representative values.
+#'
+#' @param population Either `NULL` or a `data.frame` with columns `age_group`
+#'    and `n` of same length (age groups) as `contact_matrix` supplied. If
+#'    `NULL` defaults to nationally representative values.
+#'
+#' @param seed_pars Either `NULL` or a `list` with elements `seed_group`,
+#'    `seed_number` and `seed_time` for the `age_group` in which initial
+#'    infections will be seeded, the number of infection to seed and the model
+#'    time in which they will be seeded, respectively. If `NULL` will
+#'    default to seeding 5 infection in `age_group` 5 at `t = 0`.
+#'
+#' @param pars_list Either `NULL` or a `list` of all other model parameters to
+#'    fix. If `NULL` default values will be supplied.
+#'
+#' @return Return a `list` of parameters to run the basic ZamCovid model.
+#'
+#' @export
+#'
+#' @examples zamcovid_parameters(model_end = 20)
+zamcovid_parameters <- function(start_date,
+                                steps_per_day = 4L,
+                                initial_seed_pattern = 1.0,
+                                initial_seed_size = 10,
+                                gamma_E = 1 / 3,
+                                gamma_I = 1 / 8,
+                                gamma_D = 1 / 15,
+                                gamma_R = 1 / (365 * 3),
+                                beta_value = NULL,
+                                beta_date = NULL,
+                                contact_matrix = NULL,
+                                population = NULL,
+                                par_list = NULL) {
+  # browser()
+
+  if (!is.character(start_date)) {
+    stop("start_date must be character string in format yyyy-mm-dd!")
+  }
+
+  if (!is.integer(steps_per_day)) {
+    stop("Steps per day must be an integer!")
+  }
+
+  if (length(beta_date) != length(beta_value)) {
+    stop("beta_date and beta_value must be of same length!")
+  }
+
+  if (!is.null(beta_date)) {
+    if (!is.numeric(beta_date)) {
+      stop("beta_date must be numeric! Did you forget to do `numeric_date`?")
+    }
+  }
+
+  if (!is.null(contact_matrix)) {
+    if(is.null(population)) {
+      stop("A `population` must be provided with contact matrix!")
+    }
+
+  } else {
+    population <- read_csv(zamcovid_file("extdata/population.csv"))
+    contact_matrix <- read_csv(zamcovid_file("extdata/matrix.csv"))
+  }
+
+
+  ## Make ind-to-ind contact rate matrix
+  pop <- as.numeric(population$n)
+  contact_matrix <- contact_matrix / rep(pop, each = ncol(contact_matrix))
+  n_groups <- nrow(contact_matrix)
+
+  ## First epidemic wave seed
+  start_step <- numeric_date(start_date) * steps_per_day
+  initial_seed_value <-
+    seed_over_steps(start_step, initial_seed_pattern) * initial_seed_size
+
+
+  ## Piece-wise linear, time-varying parameters
+  # beta_date <- numeric_date(beta_date)
+  beta_step <- parameters_piecewise_linear(beta_date,
+                                           beta_value %||% 1, dt)
+
+
+  ## Default parameters
+  ret <- list(
+    steps_per_day = steps_per_day,
+    dt = 1 / steps_per_day,
+    beta_step = beta_step,
+
+    m = as.matrix(contact_matrix),
+    n_groups = n_groups, #  16 n_groups (5 year age bands and 75+)
+    # n_vacc_classes = 4L,
+
+    seed_age_band = 4L, # seed first wave in 15-19yo
+    seed_step_start = floor(start_step),
+    seed_value = initial_seed_value,
+
+    gamma_E = gamma_E,
+    gamma_I = gamma_I,
+    gamma_D = rep(gamma_D, n_groups),
+    gamma_R = gamma_R,
+
+    # Observation parameters
+    rho = 0.3,
+    kappa = 0.2
+  )
+
+
+  # Replace default values for parameters provided
+  if (!is.null(par_list)) {
+    # Specified parameters will be fixed in the model
+    for (i in names(par_list)) {
+      ret[[i]] <- par_list[[i]]
+    }
+  }
+
+  ret
+}
+
+
+#' Define basic model parameters
 #'
 #' @param model_end A positive integer, greated than `model_start` for the model
 #'    end time.
@@ -36,8 +174,8 @@ NULL
 #'
 #' @export
 #'
-#' @examples
-zamcovid_parameters <- function(model_end,
+#' @examples basic_parameters(model_end = 200)
+basic_parameters <- function(model_end,
                                 steps_per_day = 1,
                                 model_start = 0,
                                 contact_matrix = NULL,
@@ -153,7 +291,7 @@ zamcovid_parameters <- function(model_end,
 }
 
 
-#' Index function for basic ZamCovid model
+#' Index function for basic model
 #'
 #' @param info A `list` object containing `info` from generated ZamCovid model.
 #'
@@ -161,8 +299,8 @@ zamcovid_parameters <- function(model_end,
 #'
 #' @export
 #'
-#' @examples
-zamcovid_index <- function(info) {
+#' @examples basic_index(info)
+basic_index <- function(info) {
 
   index <- info$index
 
@@ -239,8 +377,8 @@ parameters_piecewise_linear <- function (date, value, dt) {
 #' @return A `list` of new model priors and vcv matrix.
 #' @export
 #'
-#' @examples
-zamcovid_new_pars <- function(samples, priors) {
+#' @examples basic_new_pars(samples, priors)
+basic_new_pars <- function(samples, priors) {
 
   i <- which.max(samples$probabilities[, "log_posterior"])
   initial <- samples$pars[i, ]
@@ -255,4 +393,26 @@ zamcovid_new_pars <- function(samples, priors) {
 
   list(vcv = vcv,
        priors = priors)
+}
+
+
+numeric_date <- function(date) {
+  days_into_2020 <- as.numeric(as.Date(date) - as.Date("2019-12-31"))
+  if (any(days_into_2020 < 0)) {
+    stop("Negative dates, numeric_date likely applied twice")
+  }
+  days_into_2020
+}
+
+
+seed_over_steps <- function(start_step, weights) {
+  ## The weights vector must over steps, not dates
+  weights <- weights / sum(weights)
+  p <- start_step %% 1
+  if (p == 0) {
+    ret <- weights
+  } else{
+    ret <- p * c(0, weights) + (1 - p) * c(weights, 0)
+  }
+  ret
 }

@@ -1,6 +1,3 @@
-## This model is based off the simple SEIR model in squire
-## Please do not distribute
-
 ## Definition of time-step and output as "time"
 steps_per_day <- user(integer = TRUE)
 dt <- 1 / steps_per_day
@@ -117,8 +114,6 @@ rho <- user()
 
 # Number of age (i), vaccine (j) and strain (k) classes
 N_age <- user()
-# N_vacc <- user()
-# N_strain <- user()
 
 dim(m) <- c(N_age, N_age)
 

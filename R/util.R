@@ -5,3 +5,7 @@ zamcovid_file <- function(...) {
 read_csv <- function(...) {
   read.csv(..., stringsAsFactors = FALSE)
 }
+
+`%||%` <- function(a, b) { # nolint
+  if (is.null(a)) b else a
+}

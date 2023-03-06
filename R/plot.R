@@ -1,4 +1,4 @@
-#' Plot basci ZamCovid pMCMC traces.
+#' Plot pMCMC traces of basic model.
 #'
 #' @param samples A `list` object containing the sample outputs of a basic
 #'    model run.
@@ -8,8 +8,8 @@
 #'
 #' @export
 #'
-#' @examples
-zamcovid_plot_traces <- function(samples) {
+#' @examples basic_plot_traces(samples)
+basic_plot_traces <- function(samples) {
 
   if (is.null(samples$chain)) {
     n_chains <- 1L
@@ -59,7 +59,7 @@ zamcovid_plot_traces <- function(samples) {
 }
 
 
-#' Plot basic ZamCovid model state outputs.
+#' Plot basic model state outputs.
 #'
 #' @param samples A `list` of model state outputs.
 #'
@@ -69,8 +69,8 @@ zamcovid_plot_traces <- function(samples) {
 #'
 #' @export
 #'
-#' @examples
-zamcovid_plot_trajectories <- function(samples, data) {
+#' @examples basic_plot_trajectories(samples, data)
+basic_plot_trajectories <- function(samples, data) {
 
   states <- samples$trajectories$state
   nms <- rownames(states)

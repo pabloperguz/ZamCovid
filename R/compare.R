@@ -1,7 +1,7 @@
-#' Compare function for basic ZamCovid model.
+#' Compare function for basic model.
 #'
 #' @param state State variable outputs from particle filter of generated
-#'    ZamCovid model.
+#'    basic model.
 #'
 #' @param observed Space variables from data used for particle filter.
 #'
@@ -9,13 +9,13 @@
 #'    be directly supplied to the function, but rather as an argument to
 #'    `mcstate::pmcmc()`.
 #'
-#' @return A numerical value for the negative log=likelihood of the
+#' @return A numerical value for the negative log-likelihood of the
 #'    state-space model.
 #'
 #' @export
 #'
-#' @examples
-zamcovid_compare <- function(state, observed, pars = NULL) {
+#' @examples basic_compare(state, observed)
+basic_compare <- function(state, observed, pars = NULL) {
 
   ll_nbinom <- function(data, model, kappa, exp_noise = 1e6) {
 
@@ -53,15 +53,15 @@ zamcovid_compare <- function(state, observed, pars = NULL) {
 }
 
 
-#' Make transform function for ZamCovid basic model parameters
+#' Make transform function for basic model parameters
 #'
 #' @param baseline A `list` containing all baseline parameters.
 #'
 #' @return A `list` of `odin` parameters for the basic model.
 #' @export
 #'
-#' @examples
-zamcovid_transform <- function(baseline) {
+#' @examples basic_transform(baseline)
+basic_transform <- function(baseline) {
 
   function(theta) {
 
