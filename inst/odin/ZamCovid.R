@@ -22,6 +22,7 @@ update(H_R_conf[, , ]) <- new_H_R_conf[i, j, k]
 update(H_R_unconf[, , ]) <- new_H_R_unconf[i, j, k]
 update(H_D_conf[, , ]) <- new_H_D_conf[i, j, k]
 update(H_D_unconf[, , ]) <- new_H_D_unconf[i, j, k]
+update(G_D[, ]) <- new_G_D[i, j]
 update(R[, ]) <- new_R[i, j]
 update(D_hosp[, ]) <- D_hosp[i, j] + delta_D_hosp[i, j]
 update(D_non_hosp[, ]) <- D_non_hosp[i, j] + n_I_C_2_to_G_D[i, j]
@@ -87,6 +88,8 @@ new_H_D_unconf[, , ] <-
   aux_H_D_unconf[i, j, k] - n_H_D_unconf_to_conf[i, j, k] +
   (if (k == 1) n_I_C_2_to_H_D[i, j] - n_I_C_2_to_H_D_conf[i, j] else 0)
 
+new_G_D[, ] <- G_D[i, j] + n_I_C_2_to_G_D[i, j] - n_G_D_progress[i, j]
+
 new_R[, ] <- R[i, j] -
   n_R_progress[i, j] - n_R_next_vacc_class[i, j] +
   n_infected_to_R[i, j] +
@@ -116,6 +119,8 @@ n_I_P_next_vacc_class[, ] <- rbinom(I_P[i, j] - n_I_P_progress[i, j],
 n_I_C_1_progress[, ] <- rbinom(I_C_1[i, j], p_I_C_1_progress[j])
 n_I_C_2_progress[, ] <- rbinom(I_C_2[i, j], p_I_C_2_progress[j])
 
+
+### TODO: re-check these movements and define n_G_D_progress ###
 n_I_C_2_to_RS[, ] <- rbinom(n_I_C_2_progress[i, j], 1 - p_H[i, j])
 n_I_C_2_to_G_D[, ] <- rbinom(n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j],
                            p_G_D[i, j])
@@ -124,6 +129,7 @@ n_I_C_2_to_hosp[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j] -
 
 n_I_C_2_to_H_R[, ] <- rbinom(n_I_C_2_to_hosp[i, j], 1 - p_H_D[i, j])
 n_I_C_2_to_H_D[, ] <- n_I_C_2_to_hosp[i, j] - n_I_C_2_to_H_R[i, j]
+#################################################################
 
 n_I_C_2_to_H_R_conf[, ] <- rbinom(n_I_C_2_to_H_R[i, j], p_star[i])
 n_I_C_2_to_H_D_conf[, ] <- rbinom(n_I_C_2_to_H_D[i, j], p_star[i])
@@ -175,6 +181,21 @@ n_T_sero_pos_progress[, , ] <- rbinom(T_sero_pos[i, j, k],
                                       p_T_sero_pos_progress)
 
 
+## Parallel PCR flows
+new_T_PCR_pre[, , ] <- T_PCR_pre[i, j, k] - n_T_PCR_pre_progress[i, j, k] +
+  (if (k == 1) n_S_progress[i, j] else n_T_PCR_pre_progress[i, j, k - 1])
+
+new_T_PCR_pos[, , ] <- T_PCR_pos[i, j, k] - n_T_PCR_pos_progress[i, j, k] +
+  (if (k == 1) n_T_PCR_pre_progress[i, j, k_PCR_pre] else
+    n_T_PCR_pos_progress[i, j, k - 1])
+
+new_T_PCR_neg[, , ] <- T_PCR_neg[i, j, k] +
+  n_T_PCR_pos_progress[i, j, k_PCR_pos]
+
+n_T_PCR_pre_progress[, , ] <- rbinom(T_PCR_pre[i, j, k], p_T_PCR_pre_progress)
+n_T_PCR_pos_progress[, , ] <- rbinom(T_PCR_pos[i, j, k], p_T_PCR_pos_progress)
+
+
 ## Clinical progression probabilities
 p_SE[, ] <- 1 - exp(-lambda_susc[i, j] * dt) # age/vacc dependent
 p_E_progress <- 1 - exp(-gamma_E * dt)
@@ -190,6 +211,8 @@ p_test <- 1 - exp(-gamma_U * dt)
 p_sero_pos[] <- user()
 p_T_sero_pre_progress <- 1 - exp(-gamma_sero_pre * dt)
 p_T_sero_pos_progress <- 1 - exp(-gamma_sero_pos * dt)
+p_T_PCR_pre_progress <- 1 - exp(-gamma_PCR_pre * dt)
+p_T_PCR_pos_progress <- 1 - exp(-gamma_PCR_pos * dt)
 
 
 ## Vaccination model
@@ -218,12 +241,6 @@ p_star[] <- if (as.integer(step) >= n_p_star_steps)
 
 
 
-####### TODO: need to define serology flow progression probabilities
-# p_T_PCR_pre_progress <- 1 - exp(-gamma_PCR_pre * dt)
-# p_T_PCR_pos_progress <- 1 - exp(-gamma_PCR_pos * dt)
-##########
-
-
 ## Seeding model for first epidemic wave
 seed_step_end <- seed_step_start + length(seed_value)
 seed_rate <- if (step >= seed_step_start && step < seed_step_end)
@@ -239,11 +256,32 @@ n_S_progress[seed_age_band, 1] <- n_S_progress[seed_age_band, 1] +
   min(S[seed_age_band, 1], seed)
 
 
-## TODO: Force of infection
+## Force of infection - depens on: contact matrix (m), relative infectivity
+# matrix (age, vaccination class), individuals in infected compartments and
+# assumptions about how much each compartment contributes to transmission
 m[, ] <- user()
-temp[] <- I[i]
-s_ij[, ] <- m[i, j] * temp[j] # note temp[j] not temp[i]
+rel_infectivity[, ] <- user()
+I_A_transmission <- user()
+I_P_transmission <- user()
+I_C_1_transmission <- user()
+I_C_2_transmission <- user()
+hosp_transmission <- user()
+G_D_transmission <- user()
+
+I_trans[, ] <- rel_infectivity[i, j] *
+  (I_A_transmission * sum(I_A[i, j]) +
+     I_P_transmission * sum(I_P[i, j]) +
+     I_C_1_transmission * sum(I_C_1[i, j]) +
+     I_C_2_transmission * sum(I_C_2[i, j]) +
+     hosp_transmission * (sum(H_R_conf[i, j, ]) +
+                            sum(H_R_unconf[i, j, ]) +
+                            sum(H_D_conf[i, j, ]) +
+                            sum(H_D_unconf[i, j, ])) +
+     G_D_transmission * sum(G_D[i, j]))
+
+s_ij[, ] <- m[i, j] * sum(I_trans[j, k])
 lambda[] <- beta * sum(s_ij[i, ])
+lambda_susc[, ] <- lambda * rel_susceptibility[i, j]
 
 beta_step[] <- user()
 dim(beta_step) <- user()
@@ -282,7 +320,8 @@ update(cases_50_plus) <- if (step %% steps_per_day == 0)
   delta_case_50_plus else delta_case_50_plus + cases_50_plus
 
 
-### Initial states are all zeroed ###
+
+### Initial states are all zeroed
 # S and E will be initialiased based on the seeding model
 initial(S[]) <- 0
 initial(E1[]) <- 0
