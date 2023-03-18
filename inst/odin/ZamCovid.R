@@ -2,6 +2,14 @@
 # Note k index is used for shape parameter of erlang distributed rates
 n_groups <- user()
 n_vacc_classes <- user()
+k_E <- user()
+k_G_D <- user()
+k_H_D <- user()
+k_H_R <- user()
+k_PCR_pos <- user()
+k_PCR_pre <- user()
+k_sero_pos <- user()
+k_sero_pre <- user()
 
 
 ## Definition of time-step and output as "time"
@@ -112,7 +120,7 @@ delta_D_non_hosp_disag[, ] <- n_G_D_progress[i, j, k_G_D]
 
 
 ## Binomial draws for numbers who will progress
-n_S_progress[, ] <- rbinom(S[i, ], p_SE[i, ])
+n_S_progress[, ] <- rbinom(S[i, j], p_SE[i, j])
 n_S_next_vacc_class[, ] <- rbinom(S[i, j] - n_S_progress[i, j],
                                   p_S_next_vacc_class[i, j])
 n_E_progress[, , ] <- rbinom(E[i, j, k], p_E_progress)
@@ -124,12 +132,12 @@ n_EI_P[, ] <- n_E_progress[i, j, k_E] - n_EI_A[i, j]
 n_I_A_progress[, ] <- rbinom(I_A[i, j], p_I_A_progress)
 n_I_A_next_vacc_class[, ] <- rbinom(I_A[i, j] - n_I_A_progress[i, j],
                                     p_I_A_next_vacc_class[i, j])
-n_I_P_progress[, ] <- rbinom(I_P[i, j], p_I_P_progress[j])
+n_I_P_progress[, ] <- rbinom(I_P[i, j], p_I_P_progress)
 n_I_P_next_vacc_class[, ] <- rbinom(I_P[i, j] - n_I_P_progress[i, j],
                                     p_I_P_next_vacc_class[i, j])
 
-n_I_C_1_progress[, ] <- rbinom(I_C_1[i, j], p_I_C_1_progress[j])
-n_I_C_2_progress[, ] <- rbinom(I_C_2[i, j], p_I_C_2_progress[j])
+n_I_C_1_progress[, ] <- rbinom(I_C_1[i, j], p_I_C_1_progress)
+n_I_C_2_progress[, ] <- rbinom(I_C_2[i, j], p_I_C_2_progress)
 n_I_C_2_to_RS[, ] <- rbinom(n_I_C_2_progress[i, j], 1 - p_H[i, j])
 n_I_C_2_to_G_D[, ] <- rbinom(n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j],
                            p_G_D[i, j])
@@ -142,23 +150,23 @@ n_I_C_2_to_H_R_conf[, ] <- rbinom(n_I_C_2_to_H_R[i, j], p_star[i])
 n_I_C_2_to_H_D_conf[, ] <- rbinom(n_I_C_2_to_H_D[i, j], p_star[i])
 
 ##TODO: check these two are unused
-n_I_C_2_to_H_R_unconf[, ] <- n_I_C_2_to_H_R[i, j] - n_I_C_2_to_H_R_conf[i, j]
-n_I_C_2_to_H_D_unconf[, ] <- n_I_C_2_to_H_D[i, j] - n_I_C_2_to_H_D_conf[i, j]
+# n_I_C_2_to_H_R_unconf[, ] <- n_I_C_2_to_H_R[i, j] - n_I_C_2_to_H_R_conf[i, j]
+# n_I_C_2_to_H_D_unconf[, ] <- n_I_C_2_to_H_D[i, j] - n_I_C_2_to_H_D_conf[i, j]
 ##
 
 n_H_R_unconf_to_conf[, , ] <- rbinom(aux_H_R_unconf[i, j, k], p_test)
 n_H_D_unconf_to_conf[, , ] <- rbinom(aux_H_D_unconf[i, j, k], p_test)
-n_H_R_conf_progress[, , ] <- rbinom(H_R_conf[i, j, k], p_H_R_progress[j])
-n_H_R_unconf_progress[, , ] <- rbinom(H_R_unconf[i, j, k], p_H_R_progress[j])
-n_H_D_conf_progress[, , ] <- rbinom(H_D_conf[i, j, k], p_H_D_progress[j])
-n_H_D_unconf_progress[, , ] <- rbinom(H_D_unconf[i, j, k], p_H_D_progress[j])
+n_H_R_conf_progress[, , ] <- rbinom(H_R_conf[i, j, k], p_H_R_progress)
+n_H_R_unconf_progress[, , ] <- rbinom(H_R_unconf[i, j, k], p_H_R_progress)
+n_H_D_conf_progress[, , ] <- rbinom(H_D_conf[i, j, k], p_H_D_progress)
+n_H_D_unconf_progress[, , ] <- rbinom(H_D_unconf[i, j, k], p_H_D_progress)
 
 n_infection_end[, ] <- n_I_A_progress[i, j] + n_I_C_2_to_RS[i, j] +
   n_H_R_conf_progress[i, j, k_H_R] + n_H_R_unconf_progress[i, j, k_H_R]
 n_infected_to_R[, ] <- rbinom(n_infection_end[i, j], p_R[i, j])
 n_infected_to_S[, ] <- n_infection_end[i, j] - n_infected_to_R[i, j]
 
-n_G_D_progress[, , ] <- rbinom(G_D[i, j, k], p_G_D)
+n_G_D_progress[, , ] <- rbinom(G_D[i, j, k], p_G_D_progress)
 n_R_progress[, ] <- rbinom(R[i, j], p_R_progress)
 n_R_next_vacc_class[, ] <- rbinom(R[i, j] - n_R_progress[i, j],
                                   p_R_next_vacc_class[i, j])
@@ -217,6 +225,7 @@ p_I_C_1_progress <- 1 - exp(-gamma_C_1 * dt)
 p_I_C_2_progress <- 1 - exp(-gamma_C_2 * dt)
 p_H_R_progress <- 1 - exp(-gamma_H_R * dt)
 p_H_D_progress <- 1 - exp(-gamma_H_D * dt)
+p_G_D_progress <- 1 - exp(-gamma_G_D * dt)
 p_R_progress <- 1 - exp(-waning_rate * dt)
 p_test <- 1 - exp(-gamma_U * dt)
 
@@ -228,7 +237,7 @@ p_T_PCR_pos_progress <- 1 - exp(-gamma_PCR_pos * dt)
 
 
 ## Vaccination probability and relative protection parameters
-vaccine_probability[, ] <- user()
+# vaccine_probability[, ] <- user()
 p_S_next_vacc_class[, ] <- vaccine_probability[i, j]
 p_E_next_vacc_class[, ] <- vaccine_probability[i, j]
 p_I_A_next_vacc_class[, ] <- vaccine_probability[i, j]
@@ -241,7 +250,7 @@ rel_p_sympt[, ] <- user()
 rel_p_hosp_if_sympt[, ] <- user()
 rel_p_H_D[, ] <- user()
 rel_p_G_D[, ] <- user()
-
+rel_p_R[, ] <- user()
 
 ## Time-varying probabilities
 p_C_step[, ] <- user()
@@ -254,6 +263,8 @@ p_star_step[, ] <- user()
 n_p_star_steps <- user()
 p_G_D_step[, ] <- user()
 n_p_G_D_steps <- user()
+p_R_step[, ] <- user()
+n_p_R_steps <- user()
 
 p_C[, ] <- if (as.integer(step) >= n_p_C_steps)
   min(p_C_step[n_p_C_steps, i] * rel_p_sympt[i, j], as.numeric(1)) else
@@ -270,6 +281,10 @@ p_H_D[, ] <- if (as.integer(step) >= n_p_H_D_steps)
 p_G_D[, ] <- if (as.integer(step) >= n_p_G_D_steps)
   min(p_G_D_step[n_p_G_D_steps, i] * rel_p_G_D[i, j], as.numeric(1)) else
     min(p_G_D_step[step + 1, i] * rel_p_G_D[i, j], as.numeric(1))
+
+p_R[, ] <- if (as.integer(step) >= n_p_R_steps)
+  min(p_R_step[n_p_R_steps, i] * rel_p_R[i, j], as.numeric(1)) else
+    min(p_R_step[step + 1, i] * rel_p_R[i, j], as.numeric(1))
 
 p_star[] <- if (as.integer(step) >= n_p_star_steps)
   p_star_step[n_p_star_steps, i] else p_star_step[step + 1, i]
@@ -311,11 +326,11 @@ I_trans[, ] <- rel_infectivity[i, j] *
                             sum(H_R_unconf[i, j, ]) +
                             sum(H_D_conf[i, j, ]) +
                             sum(H_D_unconf[i, j, ])) +
-     G_D_transmission * sum(G_D[i, j]))
+     G_D_transmission * sum(G_D[i, j, ]))
 
-s_ij[, ] <- m[i, j] * sum(I_trans[j, k])
+s_ij[, ] <- m[i, j] * sum(I_trans[j, ])
 lambda[] <- beta * sum(s_ij[i, ])
-lambda_susc[, ] <- lambda * rel_susceptibility[i, j]
+lambda_susc[, ] <- lambda[i] * rel_susceptibility[i, j]
 
 beta_step[] <- user()
 dim(beta_step) <- user()
@@ -396,14 +411,7 @@ vaccine_probability[, ] <- (
 update(tmp_vaccine_n_candidates[, ]) <- vaccine_n_candidates[i, j]
 update(tmp_vaccine_probability[, ]) <- vaccine_probability[i, j]
 
-vacc_skip_probability[, ] <- (
-  if (vacc_skip_dose_inverse[j] > 0) (
-    if (vacc_skip_n_candidates[i, vacc_skip_dose_inverse[j]] > 0)
-      min(vacc_skip_attempted_doses[i, vacc_skip_dose_inverse[j]] /
-            vacc_skip_n_candidates[i, vacc_skip_dose_inverse[j]],
-          as.numeric(1)) else 0)
-  else 1 - exp(-vacc_skip_progression_rate_base[j] * dt))
-
+vaccine_progression_rate_base[, ] <- user()
 
 ## Space observation equations
 ## TODO: define anything that will become a space variable for the compare fnx
@@ -422,7 +430,7 @@ initial(H_R_conf[, , ]) <- 0
 initial(H_R_unconf[, , ]) <- 0
 initial(H_D_conf[, , ]) <- 0
 initial(H_D_unconf[, , ]) <- 0
-initial(G_D[, ]) <- 0
+initial(G_D[, , ]) <- 0
 initial(R[, ]) <- 0
 initial(D[, ]) <- 0
 initial(D_hosp[, ]) <- 0
@@ -453,6 +461,7 @@ gamma_C_1 <- user()
 gamma_C_2 <- user()
 gamma_H_R <- user()
 gamma_H_D <- user()
+gamma_G_D <- user()
 waning_rate <- user()
 gamma_U <- user()
 gamma_sero_pre <- user()
@@ -553,7 +562,6 @@ dim(n_T_PCR_pos_progress) <- c(n_groups, n_vacc_classes, k_PCR_pos)
 
 dim(p_SE) <- c(n_groups, n_vacc_classes)
 dim(p_sero_pos) <- n_groups
-dim(vaccine_probability) <- c(n_groups, n_vacc_classes)
 dim(p_S_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(p_E_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(p_I_A_next_vacc_class) <- c(n_groups, n_vacc_classes)
@@ -565,17 +573,20 @@ dim(rel_p_sympt) <- c(n_groups, n_vacc_classes)
 dim(rel_p_hosp_if_sympt) <- c(n_groups, n_vacc_classes)
 dim(rel_p_H_D) <- c(n_groups, n_vacc_classes)
 dim(rel_p_G_D) <- c(n_groups, n_vacc_classes)
+dim(rel_p_R) <- c(n_groups, n_vacc_classes)
 
 dim(p_C) <- c(n_groups, n_vacc_classes)
 dim(p_H) <- c(n_groups, n_vacc_classes)
 dim(p_H_D) <- c(n_groups, n_vacc_classes)
 dim(p_G_D) <- c(n_groups, n_vacc_classes)
+dim(p_R) <- c(n_groups, n_vacc_classes)
 dim(p_star) <- n_groups
 
 dim(p_C_step) <- c(n_p_C_steps, n_groups)
 dim(p_H_step) <- c(n_p_H_steps, n_groups)
 dim(p_H_D_step) <- c(n_p_H_D_steps, n_groups)
 dim(p_G_D_step) <- c(n_p_G_D_steps, n_groups)
+dim(p_R_step) <- c(n_p_R_steps, n_groups)
 dim(p_star_step) <- c(n_p_star_steps, n_groups)
 
 dim(m) <- c(n_groups, n_groups)
@@ -599,8 +610,8 @@ dim(vaccine_missed_doses) <- c(n_groups, n_doses)
 dim(total_attempted_doses) <- c(n_groups, n_doses)
 dim(vaccine_attempted_doses) <- c(n_groups, n_doses)
 dim(vaccine_probability_doses) <- c(n_groups, n_doses)
+dim(vaccine_progression_rate_base) <- c(n_groups, n_vacc_classes)
 
 dim(vaccine_probability) <- c(n_groups, n_vacc_classes)
 dim(tmp_vaccine_n_candidates) <- c(n_groups, n_doses)
 dim(tmp_vaccine_probability) <- c(n_groups, n_vacc_classes)
-dim(vacc_skip_probability) <- c(n_groups, n_vacc_classes)
