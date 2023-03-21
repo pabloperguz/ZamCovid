@@ -81,6 +81,6 @@ Every time varying parameter has the same format, which can be \code{NULL} (in
 which case a default single value is used) or a list with \code{date} and
 \code{value} for changes in the parameter. If \code{value} is scalar then
 \code{date} can be \code{NULL} or missing. If \code{value} is a vector then \code{date}
-must be a vector of sircovid dates of the same length as \code{value}.
+must be a vector of numeric dates of the same length as \code{value}.
 }
 
