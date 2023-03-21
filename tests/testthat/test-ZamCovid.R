@@ -3,8 +3,8 @@ context("ZamCovid")
 
 test_that("can run ZamCovid model", {
 
-  p <- zamcovid_parameters(start_date = "2020-02-01")
-  mod <- ZamCovid$new(p, 0, 5)
+  p <- ZamCovid_parameters(start_date = "2020-02-01")
+  mod <- ZamCovid$new(p, 0, 5, seed = 1L)
   info <- mod$info()
 
   y <- mod$run(400)

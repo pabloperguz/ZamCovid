@@ -149,11 +149,6 @@ n_I_C_2_to_H_D[, ] <- n_I_C_2_to_hosp[i, j] - n_I_C_2_to_H_R[i, j]
 n_I_C_2_to_H_R_conf[, ] <- rbinom(n_I_C_2_to_H_R[i, j], p_star[i])
 n_I_C_2_to_H_D_conf[, ] <- rbinom(n_I_C_2_to_H_D[i, j], p_star[i])
 
-##TODO: check these two are unused
-# n_I_C_2_to_H_R_unconf[, ] <- n_I_C_2_to_H_R[i, j] - n_I_C_2_to_H_R_conf[i, j]
-# n_I_C_2_to_H_D_unconf[, ] <- n_I_C_2_to_H_D[i, j] - n_I_C_2_to_H_D_conf[i, j]
-##
-
 n_H_R_unconf_to_conf[, , ] <- rbinom(aux_H_R_unconf[i, j, k], p_test)
 n_H_D_unconf_to_conf[, , ] <- rbinom(aux_H_D_unconf[i, j, k], p_test)
 n_H_R_conf_progress[, , ] <- rbinom(H_R_conf[i, j, k], p_H_R_progress)
@@ -226,7 +221,7 @@ p_I_C_2_progress <- 1 - exp(-gamma_C_2 * dt)
 p_H_R_progress <- 1 - exp(-gamma_H_R * dt)
 p_H_D_progress <- 1 - exp(-gamma_H_D * dt)
 p_G_D_progress <- 1 - exp(-gamma_G_D * dt)
-p_R_progress <- 1 - exp(-waning_rate * dt)
+p_R_progress <- 1 - exp(-gamma_R * dt)
 p_test <- 1 - exp(-gamma_U * dt)
 
 p_sero_pos[] <- user()
@@ -296,7 +291,7 @@ seed_rate <- if (step >= seed_step_start && step < seed_step_end)
   seed_value[as.integer(step - seed_step_start + 1)] else 0
 seed <- rpois(seed_rate)
 
-seed_age_band <- user()
+seed_age_band <- user(integer = TRUE)
 seed_step_start <- user()
 seed_value[] <- user()
 dim(seed_value) <- user()
@@ -453,21 +448,74 @@ initial(tmp_vaccine_n_candidates[, ]) <- 0
 initial(tmp_vaccine_probability[, ]) <- 0
 
 
-## Progression rates
-gamma_E <- user()
-gamma_A <- user()
-gamma_P <- user()
-gamma_C_1 <- user()
-gamma_C_2 <- user()
-gamma_H_R <- user()
-gamma_H_D <- user()
-gamma_G_D <- user()
-waning_rate <- user()
-gamma_U <- user()
-gamma_sero_pre <- user()
-gamma_sero_pos <- user()
-gamma_PCR_pre <- user()
-gamma_PCR_pos <- user()
+## Time-varying progression rates
+gamma_E_step[] <- user()
+n_gamma_E_steps <- user()
+gamma_A_step[] <- user()
+n_gamma_A_steps <- user()
+gamma_P_step[] <- user()
+n_gamma_P_steps <- user()
+gamma_C_1_step[] <- user()
+n_gamma_C_1_steps <- user()
+gamma_C_2_step[] <- user()
+n_gamma_C_2_steps <- user()
+gamma_H_R_step[] <- user()
+n_gamma_H_R_steps <- user()
+gamma_H_D_step[] <- user()
+n_gamma_H_D_steps <- user()
+gamma_G_D_step[] <- user()
+n_gamma_G_D_steps <- user()
+gamma_PCR_pre_step[] <- user()
+n_gamma_PCR_pre_steps <- user()
+gamma_PCR_pos_step[] <- user()
+n_gamma_PCR_pos_steps <- user()
+gamma_sero_pos_step[] <- user()
+n_gamma_sero_pos_steps <- user()
+gamma_sero_pre_step[] <- user()
+n_gamma_sero_pre_steps <- user()
+gamma_U_step[] <- user()
+n_gamma_U_steps <- user()
+
+gamma_E <- if (as.integer(step) >= n_gamma_E_steps)
+  gamma_E_step[n_gamma_E_steps] else gamma_E_step[step + 1]
+
+gamma_A <- if (as.integer(step) >= n_gamma_A_steps)
+  gamma_A_step[n_gamma_A_steps] else gamma_A_step[step + 1]
+
+gamma_P <- if (as.integer(step) >= n_gamma_P_steps)
+  gamma_P_step[n_gamma_P_steps] else gamma_P_step[step + 1]
+
+gamma_C_1 <- if (as.integer(step) >= n_gamma_C_1_steps)
+  gamma_C_1_step[n_gamma_C_1_steps] else gamma_C_1_step[step + 1]
+
+gamma_C_2 <- if (as.integer(step) >= n_gamma_C_2_steps)
+  gamma_C_2_step[n_gamma_C_2_steps] else gamma_C_2_step[step + 1]
+
+gamma_H_R <- if (as.integer(step) >= n_gamma_H_R_steps)
+  gamma_H_R_step[n_gamma_H_R_steps] else gamma_H_R_step[step + 1]
+
+gamma_H_D <- if (as.integer(step) >= n_gamma_H_D_steps)
+  gamma_H_D_step[n_gamma_H_D_steps] else gamma_H_D_step[step + 1]
+
+gamma_G_D <- if (as.integer(step) >= n_gamma_G_D_steps)
+  gamma_G_D_step[n_gamma_G_D_steps] else gamma_G_D_step[step + 1]
+
+gamma_PCR_pre <- if (as.integer(step) >= n_gamma_PCR_pre_steps)
+  gamma_PCR_pre_step[n_gamma_PCR_pre_steps] else gamma_PCR_pre_step[step + 1]
+
+gamma_PCR_pos <- if (as.integer(step) >= n_gamma_PCR_pos_steps)
+  gamma_PCR_pos_step[n_gamma_PCR_pos_steps] else gamma_PCR_pos_step[step + 1]
+
+gamma_sero_pre <- if (as.integer(step) >= n_gamma_sero_pre_steps)
+  gamma_sero_pre_step[n_gamma_sero_pre_steps] else gamma_sero_pre_step[step + 1]
+
+gamma_sero_pos <- if (as.integer(step) >= n_gamma_sero_pos_steps)
+  gamma_sero_pos_step[n_gamma_sero_pos_steps] else gamma_sero_pos_step[step + 1]
+
+gamma_U <- if (as.integer(step) >= n_gamma_U_steps)
+  gamma_U_step[n_gamma_U_steps] else gamma_U_step[step + 1]
+
+gamma_R <- user()
 
 
 ## Progression probabilities
@@ -615,3 +663,17 @@ dim(vaccine_progression_rate_base) <- c(n_groups, n_vacc_classes)
 dim(vaccine_probability) <- c(n_groups, n_vacc_classes)
 dim(tmp_vaccine_n_candidates) <- c(n_groups, n_doses)
 dim(tmp_vaccine_probability) <- c(n_groups, n_vacc_classes)
+
+dim(gamma_E_step) <- n_gamma_E_steps
+dim(gamma_A_step) <- n_gamma_A_steps
+dim(gamma_P_step) <- n_gamma_P_steps
+dim(gamma_C_1_step) <- n_gamma_C_1_steps
+dim(gamma_C_2_step) <- n_gamma_C_2_steps
+dim(gamma_H_R_step) <- n_gamma_H_R_steps
+dim(gamma_H_D_step) <- n_gamma_H_D_steps
+dim(gamma_G_D_step) <- n_gamma_G_D_steps
+dim(gamma_U_step) <- n_gamma_U_steps
+dim(gamma_PCR_pre_step) <- n_gamma_PCR_pre_steps
+dim(gamma_PCR_pos_step) <- n_gamma_PCR_pos_steps
+dim(gamma_sero_pos_step) <- n_gamma_sero_pos_steps
+dim(gamma_sero_pre_step) <- n_gamma_sero_pre_steps
