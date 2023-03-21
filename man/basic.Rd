@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameters.R
 \name{basic}
 \alias{basic}
-\title{The basic ZamCovid model}
+\title{The basic SEIR model}
 \description{
-##' "Basic" ZamCovid SEIR model. This is a dust model.
+##' "Basic" SEIR model. This is a dust model.
 }
