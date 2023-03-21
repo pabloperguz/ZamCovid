@@ -184,7 +184,7 @@ ZamCovid_parameters <- function(start_date,
 ##'   which case a default single value is used) or a list with `date` and
 ##'   `value` for changes in the parameter. If `value` is scalar then
 ##'   `date` can be `NULL` or missing. If `value` is a vector then `date`
-##'   must be a vector of sircovid dates of the same length as `value`.
+##'   must be a vector of numeric dates of the same length as `value`.
 ##'
 ##' @param gamma_E Time-varying mean duration in the E (exposed) compartment.
 ##'
@@ -357,7 +357,7 @@ ZamCovid_parameters_progression <- function(dt,
 ##'   which case the value from `severity` is used) or a list with `date` and
 ##'   `value` for changes in the parameter. If `value` is scalar then
 ##'   `date` can be `NULL` or missing. If `value` is a vector then `date`
-##'   must be a vector of sircovid dates of the same length as `value`.
+##'   must be a vector of numeric dates of the same length as `value`.
 ##'
 ##' @param p_C Time-varying parameters for p_C (the probability of an infected
 ##'   individual becoming symptomatic). See Details.
@@ -730,10 +730,10 @@ parameters_piecewise_linear <- function (date, value, dt) {
     stop("Need at least two dates and values for a varying piecewise linear")
   }
   if (!is.numeric(date)) {
-    stop("'date' must be numeric - did you forget sircovid_date()?")
+    stop("'date' must be numeric - did you forget numeric_date()?")
   }
   if (any(date < 0)) {
-    stop("Negative dates, sircovid_date likely applied twice")
+    stop("Negative dates, numeric_date likely applied twice")
   }
   if (any(diff(date) <= 0)) {
     stop("Dates must be strictly increasing")
