@@ -19,22 +19,39 @@ NULL
 #' @param steps_per_day A positive integer for the number of steps per day to
 #'    run the model.
 #'
-#' @param model_start Either 0 or a positive integer for the initial start time
-#'    for the model.
+#' @param beta_date A vector of `numeric_date`s for constructing piece-wise
+#'    linear interpolate function for beta (transmission scaling) parameter.
 #'
-#' @param contact_matrix Either `NULL` or a `data.frame` of a symmetric
-#'    individual-to-individual contact rate matrix. If `NULL` defaults to
-#'    nationally representative values.
+#' @param beta_value A vector of `double` values for constructing piece-wise
+#'    linear interpolate function for beta (transmission scaling) parameter.
 #'
 #' @param population Either `NULL` or a `data.frame` with columns `age_group`
 #'    and `n` of same length (age groups) as `contact_matrix` supplied. If
-#'    `NULL` defaults to nationally representative values.
+#'    `NULL` defaults to nationally representative values for Zambia.
 #'
-#' @param seed_pars Either `NULL` or a `list` with elements `seed_group`,
-#'    `seed_number` and `seed_time` for the `age_group` in which initial
-#'    infections will be seeded, the number of infection to seed and the model
-#'    time in which they will be seeded, respectively. If `NULL` will
-#'    default to seeding 5 infection in `age_group` 5 at `t = 0`.
+#' @param contact_matrix Either `NULL` or a `data.frame` of a symmetric
+#'    individual-to-individual contact rate matrix. If `NULL` defaults to
+#'    nationally representative values for Zambia.
+#'
+#' @param N_tot Either `NULL` or a `vector` integer numbers of age-specific
+#'    population of same length as age-groups in `contact_matri`. Must be
+#'    supplied if `population` and `contact_matrix` are not `NULL`.
+#'
+#' @param n_groups Either `NULL` or an `integer` number specifying the number of
+#'    age groups in the populsation to model. Must be supplied if `population`
+#'    and `contact_matrix` are not `NULL`.
+#'
+#' @param severity Either `NULL` or a named `list` containing all elements in
+#'    [ZamCovid::ZamCovid_parameters_severity].
+#'
+#' @param progression Either `NULL` or a named `list` containing all elements in
+#'    [ZamCovid::ZamCovid_parameters_progression].
+#'
+#' @param vaccination Either `NULL` or a named `list` containing all elements in
+#'    [ZamCovid::ZamCovid_parameters_vaccination]. Nota that, if `NULL` and
+#'    modelling vaccination, a `vaccine_progression_rate`, `vaccine_schedule`,
+#'    `vaccine_index_dose2`, `vaccine_index_booster`, `vaccine_catchup_fraction`
+#'    and `n_doses` must be supplied.
 #'
 #' @return Return a `list` of parameters to run the basic ZamCovid model.
 #'
@@ -50,7 +67,13 @@ ZamCovid_parameters <- function(start_date,
                                 severity = NULL,
                                 progression = NULL,
                                 vaccination = NULL,
-                                initial_seed_pattern = 1.0,
+                                vaccine_progression_rate = NULL,
+                                vaccine_schedule = NULL,
+                                vaccine_index_dose2 = NULL,
+                                vaccine_index_booster = NULL,
+                                vaccine_catchup_fraction = NULL,
+                                n_doses = 2L,
+                                initial_seed_pattern = 1,
                                 initial_seed_size = 10,
                                 I_A_transmission = 0.223,
                                 I_P_transmission = 1,
@@ -62,16 +85,11 @@ ZamCovid_parameters <- function(start_date,
                                 rel_p_sympt = 1,
                                 rel_p_hosp_if_sympt = 1,
                                 rel_p_death = 1,
-                                rel_infectivity = 1,
-                                vaccine_progression_rate = NULL,
-                                vaccine_schedule = NULL,
-                                vaccine_index_dose2 = NULL,
-                                vaccine_index_booster = NULL,
-                                vaccine_catchup_fraction = 1,
-                                n_doses = 2L) {
+                                rel_infectivity = 1) {
 
-  if (!is.character(start_date)) {
-    stop("start_date must be character string in format yyyy-mm-dd!")
+  if (!is.numeric(start_date)) {
+    stop("start_date must be numeric! Did you forget to do `numeric_date` on
+         string data of format yyyy-mm-dd?")
   }
 
   if (!is.integer(steps_per_day)) {
@@ -107,7 +125,7 @@ ZamCovid_parameters <- function(start_date,
   dt <- 1 / steps_per_day
 
   ## First epidemic wave seed
-  start_step <- numeric_date(start_date) * steps_per_day
+  start_step <- start_date * steps_per_day
   initial_seed_value <-
     seed_over_steps(start_step, initial_seed_pattern) * initial_seed_size
 
@@ -158,6 +176,7 @@ ZamCovid_parameters <- function(start_date,
                                                      vaccine_index_booster)
 
   ret <- c(ret, severity, progression, vaccination)
+  ret$N_tot <- N_tot
 
   ## Add some bespoke rel_p parameters
   rel_p_death <- build_rel_param(n_groups, rel_p_death,
@@ -460,6 +479,15 @@ ZamCovid_parameters_severity <- function(dt,
 }
 
 
+##' ZamCovid vaccination parameters
+##'
+##' @title ZamCovid vaccination parameters
+##'
+##' @param dt The step size
+##'
+##' @return A list of vaccination parameters
+##'
+##' @export
 ZamCovid_parameters_vaccination <- function(dt,
                                             N_tot,
                                             n_groups,
@@ -522,6 +550,44 @@ ZamCovid_parameters_vaccination <- function(dt,
   ret$n_doses <- n_doses
 
   ret
+}
+
+
+##' Create initial conditions for the ZamCovid model. This matches the
+##' interface required for mcstate
+##'
+##' @title Initial conditions for the ZamCovid model
+##'
+##' @return A numeric vector of initial conditions
+##' @export
+##' @examples
+##' p <- ZamCovid_parameters(numeric_date("2020-02-07"))
+##' mod <- ZamCovid$new(p, 0, 10)
+##' ZamCovid_initial(mod$info(), 10, p, 4L)
+ZamCovid_initial <- function(info, n_particles, pars) {
+
+  index <- info$index
+  state <- numeric(info$len)
+
+  index_S <- index[["S"]]
+  index_N_tot <- index[["N_tot"]]
+  index_susceptible <- index[["susceptible"]]
+  index_S_no_vacc <- index_S[seq_len(length(pars$N_tot))]
+  index_N_tot_sero <- index[["N_tot_sero"]][[1L]]
+  index_N_tot_PCR <- index[["N_tot_PCR"]][[1L]]
+  index_I_weighted <- index[["I_weighted"]][[1L]] + pars$seed_age_band - 1L
+
+  ## S0 is the population totals
+  initial_S <- pars$N_tot
+
+  state[index_N_tot] <- pars$N_tot
+  state[index_susceptible] <- sum(pars$N_tot)
+  state[index_S_no_vacc] <- initial_S
+  state[index_N_tot_sero] <- sum(pars$N_tot)
+  state[index_N_tot_PCR] <- sum(pars$N_tot)
+  state[index_I_weighted] <- 1
+
+  state
 }
 
 

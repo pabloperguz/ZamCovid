@@ -408,10 +408,6 @@ update(tmp_vaccine_probability[, ]) <- vaccine_probability[i, j]
 
 vaccine_progression_rate_base[, ] <- user()
 
-## Space observation equations
-## TODO: define anything that will become a space variable for the compare fnx
-
-
 
 ### Initial states are all zeroed
 # S and E will be initialiased based on the seeding model
@@ -677,3 +673,54 @@ dim(gamma_PCR_pre_step) <- n_gamma_PCR_pre_steps
 dim(gamma_PCR_pos_step) <- n_gamma_PCR_pos_steps
 dim(gamma_sero_pos_step) <- n_gamma_sero_pos_steps
 dim(gamma_sero_pre_step) <- n_gamma_sero_pre_steps
+
+
+
+########################################
+###   Space observation equations    ###
+########################################
+
+## Total number of susceptible (used for initialising population)
+initial(susceptible) <- 0
+update(susceptible) <- sum(new_S)
+
+## Total population
+initial(N_tot[]) <- 0
+update(N_tot[]) <- sum(S[i, ]) + sum(R[i, ]) + sum(D_hosp[i, ]) +
+  sum(E[i, , ]) + sum(I_A[i, ]) + sum(I_P[i, ]) +
+  sum(I_C_1[i, ]) + sum(I_C_2[i, ]) +
+  sum(H_R_conf[i, , ]) + sum(H_R_unconf[i, , ]) +
+  sum(H_D_conf[i, , ]) + sum(H_D_unconf[i, , ]) +
+  sum(G_D[i, , ]) + sum(D_non_hosp[i, ])
+dim(N_tot) <- n_groups
+
+## Total population calculated with seroconversion flow
+initial(N_tot_sero) <- 0
+update(N_tot_sero) <- sum(S) + sum(T_sero_pre) +
+  sum(T_sero_pos) + sum(T_sero_neg) + sum(E)
+
+## Total population calculated with PCR flow
+initial(N_tot_PCR) <- 0
+update(N_tot_PCR) <- sum(S) + sum(T_PCR_pre) + sum(T_PCR_pos) + sum(T_PCR_neg)
+
+## I_weighted used in Rt and IFR calculations
+dim(new_I_weighted) <- c(n_groups, n_vacc_classes)
+new_I_weighted[, ] <-
+  I_A_transmission * new_I_A[i, j] +
+  I_P_transmission * new_I_P[i, j] +
+  I_C_1_transmission * new_I_C_1[i, j] +
+  I_C_2_transmission * new_I_C_2[i, j] +
+  hosp_transmission * (sum(H_R_conf[i, j, ]) +
+                         sum(H_R_unconf[i, j, ]) +
+                         sum(H_D_conf[i, j, ]) +
+                         sum(H_D_unconf[i, j, ])) +
+  G_D_transmission * sum(G_D[i, j, ])
+sum_new_I_weighted <- sum(new_I_weighted)
+initial(I_weighted[, ]) <- 0
+dim(I_weighted) <- c(n_groups, n_vacc_classes)
+# If there are zero infectives at time step default to putting weight
+# in group 4/vaccine stratum 1 to avoid NAs in IFR calculation.
+update(I_weighted[, ]) <-
+  (if (sum_new_I_weighted == 0)
+    (if (i == seed_age_band && j == 1) 1 else 0)
+   else new_I_weighted[i, j])
