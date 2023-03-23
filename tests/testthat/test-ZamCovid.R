@@ -1,5 +1,6 @@
 context("ZamCovid")
 
+
 test_that("can run ZamCovid model", {
   start_date <- numeric_date("2020-02-01")
   p <- ZamCovid_parameters(start_date)
@@ -12,7 +13,7 @@ test_that("can run ZamCovid model", {
 
   res <- mod$run(end)
 
-  expect_equal(c(693, 5), dim(res))
+  expect_equal(c(701, 5), dim(res))
 
   ## TODO: add test with expected space observations given baseline parameters
 })
@@ -72,6 +73,78 @@ test_that("can seed infections", {
   i <- apply(n_E[4, , ] > 0, 1, function(x) min(which(x)))
   expect_equal(min(t[i]), floor(start_date * p$steps_per_day) + 1)
   expect_gte(diff(range(t[i])), 1)
+})
+
+
+test_that("infections spread to other age groups after seed", {
+
+  start_date <- numeric_date("2020-02-01") + 0.123
+  n_particles <- 10
+  pattern <- rep(1, 4) # over a 1 day window
+  p <- ZamCovid_parameters(start_date,
+                           initial_seed_size = 10,
+                           initial_seed_pattern = pattern)
+
+  mod <- ZamCovid$new(p, 4, n_particles, seed = 1L)
+  end <- numeric_date("2020-09-30") / p$dt
+
+  initial <- ZamCovid_initial(mod$info(), n_particles, p)
+  mod$update_state(state = initial)
+
+  t <- seq(4, end)
+  res <- mod$simulate(t)
+
+  info <- mod$info()
+  n_E <- res[info$index$E, , ]
+
+  i_donor <- apply(n_E[4, , ] > 0, 1, function(x) min(which(x)))
+  i_recipient <- NULL
+  for (i in c(seq(1, 3, 1), seq(5, 16))) {
+    tmp <- suppressWarnings(
+      apply(n_E[i, , ] > 0, 1, function(x) min(which(x)))
+    )
+    i_recipient <- rbind(i_recipient, tmp)
+  }
+
+  expect_true(all(i_recipient > mean(i_donor)))
+})
+
+
+test_that("people sero-convert", {
+  start_date <- numeric_date("2020-02-01") + 0.123
+  n_particles <- 5
+  pattern <- rep(1, 4) # over a 1 day window
+  p <- ZamCovid_parameters(start_date,
+                           initial_seed_size = 10,
+                           initial_seed_pattern = pattern)
+
+  mod <- ZamCovid$new(p, 4, n_particles, seed = 1L)
+  end <- numeric_date("2020-09-30") / p$dt
+
+  initial <- ZamCovid_initial(mod$info(), n_particles, p)
+  mod$update_state(state = initial)
+
+  t <- seq(4, end)
+  res <- mod$simulate(t)
+
+  info <- mod$info()
+
+  sero_pos <- sum(res[info$index$sero_pos_over15, , dim(res)[3]])
+
+  expect_true(sero_pos > 0)
+})
+
+
+test_that("can run the particle filter on the model", {
+  start_date <- numeric_date("2020-02-01")
+  pars <- ZamCovid_parameters(start_date)
+  data <- helper_lancelot_data(read_csv(sircovid_file("extdata/example.csv")),
+                               0, pars$dt)
+
+  pf <- helper_lancelot_particle_filter(data, 10)
+  expect_s3_class(pf, "particle_filter")
+
+  pf$run(pars)
 })
 
 

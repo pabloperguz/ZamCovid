@@ -47,6 +47,9 @@ NULL
 #' @param progression Either `NULL` or a named `list` containing all elements in
 #'    [ZamCovid::ZamCovid_parameters_progression].
 #'
+#' @param sens_and_spec Either `NULL` or a named `list` containing all elements
+#'    in [ZamCovid::ZamCovid_parameters_sens_and_spec].
+#'
 #' @param vaccination Either `NULL` or a named `list` containing all elements in
 #'    [ZamCovid::ZamCovid_parameters_vaccination]. Nota that, if `NULL` and
 #'    modelling vaccination, a `vaccine_progression_rate`, `vaccine_schedule`,
@@ -66,6 +69,7 @@ ZamCovid_parameters <- function(start_date,
                                 n_groups = NULL,
                                 severity = NULL,
                                 progression = NULL,
+                                sens_and_spec = NULL,
                                 vaccination = NULL,
                                 vaccine_progression_rate = NULL,
                                 vaccine_schedule = NULL,
@@ -160,6 +164,8 @@ ZamCovid_parameters <- function(start_date,
 
   progression <- progression %||% ZamCovid_parameters_progression(dt)
 
+  sens_and_spec <- sens_and_spec %||% ZamCovid_parameters_sens_and_spec()
+
   vaccination <-
     vaccination %||% ZamCovid_parameters_vaccination(dt,
                                                      N_tot,
@@ -175,8 +181,17 @@ ZamCovid_parameters <- function(start_date,
                                                      vaccine_index_dose2,
                                                      vaccine_index_booster)
 
-  ret <- c(ret, severity, progression, vaccination)
+  ret <- c(ret, severity, progression, vaccination, sens_and_spec)
+
+  ## Parameters to support compare function
+  ret$exp_noise <- 1e6
   ret$N_tot <- N_tot
+  ret$N_tot_over15 <- sum(N_tot[4:length(N_tot)])
+  ret$N_tot_15_19 <- N_tot[4]
+  ret$N_tot_20_29 <- sum(N_tot[5:6])
+  ret$N_tot_30_39 <- sum(N_tot[7:8])
+  ret$N_tot_40_49 <- sum(N_tot[9:10])
+  ret$N_tot_50_plus <- sum(N_tot[11:length(N_tot)])
 
   ## Add some bespoke rel_p parameters
   rel_p_death <- build_rel_param(n_groups, rel_p_death,
@@ -355,6 +370,42 @@ ZamCovid_parameters_progression <- function(dt,
   for (name in names(time_varying_gammas)) {
     ret <- get_gamma_step(ret, name)
   }
+  ret
+}
+
+
+##' ZamCovid observation parameters
+##'
+##' @title ZamCovid sensitivity and specificity parameters
+##'
+##' @return A list of parameter values
+##'
+##' @param sero_specificity Specificity of the serology test assay
+##'
+##' @param sero_sensitivity Sensitivity of the serology test assay
+##'
+##' @param PCR_specificity Specificity of the PCR test
+##'
+##' @param PCR_sensitivity Sensitivity of the PCR test
+##'
+##' @export
+ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.99,
+                                              sero_sensitivity = 0.831,
+                                              PCR_specificity = 0.99,
+                                              PCR_sensitivity = 0.99) {
+
+  ## Sero_sens of Abbott Architect IgG in LMIC settings from
+  ## https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0256566
+
+  ret <- list(
+    sero_specificity = sero_specificity,
+    sero_sensitivity = sero_sensitivity,
+    PCR_specificity = PCR_specificity,
+    PCR_sensitivity = PCR_sensitivity)
+
+  lapply(seq_len(length(ret)),
+         function(i) assert_proportion(ret[i], names(ret)[i]))
+
   ret
 }
 
@@ -740,42 +791,6 @@ basic_parameters <- function(model_end,
 }
 
 
-#' Index function for basic model
-#'
-#' @param info A `list` object containing `info` from generated ZamCovid model.
-#'
-#' @return A `list` with elements `run` and `state`
-#'
-#' @export
-#'
-#' @examples basic_index(info)
-basic_index <- function(info) {
-
-  index <- info$index
-
-  # An index of all model states required for the particle filter
-  index_core <- c(cases_under_15 = index[["cases_under_15"]],
-                  cases_15_19 = index[["cases_15_19"]],
-                  cases_20_29 = index[["cases_20_29"]],
-                  cases_30_39 = index[["cases_30_39"]],
-                  cases_40_49 = index[["cases_40_49"]],
-                  cases_50_plus = index[["cases_50_plus"]])
-
-  # An index of only incidence versions for the likelihood function
-  # For now, this is basically the same as index_core, but we will need to
-  # modify this when we introduce new data to fit the model to, like serology
-  index_run <- c(time = index[["time"]], index_core)
-
-  # Similarly, we might introduce an additional index_save if we have other
-  # variables we sometimes, but not always, want to save for post-processing,
-  # such as model states by vaccination or strain classes
-  # index_save <- NULL
-  index_state <- index_core
-
-  list(run = index_run, state = index_state)
-}
-
-
 parameters_piecewise_linear <- function (date, value, dt) {
   if (!inherits(value, "matrix")) {
     value <- matrix(value, ncol = 1)
@@ -851,6 +866,23 @@ numeric_date <- function(date) {
     stop("Negative dates, numeric_date likely applied twice")
   }
   days_into_2020
+}
+
+
+numeric_date_as_date <- function(date) {
+  assert_numeric_date(date)
+  as_date("2019-12-31") + date
+}
+
+
+assert_numeric_date <- function(date) {
+  if (!is.numeric(date)) {
+    stop("'date' must be numeric - did you forget sircovid_date()?")
+  }
+  if (any(date < 0)) {
+    stop("Negative dates, sircovid_date likely applied twice")
+  }
+  date
 }
 
 

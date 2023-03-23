@@ -15,6 +15,7 @@ ZamCovid_parameters(
   n_groups = NULL,
   severity = NULL,
   progression = NULL,
+  sens_and_spec = NULL,
   vaccination = NULL,
   vaccine_progression_rate = NULL,
   vaccine_schedule = NULL,
@@ -71,6 +72,9 @@ and \code{contact_matrix} are not \code{NULL}.}
 
 \item{progression}{Either \code{NULL} or a named \code{list} containing all elements in
 \link{ZamCovid_parameters_progression}.}
+
+\item{sens_and_spec}{Either \code{NULL} or a named \code{list} containing all elements
+in \link{ZamCovid_parameters_sens_and_spec}.}
 
 \item{vaccination}{Either \code{NULL} or a named \code{list} containing all elements in
 \link{ZamCovid_parameters_vaccination}. Nota that, if \code{NULL} and

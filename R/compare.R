@@ -1,3 +1,111 @@
+#' Compare function for ZamCovid model.
+#'
+#' @param state State variable outputs from particle filter of generated
+#'    basic model.
+#'
+#' @param observed Space variables from data used for particle filter.
+#'
+#' @param pars A `list` of `mcstate::pmcmc_parameters` to fit. Note these cannot
+#'    be directly supplied to the function, but rather as an argument to
+#'    `mcstate::pmcmc()`.
+#'
+#' @return A numerical value for the negative log-likelihood of the
+#'    state-space model.
+#'
+#' @export
+#'
+#' @examples basic_compare(state, observed)
+ZamCovid_compare <- function(state, observed, pars = NULL) {
+
+  model_sero_pos_over15 <- state["sero_pos_over15"]
+  model_sero_pos_15_19 <- state["sero_pos_15_19"]
+  model_sero_pos_20_29 <- state["sero_pos_20_29"]
+  model_sero_pos_30_39 <- state["sero_pos_30_39"]
+  model_sero_pos_40_49 <- state["sero_pos_40_49"]
+  model_sero_pos_50_plus <- state["sero_pos_50_plus"]
+
+
+  ## Serology assay
+  # It is possible that model_sero_pos > pars$N_tot; this is capped here to
+  # avoid probabilities > 1
+  model_sero_capped_over15 <- pmin(model_sero_pos_over15, pars$N_tot_over15)
+  model_sero_capped_15_19 <- pmin(model_sero_pos, pars$N_tot_15_19)
+  model_sero_capped_20_29 <- pmin(model_sero_pos, pars$N_tot_20_29)
+  model_sero_capped_30_39 <- pmin(model_sero_pos, pars$N_tot_30_39)
+  model_sero_capped_40_49 <- pmin(model_sero_pos, pars$N_tot_40_49)
+  model_sero_capped_50_plus <- pmin(model_sero_pos, pars$N_tot_50_plus)
+
+  model_sero_prob_pos_over15 <-
+    test_prob_pos(model_sero_capped_over15,
+                  pars$N_tot_over15 - model_sero_capped_over15,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
+
+  model_sero_prob_pos_15_19 <-
+    test_prob_pos(model_sero_capped_15_19,
+                  pars$N_tot_15_19 - model_sero_capped_15_19,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
+
+  model_sero_prob_pos_20_29 <-
+    test_prob_pos(model_sero_capped_20_29,
+                  pars$N_tot_20_29 - model_sero_capped_20_29,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
+
+  model_sero_prob_pos_30_39 <-
+    test_prob_pos(model_sero_capped_30_39,
+                  pars$N_tot_30_39 - model_sero_capped_30_39,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
+
+  model_sero_prob_pos_40_49 <-
+    test_prob_pos(model_sero_capped_40_49,
+                  pars$N_tot_40_49 - model_sero_capped_40_49,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
+
+  model_sero_prob_pos_50_plus <-
+    test_prob_pos(model_sero_capped_50_plus,
+                  pars$N_tot_50_plus - model_sero_capped_50_plus,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
+
+  ll_serology_over15 <- ll_binom(observed$sero_pos_over15,
+                                 observed$sero_tot_over15,
+                                 model_sero_prob_pos_over15)
+
+  ll_serology_15_19 <- ll_binom(observed$sero_pos_15_19,
+                                 observed$sero_tot_15_19,
+                                 model_sero_prob_pos_15_19)
+
+  ll_serology_20_29 <- ll_binom(observed$sero_pos_20_29,
+                                 observed$sero_tot_20_29,
+                                 model_sero_prob_pos_20_29)
+
+  ll_serology_30_39 <- ll_binom(observed$sero_pos_30_39,
+                                 observed$sero_tot_30_39,
+                                 model_sero_prob_pos_30_39)
+
+  ll_serology_40_49 <- ll_binom(observed$sero_pos_40_49,
+                                 observed$sero_tot_40_49,
+                                 model_sero_prob_pos_40_49)
+
+  ll_serology_50_plus <- ll_binom(observed$sero_pos_50_plus,
+                                 observed$sero_tot_50_plus,
+                                 model_sero_prob_pos_50_plus)
+
+  ll_serology_over15 + ll_serology_15_19 + ll_serology_20_29 +
+    ll_serology_30_39 + ll_serology_40_49 +ll_serology_50_plus
+}
+
+
 #' Compare function for basic model.
 #'
 #' @param state State variable outputs from particle filter of generated
@@ -16,17 +124,6 @@
 #'
 #' @examples basic_compare(state, observed)
 basic_compare <- function(state, observed, pars = NULL) {
-
-  ll_nbinom <- function(data, model, kappa, exp_noise = 1e6) {
-
-    if (is.na(data)) {
-      return(numeric(length(model)))
-    }
-
-    mu <- model + rexp(length(model), rate = exp_noise)
-
-    dnbinom(data, kappa, mu = mu, log = TRUE)
-  }
 
   model_cases_under_15 <- state["cases_under_15", , drop = TRUE]
   model_cases_15_19 <- state["cases_15_19", , drop = TRUE]

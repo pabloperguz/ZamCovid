@@ -1,3 +1,8 @@
+## TODO: checklist
+# Create mock dataset and write tests for pMCMC
+# Create mock vaccination schedule and write tests for vaccine engine
+# Add S, E, R classes tracking re-infections
+
 ## Compartment indexes: age groups (i), vaccine class (j)
 # Note k index is used for shape parameter of erlang distributed rates
 n_groups <- user()
@@ -680,9 +685,20 @@ dim(gamma_sero_pre_step) <- n_gamma_sero_pre_steps
 ###   Space observation equations    ###
 ########################################
 
+## Parameters to support the compare function. Since these do not appear in any
+## odin equation, they are marked as "ignore.unused"
+N_tot_over15 <- user() # ignore.unused
+sero_sensitivity <- user() # ignore.unused
+sero_specificity <- user() # ignore.unused
+PCR_sensitivity <- user() # ignore.unused
+PCR_specificity <- user() # ignore.unused
+exp_noise <- user() # ignore.unused
+
+
 ## Total number of susceptible (used for initialising population)
 initial(susceptible) <- 0
 update(susceptible) <- sum(new_S)
+
 
 ## Total population
 initial(N_tot[]) <- 0
@@ -694,14 +710,17 @@ update(N_tot[]) <- sum(S[i, ]) + sum(R[i, ]) + sum(D_hosp[i, ]) +
   sum(G_D[i, , ]) + sum(D_non_hosp[i, ])
 dim(N_tot) <- n_groups
 
+
 ## Total population calculated with seroconversion flow
 initial(N_tot_sero) <- 0
 update(N_tot_sero) <- sum(S) + sum(T_sero_pre) +
   sum(T_sero_pos) + sum(T_sero_neg) + sum(E)
 
+
 ## Total population calculated with PCR flow
 initial(N_tot_PCR) <- 0
 update(N_tot_PCR) <- sum(S) + sum(T_PCR_pre) + sum(T_PCR_pos) + sum(T_PCR_neg)
+
 
 ## I_weighted used in Rt and IFR calculations
 dim(new_I_weighted) <- c(n_groups, n_vacc_classes)
@@ -724,3 +743,32 @@ update(I_weighted[, ]) <-
   (if (sum_new_I_weighted == 0)
     (if (i == seed_age_band && j == 1) 1 else 0)
    else new_I_weighted[i, j])
+
+
+## Sero-positive population by age
+initial(sero_pos_over15) <- 0
+update(sero_pos_over15) <- sum(new_T_sero_pos[4:n_groups, , ])
+
+initial(sero_pos_15_19) <- 0
+update(sero_pos_15_19) <- sum(new_T_sero_pos[4, , ])
+
+initial(sero_pos_20_29) <- 0
+update(sero_pos_20_29) <- sum(new_T_sero_pos[5:6, , ])
+
+initial(sero_pos_30_39) <- 0
+update(sero_pos_30_39) <- sum(new_T_sero_pos[7:8, , ])
+
+initial(sero_pos_40_49) <- 0
+update(sero_pos_40_49) <- sum(new_T_sero_pos[9:10, , ])
+
+initial(sero_pos_50_plus) <- 0
+update(sero_pos_50_plus) <- sum(new_T_sero_pos[11:n_groups, , ])
+
+
+## Other state variables for post-processing
+initial(hosp_tot) <- 0
+update(hosp_tot) <- sum(new_H_R_conf) + sum(new_H_D_conf)
+
+initial(D_hosp_tot) <- 0
+update(D_hosp_tot) <- D_hosp_tot + sum(delta_D_hosp_disag) +
+  sum(delta_D_non_hosp_disag)
