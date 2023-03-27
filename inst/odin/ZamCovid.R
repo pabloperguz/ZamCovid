@@ -2,6 +2,13 @@
 # Create mock dataset and write tests for pMCMC
 # Create mock vaccination schedule and write tests for vaccine engine
 # Add S, E, R classes tracking re-infections
+# If boosters are needed further down the line, implement vaccine skip
+# Assess hospitalisation data, as and when available, and think whether
+# conf/uncof still make sense or it might need re-factoring
+# Check N_tot_ for parallel flows, as new_T_PCR_neg (e.g.) is an absorbing
+# state, so the N_tot_ might be not quite right
+# For a fixed seed, we can do -50 odd days after the first 15 deaths recorded
+# ass OJ did in squire
 
 ## Compartment indexes: age groups (i), vaccine class (j)
 # Note k index is used for shape parameter of erlang distributed rates
@@ -519,10 +526,6 @@ gamma_U <- if (as.integer(step) >= n_gamma_U_steps)
 gamma_R <- user()
 
 
-## Progression probabilities
-
-
-
 
 ## Dimensions of arrays and vectors ###
 dim(S) <- c(n_groups, n_vacc_classes)
@@ -693,6 +696,10 @@ sero_specificity <- user() # ignore.unused
 PCR_sensitivity <- user() # ignore.unused
 PCR_specificity <- user() # ignore.unused
 exp_noise <- user() # ignore.unused
+phi_admitted <- user() # ignore.unused
+kappa_admitted <- user() # ignore.unused
+phi_death_hosp <- user() # ignore.unused
+kappa_death_hosp <- user() # ignore.unused
 
 
 ## Total number of susceptible (used for initialising population)
@@ -765,10 +772,21 @@ initial(sero_pos_50_plus) <- 0
 update(sero_pos_50_plus) <- sum(new_T_sero_pos[11:n_groups, , ])
 
 
-## Other state variables for post-processing
-initial(hosp_tot) <- 0
-update(hosp_tot) <- sum(new_H_R_conf) + sum(new_H_D_conf)
+## Confirmed hospital admissions
+initial(cum_admit_conf) <- 0
+delta_admit_conf <- sum(n_I_C_2_to_H_D_conf) + sum(n_I_C_2_to_H_R_conf)
+update(cum_admit_conf) <- cum_admit_conf + delta_admit_conf
 
-initial(D_hosp_tot) <- 0
-update(D_hosp_tot) <- D_hosp_tot + sum(delta_D_hosp_disag) +
-  sum(delta_D_non_hosp_disag)
+initial(admit_conf_inc) <- 0
+update(admit_conf_inc) <- if (step %% steps_per_day == 0)
+  delta_admit_conf else admit_conf_inc + delta_admit_conf
+
+
+## Other state variables for post-processing
+initial(cum_deaths_hosp) <- 0
+delta_deaths_hosp <- sum(delta_D_hosp_disag)
+update(cum_deaths_hosp) <- cum_deaths_hosp + delta_deaths_hosp
+
+initial(hosp_deaths_inc) <- 0
+update(hosp_deaths_inc) <- if (step %% steps_per_day == 0)
+  delta_deaths_hosp else hosp_deaths_inc + delta_deaths_hosp

@@ -12,7 +12,9 @@ ZamCovid_index <- function(info) {
   index <- info$index
 
   # Model states required for the particle filter to run:
-  index_core <- c(sero_pos_over15 = index[["sero_pos_over15"]],
+  index_core <- c(admitted_inc = index[["admit_conf_inc"]],
+                  deaths_hosp_inc = index[["hosp_deaths_inc"]],
+                  sero_pos_over15 = index[["sero_pos_over15"]],
                   sero_pos_15_19 = index[["sero_pos_15_19"]],
                   sero_pos_20_29 = index[["sero_pos_20_29"]],
                   sero_pos_30_39 = index[["sero_pos_30_39"]],
@@ -32,14 +34,12 @@ ZamCovid_index <- function(info) {
   # States disaggregated by age and/or vaccine class
   # Be careful of what disaggregated states you extract, as too many can easily
   # lead to memory issues when post-processing!
-  age_suffix <- paste0("_", c(model_age_bins()))
+  age_suffix <- paste0("_", model_age_bins()$start)
   n_vacc_classes <- info$dim$S[[2]]
 
   index_S <- calculate_index(index, "S", list(n_vacc_classes), age_suffix)
 
-  index_R <- calculate_index(index, "R",
-                             list(n_vacc_classes),
-                             age_suffix)
+  index_R <- calculate_index(index, "R", list(n_vacc_classes), age_suffix)
 
   index_state <- c(index_core, index_save, index_S, index_R)
 
@@ -105,6 +105,12 @@ calculate_index <- function(index, state, suffix_list, suffix0 = NULL,
   nms <- apply(suffixes, 1,
                function(x) sprintf("%s%s",
                                    state_name, paste0(x, collapse = "")))
+
+  set_names <- function(x, nms) {
+    names(x) <- nms
+    x
+  }
+
   set_names(index[[state]], nms)
 }
 

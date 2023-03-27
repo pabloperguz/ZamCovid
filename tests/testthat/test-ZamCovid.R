@@ -13,7 +13,7 @@ test_that("can run ZamCovid model", {
 
   res <- mod$run(end)
 
-  expect_equal(c(701, 5), dim(res))
+  expect_equal(c(703, 5), dim(res))
 
   ## TODO: add test with expected space observations given baseline parameters
 })
@@ -138,10 +138,11 @@ test_that("people sero-convert", {
 test_that("can run the particle filter on the model", {
   start_date <- numeric_date("2020-02-01")
   pars <- ZamCovid_parameters(start_date)
-  data <- helper_lancelot_data(read_csv(sircovid_file("extdata/example.csv")),
-                               0, pars$dt)
 
-  pf <- helper_lancelot_particle_filter(data, 10)
+  data <- read_csv(ZamCovid_file("extdata/example.csv"))
+  data <- helper_data(data, 0, pars$dt)
+
+  pf <- helper_particle_filter(data, 1)
   expect_s3_class(pf, "particle_filter")
 
   pf$run(pars)

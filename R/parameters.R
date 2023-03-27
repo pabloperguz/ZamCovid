@@ -192,6 +192,10 @@ ZamCovid_parameters <- function(start_date,
   ret$N_tot_30_39 <- sum(N_tot[7:8])
   ret$N_tot_40_49 <- sum(N_tot[9:10])
   ret$N_tot_50_plus <- sum(N_tot[11:length(N_tot)])
+  ret$phi_admitted <- 1
+  ret$kappa_admitted <- 2
+  ret$phi_death_hosp <- 1
+  ret$kappa_death_hosp <- 2
 
   ## Add some bespoke rel_p parameters
   rel_p_death <- build_rel_param(n_groups, rel_p_death,
@@ -639,6 +643,20 @@ ZamCovid_initial <- function(info, n_particles, pars) {
   state[index_I_weighted] <- 1
 
   state
+}
+
+
+##' Check that data for the particle filter has required columns and apply
+##' constraints for fitting to it.
+##'
+##' @title Check data for particle filter
+##' @param data A data.frame of data
+##' @return Invisibly, a data frame, identical to `data`
+##' @export
+ZamCovid_check_data <- function(data) {
+  ## TODO: develop constraints here, e.g. not allowing to fit to aggregated and
+  ## age-disaggregated data, etc.
+  invisible(data)
 }
 
 
