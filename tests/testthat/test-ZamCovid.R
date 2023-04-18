@@ -12,10 +12,26 @@ test_that("can run ZamCovid model", {
   mod$update_state(state = initial)
 
   res <- mod$run(end)
-
   expect_equal(c(672, 5), dim(res))
 
-  ## TODO: add test with expected space observations given baseline parameters
+  index <- ZamCovid_index(info)$run
+
+  mod$set_index(index)
+  res <- mod$run(end)
+
+  expected <- rbind(
+    time = c(274, 274, 274, 274, 274),
+    admitted_inc = c(0, 0, 1, 0, 0),
+    deaths_hosp_inc = c(3, 0, 2, 0, 6),
+    sero_pos_all = c(2494176, 1891080, 2574865, 1498194, 2412228),
+    sero_pos_over15 = c(1450901, 1099977, 1499329, 870743, 1403523),
+    sero_pos_15_19 = c(296256, 225071, 304955, 177718, 286858),
+    sero_pos_20_29 = c(431933, 327537, 446149, 260325, 417728),
+    sero_pos_30_39 = c(318735, 241715, 330708, 190711, 307682),
+    sero_pos_40_49 = c(206889, 155978, 213588, 124098, 200156),
+    sero_pos_50_plus = c(197088, 149676, 203929, 117891, 191099))
+
+  expect_equal(res, expected)
 })
 
 
@@ -137,16 +153,19 @@ test_that("people sero-convert", {
 
 test_that("can run the particle filter on the model", {
 
+  set.seed(2)
   start_date <- numeric_date("2020-02-01")
   pars <- ZamCovid_parameters(start_date)
 
   data <- read_csv(ZamCovid_file("extdata/example.csv"))
   data <- helper_data(data, 0, pars$dt)
 
-  pf <- helper_particle_filter(data, 1)
+  np <- 10
+  pf <- helper_particle_filter(data, np, seed = 2)
   expect_s3_class(pf, "particle_filter")
 
   pf$run(pars)
+
 })
 
 
