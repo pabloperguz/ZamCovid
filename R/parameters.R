@@ -53,7 +53,7 @@ NULL
 #' @param vaccination Either `NULL` or a named `list` containing all elements in
 #'    [ZamCovid::ZamCovid_parameters_vaccination]. Nota that, if `NULL` and
 #'    modelling vaccination, a `vaccine_progression_rate`, `vaccine_schedule`,
-#'    `vaccine_index_dose2`, `vaccine_index_booster`, `vaccine_catchup_fraction`
+#'    `vaccine_index_dose2`, `vaccine_catchup_fraction`
 #'    and `n_doses` must be supplied.
 #'
 #' @return Return a `list` of parameters to run the basic ZamCovid model.
@@ -74,7 +74,6 @@ ZamCovid_parameters <- function(start_date,
                                 vaccine_progression_rate = NULL,
                                 vaccine_schedule = NULL,
                                 vaccine_index_dose2 = NULL,
-                                vaccine_index_booster = NULL,
                                 vaccine_catchup_fraction = NULL,
                                 n_doses = 2L,
                                 initial_seed_pattern = 1,
@@ -119,7 +118,13 @@ ZamCovid_parameters <- function(start_date,
     if (is.null(n_groups)) {stop("Expected n_groups!")}
 
   } else {
-    population <- read_csv(ZamCovid_file("extdata/population.csv"))
+
+    if (is.null(population)) {
+      population <- read_csv(ZamCovid_file("extdata/population.csv"))
+    } else {
+      population <- population
+    }
+
     N_tot <- as.numeric(population$n)
     contact_matrix <-
       make_contact_matrix("extdata/matrix.csv", N_tot)
@@ -138,7 +143,6 @@ ZamCovid_parameters <- function(start_date,
   # beta_date <- numeric_date(beta_date)
   beta_step <- parameters_piecewise_linear(beta_date,
                                            beta_value %||% 0.1, dt)
-
 
   ## Default parameters
   ret <- list(
@@ -178,8 +182,7 @@ ZamCovid_parameters <- function(start_date,
                                                      rel_infectivity,
                                                      vaccine_progression_rate,
                                                      vaccine_schedule,
-                                                     vaccine_index_dose2,
-                                                     vaccine_index_booster)
+                                                     vaccine_index_dose2)
 
   ret <- c(ret, severity, progression, vaccination, sens_and_spec)
 
@@ -192,6 +195,12 @@ ZamCovid_parameters <- function(start_date,
   ret$N_tot_30_39 <- sum(N_tot[7:8])
   ret$N_tot_40_49 <- sum(N_tot[9:10])
   ret$N_tot_50_plus <- sum(N_tot[11:length(N_tot)])
+
+  ## TODO: we need observation parameters! kappas will be observation
+  ## probabilities in dnbinom (prob success in trial)
+  # kappa_death <- 1 / alpha_D
+  # kappa_pcr_cases <- 1 / x
+  # phi_pcr_cases <- 1
   ret$phi_admitted <- 1
   ret$kappa_admitted <- 2
   ret$phi_death_hosp <- 1
@@ -288,7 +297,7 @@ ZamCovid_parameters_progression <- function(dt,
   ## distribution, while the gamma parameters are the rate
   ## parameters of that distribution.
   ret <- list(k_E = 2,
-              k_H_R = 2,
+              k_H_R = 1,
               k_H_D = 2,
               k_G_D = 2,
               k_sero_pre = 2,
@@ -296,13 +305,13 @@ ZamCovid_parameters_progression <- function(dt,
               k_PCR_pre = 2,
               k_PCR_pos = 2,
 
-              gamma_E = 1 / (3.42 / 2),
+              gamma_E = 1 / 1.156069,
               gamma_A = 1 / 2.88,
               gamma_P = 1 / 1.68,
               gamma_C_1 = 1 / 2.14,
               gamma_C_2 = 1 / 1.86,
-              gamma_H_D = 2 / 5,
-              gamma_H_R = 2 / 10,
+              gamma_H_D = 1 / 5.2,
+              gamma_H_R = 1 / 10.7,
               gamma_G_D = 1 / (3 / 2),
               gamma_R = 1 / (3 * 365),
               gamma_U = 3 / 10,
@@ -462,7 +471,8 @@ ZamCovid_parameters_severity <- function(dt,
                                          p_H_D = NULL,
                                          p_G_D = NULL,
                                          p_R = NULL,
-                                         p_star = NULL) {
+                                         p_star = NULL,
+                                         p_sero_pos = NULL) {
 
   severity <- process_parameters_severity(severity)
 
@@ -555,10 +565,13 @@ ZamCovid_parameters_vaccination <- function(dt,
                                             vaccine_progression_rate,
                                             vaccine_schedule,
                                             vaccine_index_dose2,
-                                            vaccine_index_booster,
                                             vaccine_catchup_fraction = 1) {
+
   stopifnot(length(N_tot) == n_groups)
   calc_n_vacc_classes <- function(x) {
+    nlayer <- function(x) {
+      dim(x)[2L]
+    }
     if (is.array(x)) nlayer(x) else length(x)
   }
 

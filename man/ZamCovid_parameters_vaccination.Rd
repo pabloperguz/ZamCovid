@@ -17,7 +17,6 @@ ZamCovid_parameters_vaccination(
   vaccine_progression_rate,
   vaccine_schedule,
   vaccine_index_dose2,
-  vaccine_index_booster,
   vaccine_catchup_fraction = 1
 )
 }

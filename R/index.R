@@ -14,6 +14,7 @@ ZamCovid_index <- function(info) {
   # Model states required for the particle filter to run:
   index_core <- c(admitted_inc = index[["admit_conf_inc"]],
                   deaths_hosp_inc = index[["hosp_deaths_inc"]],
+                  sero_pos_all = index[["sero_pos_all"]],
                   sero_pos_over15 = index[["sero_pos_over15"]],
                   sero_pos_15_19 = index[["sero_pos_15_19"]],
                   sero_pos_20_29 = index[["sero_pos_20_29"]],

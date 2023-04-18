@@ -13,7 +13,7 @@ test_that("can run ZamCovid model", {
 
   res <- mod$run(end)
 
-  expect_equal(c(703, 5), dim(res))
+  expect_equal(c(672, 5), dim(res))
 
   ## TODO: add test with expected space observations given baseline parameters
 })
@@ -136,6 +136,7 @@ test_that("people sero-convert", {
 
 
 test_that("can run the particle filter on the model", {
+
   start_date <- numeric_date("2020-02-01")
   pars <- ZamCovid_parameters(start_date)
 

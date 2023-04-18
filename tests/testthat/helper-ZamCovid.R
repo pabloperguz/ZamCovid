@@ -3,6 +3,7 @@ helper_data <- function(data, start_date, dt) {
   data$date <- numeric_date(data$date)
 
   expected <- c(hosp_admissions = NA_real_, deaths_hosp = NA_real_,
+                sero_pos_all = NA_real_,
                 sero_pos_over15 = NA_real_, sero_tot_over15 = NA_real_,
                 sero_pos_15_19 = NA_real_, sero_tot_15_19 = NA_real_,
                 sero_pos_20_29 = NA_real_, sero_tot_20_29 = NA_real_,

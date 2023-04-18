@@ -9,6 +9,8 @@
 # state, so the N_tot_ might be not quite right
 # For a fixed seed, we can do -50 odd days after the first 15 deaths recorded
 # ass OJ did in squire
+# exp_noise for seropos ll might not be necessary here, as we will be explicitly
+# accounting for test performance characteristics
 
 ## Compartment indexes: age groups (i), vaccine class (j)
 # Note k index is used for shape parameter of erlang distributed rates
@@ -753,6 +755,9 @@ update(I_weighted[, ]) <-
 
 
 ## Sero-positive population by age
+initial(sero_pos_all) <- 0
+update(sero_pos_all) <- sum(new_T_sero_pos[1:n_groups, , ])
+
 initial(sero_pos_over15) <- 0
 update(sero_pos_over15) <- sum(new_T_sero_pos[4:n_groups, , ])
 

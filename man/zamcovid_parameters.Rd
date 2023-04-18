@@ -20,7 +20,6 @@ ZamCovid_parameters(
   vaccine_progression_rate = NULL,
   vaccine_schedule = NULL,
   vaccine_index_dose2 = NULL,
-  vaccine_index_booster = NULL,
   vaccine_catchup_fraction = NULL,
   n_doses = 2L,
   initial_seed_pattern = 1,
@@ -79,7 +78,7 @@ in \link{ZamCovid_parameters_sens_and_spec}.}
 \item{vaccination}{Either \code{NULL} or a named \code{list} containing all elements in
 \link{ZamCovid_parameters_vaccination}. Nota that, if \code{NULL} and
 modelling vaccination, a \code{vaccine_progression_rate}, \code{vaccine_schedule},
-\code{vaccine_index_dose2}, \code{vaccine_index_booster}, \code{vaccine_catchup_fraction}
+\code{vaccine_index_dose2}, \code{vaccine_catchup_fraction}
 and \code{n_doses} must be supplied.}
 }
 \value{
