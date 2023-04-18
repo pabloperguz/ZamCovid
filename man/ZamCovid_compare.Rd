@@ -4,7 +4,7 @@
 \alias{ZamCovid_compare}
 \title{Compare function for ZamCovid model.}
 \usage{
-ZamCovid_compare(state, observed, pars = NULL)
+ZamCovid_compare(state, observed, pars)
 }
 \arguments{
 \item{state}{State variable outputs from particle filter of generated

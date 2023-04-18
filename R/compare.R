@@ -15,16 +15,16 @@
 #' @export
 #'
 #' @examples basic_compare(state, observed)
-ZamCovid_compare <- function(state, observed, pars = NULL) {
+ZamCovid_compare <- function(state, observed, pars) {
 
-  model_admissions_conf <- state["admitted_inc"]
-  model_deaths_hosp <- state["deaths_hosp_inc"]
-  model_sero_pos_over15 <- state["sero_pos_over15"]
-  model_sero_pos_15_19 <- state["sero_pos_15_19"]
-  model_sero_pos_20_29 <- state["sero_pos_20_29"]
-  model_sero_pos_30_39 <- state["sero_pos_30_39"]
-  model_sero_pos_40_49 <- state["sero_pos_40_49"]
-  model_sero_pos_50_plus <- state["sero_pos_50_plus"]
+  model_admissions_conf <- state["admitted_inc", ]
+  model_deaths_hosp <- state["deaths_hosp_inc", ]
+  model_sero_pos_over15 <- state["sero_pos_over15", ]
+  model_sero_pos_15_19 <- state["sero_pos_15_19", ]
+  model_sero_pos_20_29 <- state["sero_pos_20_29", ]
+  model_sero_pos_30_39 <- state["sero_pos_30_39", ]
+  model_sero_pos_40_49 <- state["sero_pos_40_49", ]
+  model_sero_pos_50_plus <- state["sero_pos_50_plus", ]
 
 
   ## Serology assay

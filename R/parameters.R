@@ -902,7 +902,7 @@ numeric_date <- function(date) {
 
 numeric_date_as_date <- function(date) {
   assert_numeric_date(date)
-  as_date("2019-12-31") + date
+  as.Date("2019-12-31") + date
 }
 
 
