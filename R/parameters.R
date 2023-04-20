@@ -114,8 +114,20 @@ ZamCovid_parameters <- function(start_date,
       stop("A `population` must be provided with contact matrix!")
     }
 
-    if (is.null(N_tot)) {stop("Expected N_tot vector!")}
-    if (is.null(n_groups)) {stop("Expected n_groups!")}
+    stopifnot(colnames(population) == c("age_group", "n"))
+    N_tot <- population$n
+    n_groups <- length(N_tot)
+
+    if (!all(is.integer(population$n))) {
+      stop("Population must all be integer")
+    }
+
+    if (!all(population$n >= 0)) {
+      stop("Population must all be non-negative values")
+    }
+
+    stopifnot(is.matrix(contact_matrix))
+    stopifnot(nrow(contact_matrix) == n_groups)
 
   } else {
 
@@ -129,6 +141,7 @@ ZamCovid_parameters <- function(start_date,
     contact_matrix <-
       make_contact_matrix("extdata/matrix.csv", N_tot)
     n_groups <- nrow(contact_matrix)
+    contact_matrix <- as.matrix(contact_matrix)
   }
 
   dt <- 1 / steps_per_day
@@ -150,9 +163,10 @@ ZamCovid_parameters <- function(start_date,
     dt = dt,
     beta_step = beta_step,
 
-    m = as.matrix(contact_matrix),
+    m = contact_matrix,
     n_groups = n_groups, #  16 n_groups (5 year age bands and 75+)
 
+    seed_size = initial_seed_size,
     seed_age_band = 4L, # seed first wave in 15-19yo
     seed_step_start = floor(start_step),
     seed_value = initial_seed_value,
@@ -973,8 +987,8 @@ check_severity <- function(pars) {
       stop(sprintf("Parameter '%s' is missing", p_step))
     }
 
-    if (!(ncol(pars[[rel_p]]) %in% c(1, 4))) {
-      stop(sprintf("%s should have 1 or 4 columns", rel_p))
+    if (!(ncol(pars[[rel_p]]) == 1)) {
+      stop(sprintf("%s should have 1 column", rel_p))
     }
 
     assert_non_negative(pars[[rel_p]], rel_p)

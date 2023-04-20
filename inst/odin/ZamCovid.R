@@ -795,3 +795,11 @@ update(cum_deaths_hosp) <- cum_deaths_hosp + delta_deaths_hosp
 initial(hosp_deaths_inc) <- 0
 update(hosp_deaths_inc) <- if (step %% steps_per_day == 0)
   delta_deaths_hosp else hosp_deaths_inc + delta_deaths_hosp
+
+initial(cum_deaths_comm) <- 0
+delta_deaths_comm <- sum(delta_D_non_hosp_disag)
+update(cum_deaths_comm) <- cum_deaths_comm + delta_deaths_comm
+
+initial(comm_deaths_inc) <- 0
+update(comm_deaths_inc) <- if (step %% steps_per_day == 0)
+  delta_deaths_comm else comm_deaths_inc + delta_deaths_comm

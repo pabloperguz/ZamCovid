@@ -12,7 +12,7 @@ test_that("can run ZamCovid model", {
   mod$update_state(state = initial)
 
   res <- mod$run(end)
-  expect_equal(c(672, 5), dim(res))
+  expect_equal(c(674, 5), dim(res))
 
   index <- ZamCovid_index(info)$run
 
@@ -23,6 +23,7 @@ test_that("can run ZamCovid model", {
     time = c(274, 274, 274, 274, 274),
     admitted_inc = c(0, 0, 1, 0, 0),
     deaths_hosp_inc = c(3, 0, 2, 0, 6),
+    deaths_comm_inc = c(0, 0, 0, 0, 0),
     sero_pos_all = c(2494176, 1891080, 2574865, 1498194, 2412228),
     sero_pos_over15 = c(1450901, 1099977, 1499329, 870743, 1403523),
     sero_pos_15_19 = c(296256, 225071, 304955, 177718, 286858),
