@@ -82,53 +82,53 @@ test_that("can compute severity for ZamCovid model", {
   # Get default values
   severity <- ZamCovid_parameters_severity(0.25, NULL)
   expect_equal(
-    severity$p_G_D_step, array(0.05, c(1, 16)))
+    severity$p_star_step, array(0.2, c(1, 16)))
 
   # Can input severity data
   data <- read_csv(ZamCovid_file("extdata/severity_default.csv"))
-  data[data$Name == "p_G_D", -1L] <- 0
+  data[data$Name == "p_star", -1L] <- 0
 
   severity <- ZamCovid_parameters_severity(0.25, data)
   expect_equal(
-    severity$p_G_D_step, array(0, c(1, 16)))
+    severity$p_star_step, array(0, c(1, 16)))
 
   # Compute time-varying severity
   dt <- 0.25
-  p_G_D_date <- numeric_date(c("2020-02-01", "2020-05-01"))
-  p_G_D_value <- c(0.05, 0.1)
+  p_star_date <- numeric_date(c("2020-02-01", "2020-05-01"))
+  p_star_value <- c(0.2, 0.5)
 
   severity <-
     ZamCovid_parameters_severity(dt, NULL,
-                                 p_G_D = list(date = p_G_D_date,
-                                              value = p_G_D_value))
-  p_G_D_step <- parameters_piecewise_linear(p_G_D_date, p_G_D_value, dt)
+                                 p_star = list(date = p_star_date,
+                                              value = p_star_value))
+  p_star_step <- parameters_piecewise_linear(p_star_date, p_star_value, dt)
 
-  expect_equal(severity$p_G_D_step[, 16], p_G_D_step)
+  expect_equal(severity$p_star_step[, 16], p_star_step)
 
-
-  expect_error(
-    ZamCovid_parameters_severity(dt,
-                                 p_G_D = list(date = 1,
-                                              value = 0.3)),
-    "As 'p_G_D' has a single 'value', expected NULL or missing 'date'")
 
   expect_error(
     ZamCovid_parameters_severity(dt,
-                                 p_G_D = list(date = c(1, 4, 5),
+                                 p_star = list(date = 1,
+                                               value = 0.3)),
+    "As 'p_star' has a single 'value', expected NULL or missing 'date'")
+
+  expect_error(
+    ZamCovid_parameters_severity(dt,
+                                 p_star = list(date = c(1, 4, 5),
                                               value = c(0.2, 0.3))),
-    "'date' and 'value' for 'p_G_D' must have the same length")
+    "'date' and 'value' for 'p_star' must have the same length")
 
   expect_error(
     ZamCovid_parameters_severity(dt,
-                                 p_G_D = list(date = c(1, 4),
+                                 p_star = list(date = c(1, 4),
                                               value = c(-1, 0.3))),
-    "'p_G_D' must lie in [0, 1]", fixed = TRUE)
+    "'p_star' must lie in [0, 1]", fixed = TRUE)
 
   expect_error(
     ZamCovid_parameters_severity(dt,
-                                 p_G_D = list(date = c(1, 4),
+                                 p_star = list(date = c(1, 4),
                                               value = c(0.2, 3))),
-    "'p_G_D' must lie in [0, 1]", fixed = TRUE)
+    "'p_star' must lie in [0, 1]", fixed = TRUE)
 
 })
 

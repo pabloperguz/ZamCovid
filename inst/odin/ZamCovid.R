@@ -152,11 +152,13 @@ n_I_P_next_vacc_class[, ] <- rbinom(I_P[i, j] - n_I_P_progress[i, j],
 
 n_I_C_1_progress[, ] <- rbinom(I_C_1[i, j], p_I_C_1_progress)
 n_I_C_2_progress[, ] <- rbinom(I_C_2[i, j], p_I_C_2_progress)
-n_I_C_2_to_RS[, ] <- rbinom(n_I_C_2_progress[i, j], 1 - p_H[i, j])
-n_I_C_2_to_G_D[, ] <- rbinom(n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j],
-                           p_G_D[i, j])
-n_I_C_2_to_hosp[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j] -
-  n_I_C_2_to_G_D[i, j]
+
+n_I_C_2_NoHosp[, ] <- rbinom(n_I_C_2_progress[i, j], 1 - p_H[i, j])
+n_I_C_2_to_RS[, ] <- rbinom(n_I_C_2_NoHosp[i, j], 1 - p_G_D[i, j])
+
+n_I_C_2_to_hosp[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_NoHosp[i, j]
+n_I_C_2_to_G_D[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j] -
+  n_I_C_2_to_hosp[i, j]
 
 n_I_C_2_to_H_R[, ] <- rbinom(n_I_C_2_to_hosp[i, j], 1 - p_H_D[i, j])
 n_I_C_2_to_H_D[, ] <- n_I_C_2_to_hosp[i, j] - n_I_C_2_to_H_R[i, j]
@@ -605,6 +607,7 @@ dim(n_G_D_progress) <- c(n_groups, n_vacc_classes, k_G_D)
 dim(n_R_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(n_infected_to_R) <- c(n_groups, n_vacc_classes)
 dim(n_I_C_2_to_RS) <- c(n_groups, n_vacc_classes)
+dim(n_I_C_2_NoHosp) <- c(n_groups, n_vacc_classes)
 dim(n_infection_end) <- c(n_groups, n_vacc_classes)
 dim(n_I_C_2_to_hosp) <- c(n_groups, n_vacc_classes)
 dim(n_com_to_T_sero_pre) <- c(n_groups, n_vacc_classes)
