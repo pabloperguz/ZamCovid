@@ -1,3 +1,17 @@
+## TODO: checklist
+# Create mock dataset and write tests for pMCMC
+# Create mock vaccination schedule and write tests for vaccine engine
+# Add S, E, R classes tracking re-infections
+# If boosters are needed further down the line, implement vaccine skip
+# Assess hospitalisation data, as and when available, and think whether
+# conf/uncof still make sense or it might need re-factoring
+# Check N_tot_ for parallel flows, as new_T_PCR_neg (e.g.) is an absorbing
+# state, so the N_tot_ might be not quite right
+# For a fixed seed, we can do -50 odd days after the first 15 deaths recorded
+# ass OJ did in squire
+# exp_noise for seropos ll might not be necessary here, as we will be explicitly
+# accounting for test performance characteristics
+
 ## Compartment indexes: age groups (i), vaccine class (j)
 # Note k index is used for shape parameter of erlang distributed rates
 n_groups <- user()
@@ -138,11 +152,13 @@ n_I_P_next_vacc_class[, ] <- rbinom(I_P[i, j] - n_I_P_progress[i, j],
 
 n_I_C_1_progress[, ] <- rbinom(I_C_1[i, j], p_I_C_1_progress)
 n_I_C_2_progress[, ] <- rbinom(I_C_2[i, j], p_I_C_2_progress)
-n_I_C_2_to_RS[, ] <- rbinom(n_I_C_2_progress[i, j], 1 - p_H[i, j])
-n_I_C_2_to_G_D[, ] <- rbinom(n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j],
-                           p_G_D[i, j])
-n_I_C_2_to_hosp[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j] -
-  n_I_C_2_to_G_D[i, j]
+
+n_I_C_2_NoHosp[, ] <- rbinom(n_I_C_2_progress[i, j], 1 - p_H[i, j])
+n_I_C_2_to_RS[, ] <- rbinom(n_I_C_2_NoHosp[i, j], 1 - p_G_D[i, j])
+
+n_I_C_2_to_hosp[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_NoHosp[i, j]
+n_I_C_2_to_G_D[, ] <- n_I_C_2_progress[i, j] - n_I_C_2_to_RS[i, j] -
+  n_I_C_2_to_hosp[i, j]
 
 n_I_C_2_to_H_R[, ] <- rbinom(n_I_C_2_to_hosp[i, j], 1 - p_H_D[i, j])
 n_I_C_2_to_H_D[, ] <- n_I_C_2_to_hosp[i, j] - n_I_C_2_to_H_R[i, j]
@@ -408,10 +424,6 @@ update(tmp_vaccine_probability[, ]) <- vaccine_probability[i, j]
 
 vaccine_progression_rate_base[, ] <- user()
 
-## Space observation equations
-## TODO: define anything that will become a space variable for the compare fnx
-
-
 
 ### Initial states are all zeroed
 # S and E will be initialiased based on the seeding model
@@ -518,10 +530,6 @@ gamma_U <- if (as.integer(step) >= n_gamma_U_steps)
 gamma_R <- user()
 
 
-## Progression probabilities
-
-
-
 
 ## Dimensions of arrays and vectors ###
 dim(S) <- c(n_groups, n_vacc_classes)
@@ -599,6 +607,7 @@ dim(n_G_D_progress) <- c(n_groups, n_vacc_classes, k_G_D)
 dim(n_R_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(n_infected_to_R) <- c(n_groups, n_vacc_classes)
 dim(n_I_C_2_to_RS) <- c(n_groups, n_vacc_classes)
+dim(n_I_C_2_NoHosp) <- c(n_groups, n_vacc_classes)
 dim(n_infection_end) <- c(n_groups, n_vacc_classes)
 dim(n_I_C_2_to_hosp) <- c(n_groups, n_vacc_classes)
 dim(n_com_to_T_sero_pre) <- c(n_groups, n_vacc_classes)
@@ -677,3 +686,123 @@ dim(gamma_PCR_pre_step) <- n_gamma_PCR_pre_steps
 dim(gamma_PCR_pos_step) <- n_gamma_PCR_pos_steps
 dim(gamma_sero_pos_step) <- n_gamma_sero_pos_steps
 dim(gamma_sero_pre_step) <- n_gamma_sero_pre_steps
+
+
+
+########################################
+###   Space observation equations    ###
+########################################
+
+## Parameters to support the compare function. Since these do not appear in any
+## odin equation, they are marked as "ignore.unused"
+N_tot_over15 <- user() # ignore.unused
+sero_sensitivity <- user() # ignore.unused
+sero_specificity <- user() # ignore.unused
+PCR_sensitivity <- user() # ignore.unused
+PCR_specificity <- user() # ignore.unused
+exp_noise <- user() # ignore.unused
+phi_admitted <- user() # ignore.unused
+kappa_admitted <- user() # ignore.unused
+phi_death_hosp <- user() # ignore.unused
+kappa_death_hosp <- user() # ignore.unused
+
+
+## Total number of susceptible (used for initialising population)
+initial(susceptible) <- 0
+update(susceptible) <- sum(new_S)
+
+
+## Total population
+initial(N_tot[]) <- 0
+update(N_tot[]) <- sum(S[i, ]) + sum(R[i, ]) + sum(D_hosp[i, ]) +
+  sum(E[i, , ]) + sum(I_A[i, ]) + sum(I_P[i, ]) +
+  sum(I_C_1[i, ]) + sum(I_C_2[i, ]) +
+  sum(H_R_conf[i, , ]) + sum(H_R_unconf[i, , ]) +
+  sum(H_D_conf[i, , ]) + sum(H_D_unconf[i, , ]) +
+  sum(G_D[i, , ]) + sum(D_non_hosp[i, ])
+dim(N_tot) <- n_groups
+
+
+## Total population calculated with seroconversion flow
+initial(N_tot_sero) <- 0
+update(N_tot_sero) <- sum(S) + sum(T_sero_pre) +
+  sum(T_sero_pos) + sum(T_sero_neg) + sum(E)
+
+
+## Total population calculated with PCR flow
+initial(N_tot_PCR) <- 0
+update(N_tot_PCR) <- sum(S) + sum(T_PCR_pre) + sum(T_PCR_pos) + sum(T_PCR_neg)
+
+
+## I_weighted used in Rt and IFR calculations
+dim(new_I_weighted) <- c(n_groups, n_vacc_classes)
+new_I_weighted[, ] <-
+  I_A_transmission * new_I_A[i, j] +
+  I_P_transmission * new_I_P[i, j] +
+  I_C_1_transmission * new_I_C_1[i, j] +
+  I_C_2_transmission * new_I_C_2[i, j] +
+  hosp_transmission * (sum(H_R_conf[i, j, ]) +
+                         sum(H_R_unconf[i, j, ]) +
+                         sum(H_D_conf[i, j, ]) +
+                         sum(H_D_unconf[i, j, ])) +
+  G_D_transmission * sum(G_D[i, j, ])
+sum_new_I_weighted <- sum(new_I_weighted)
+initial(I_weighted[, ]) <- 0
+dim(I_weighted) <- c(n_groups, n_vacc_classes)
+# If there are zero infectives at time step default to putting weight
+# in group 4/vaccine stratum 1 to avoid NAs in IFR calculation.
+update(I_weighted[, ]) <-
+  (if (sum_new_I_weighted == 0)
+    (if (i == seed_age_band && j == 1) 1 else 0)
+   else new_I_weighted[i, j])
+
+
+## Sero-positive population by age
+initial(sero_pos_all) <- 0
+update(sero_pos_all) <- sum(new_T_sero_pos[1:n_groups, , ])
+
+initial(sero_pos_over15) <- 0
+update(sero_pos_over15) <- sum(new_T_sero_pos[4:n_groups, , ])
+
+initial(sero_pos_15_19) <- 0
+update(sero_pos_15_19) <- sum(new_T_sero_pos[4, , ])
+
+initial(sero_pos_20_29) <- 0
+update(sero_pos_20_29) <- sum(new_T_sero_pos[5:6, , ])
+
+initial(sero_pos_30_39) <- 0
+update(sero_pos_30_39) <- sum(new_T_sero_pos[7:8, , ])
+
+initial(sero_pos_40_49) <- 0
+update(sero_pos_40_49) <- sum(new_T_sero_pos[9:10, , ])
+
+initial(sero_pos_50_plus) <- 0
+update(sero_pos_50_plus) <- sum(new_T_sero_pos[11:n_groups, , ])
+
+
+## Confirmed hospital admissions
+initial(cum_admit_conf) <- 0
+delta_admit_conf <- sum(n_I_C_2_to_H_D_conf) + sum(n_I_C_2_to_H_R_conf)
+update(cum_admit_conf) <- cum_admit_conf + delta_admit_conf
+
+initial(admit_conf_inc) <- 0
+update(admit_conf_inc) <- if (step %% steps_per_day == 0)
+  delta_admit_conf else admit_conf_inc + delta_admit_conf
+
+
+## Other state variables for post-processing
+initial(cum_deaths_hosp) <- 0
+delta_deaths_hosp <- sum(delta_D_hosp_disag)
+update(cum_deaths_hosp) <- cum_deaths_hosp + delta_deaths_hosp
+
+initial(hosp_deaths_inc) <- 0
+update(hosp_deaths_inc) <- if (step %% steps_per_day == 0)
+  delta_deaths_hosp else hosp_deaths_inc + delta_deaths_hosp
+
+initial(cum_deaths_comm) <- 0
+delta_deaths_comm <- sum(delta_D_non_hosp_disag)
+update(cum_deaths_comm) <- cum_deaths_comm + delta_deaths_comm
+
+initial(comm_deaths_inc) <- 0
+update(comm_deaths_inc) <- if (step %% steps_per_day == 0)
+  delta_deaths_comm else comm_deaths_inc + delta_deaths_comm

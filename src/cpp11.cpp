@@ -6,13 +6,6 @@
 #include <R_ext/Visibility.h>
 
 // basic.cpp
-cpp11::sexp dust_basic_capabilities();
-extern "C" SEXP _ZamCovid_dust_basic_capabilities() {
-  BEGIN_CPP11
-    return cpp11::as_sexp(dust_basic_capabilities());
-  END_CPP11
-}
-// basic.cpp
 cpp11::sexp dust_basic_gpu_info();
 extern "C" SEXP _ZamCovid_dust_basic_gpu_info() {
   BEGIN_CPP11
@@ -24,6 +17,13 @@ SEXP dust_cpu_basic_alloc(cpp11::list r_pars, bool pars_multi, cpp11::sexp r_tim
 extern "C" SEXP _ZamCovid_dust_cpu_basic_alloc(SEXP r_pars, SEXP pars_multi, SEXP r_time, SEXP r_n_particles, SEXP n_threads, SEXP r_seed, SEXP deterministic, SEXP gpu_config, SEXP ode_control) {
   BEGIN_CPP11
     return cpp11::as_sexp(dust_cpu_basic_alloc(cpp11::as_cpp<cpp11::decay_t<cpp11::list>>(r_pars), cpp11::as_cpp<cpp11::decay_t<bool>>(pars_multi), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(r_time), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(r_n_particles), cpp11::as_cpp<cpp11::decay_t<int>>(n_threads), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(r_seed), cpp11::as_cpp<cpp11::decay_t<bool>>(deterministic), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(gpu_config), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(ode_control)));
+  END_CPP11
+}
+// basic.cpp
+cpp11::sexp dust_cpu_basic_capabilities();
+extern "C" SEXP _ZamCovid_dust_cpu_basic_capabilities() {
+  BEGIN_CPP11
+    return cpp11::as_sexp(dust_cpu_basic_capabilities());
   END_CPP11
 }
 // basic.cpp
@@ -142,18 +142,10 @@ extern "C" SEXP _ZamCovid_dust_cpu_basic_set_stochastic_schedule(SEXP ptr, SEXP 
   END_CPP11
 }
 // basic.cpp
-void dust_cpu_basic_ode_statistics(SEXP ptr);
+SEXP dust_cpu_basic_ode_statistics(SEXP ptr);
 extern "C" SEXP _ZamCovid_dust_cpu_basic_ode_statistics(SEXP ptr) {
   BEGIN_CPP11
-    dust_cpu_basic_ode_statistics(cpp11::as_cpp<cpp11::decay_t<SEXP>>(ptr));
-    return R_NilValue;
-  END_CPP11
-}
-// ZamCovid.cpp
-cpp11::sexp dust_ZamCovid_capabilities();
-extern "C" SEXP _ZamCovid_dust_ZamCovid_capabilities() {
-  BEGIN_CPP11
-    return cpp11::as_sexp(dust_ZamCovid_capabilities());
+    return cpp11::as_sexp(dust_cpu_basic_ode_statistics(cpp11::as_cpp<cpp11::decay_t<SEXP>>(ptr)));
   END_CPP11
 }
 // ZamCovid.cpp
@@ -168,6 +160,13 @@ SEXP dust_cpu_ZamCovid_alloc(cpp11::list r_pars, bool pars_multi, cpp11::sexp r_
 extern "C" SEXP _ZamCovid_dust_cpu_ZamCovid_alloc(SEXP r_pars, SEXP pars_multi, SEXP r_time, SEXP r_n_particles, SEXP n_threads, SEXP r_seed, SEXP deterministic, SEXP gpu_config, SEXP ode_control) {
   BEGIN_CPP11
     return cpp11::as_sexp(dust_cpu_ZamCovid_alloc(cpp11::as_cpp<cpp11::decay_t<cpp11::list>>(r_pars), cpp11::as_cpp<cpp11::decay_t<bool>>(pars_multi), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(r_time), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(r_n_particles), cpp11::as_cpp<cpp11::decay_t<int>>(n_threads), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(r_seed), cpp11::as_cpp<cpp11::decay_t<bool>>(deterministic), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(gpu_config), cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(ode_control)));
+  END_CPP11
+}
+// ZamCovid.cpp
+cpp11::sexp dust_cpu_ZamCovid_capabilities();
+extern "C" SEXP _ZamCovid_dust_cpu_ZamCovid_capabilities() {
+  BEGIN_CPP11
+    return cpp11::as_sexp(dust_cpu_ZamCovid_capabilities());
   END_CPP11
 }
 // ZamCovid.cpp
@@ -286,21 +285,19 @@ extern "C" SEXP _ZamCovid_dust_cpu_ZamCovid_set_stochastic_schedule(SEXP ptr, SE
   END_CPP11
 }
 // ZamCovid.cpp
-void dust_cpu_ZamCovid_ode_statistics(SEXP ptr);
+SEXP dust_cpu_ZamCovid_ode_statistics(SEXP ptr);
 extern "C" SEXP _ZamCovid_dust_cpu_ZamCovid_ode_statistics(SEXP ptr) {
   BEGIN_CPP11
-    dust_cpu_ZamCovid_ode_statistics(cpp11::as_cpp<cpp11::decay_t<SEXP>>(ptr));
-    return R_NilValue;
+    return cpp11::as_sexp(dust_cpu_ZamCovid_ode_statistics(cpp11::as_cpp<cpp11::decay_t<SEXP>>(ptr)));
   END_CPP11
 }
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_ZamCovid_dust_ZamCovid_capabilities",                (DL_FUNC) &_ZamCovid_dust_ZamCovid_capabilities,                0},
     {"_ZamCovid_dust_ZamCovid_gpu_info",                    (DL_FUNC) &_ZamCovid_dust_ZamCovid_gpu_info,                    0},
-    {"_ZamCovid_dust_basic_capabilities",                   (DL_FUNC) &_ZamCovid_dust_basic_capabilities,                   0},
     {"_ZamCovid_dust_basic_gpu_info",                       (DL_FUNC) &_ZamCovid_dust_basic_gpu_info,                       0},
     {"_ZamCovid_dust_cpu_ZamCovid_alloc",                   (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_alloc,                   9},
+    {"_ZamCovid_dust_cpu_ZamCovid_capabilities",            (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_capabilities,            0},
     {"_ZamCovid_dust_cpu_ZamCovid_compare_data",            (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_compare_data,            1},
     {"_ZamCovid_dust_cpu_ZamCovid_filter",                  (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_filter,                  5},
     {"_ZamCovid_dust_cpu_ZamCovid_n_state",                 (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_n_state,                 1},
@@ -319,6 +316,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ZamCovid_dust_cpu_ZamCovid_time",                    (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_time,                    1},
     {"_ZamCovid_dust_cpu_ZamCovid_update_state",            (DL_FUNC) &_ZamCovid_dust_cpu_ZamCovid_update_state,            7},
     {"_ZamCovid_dust_cpu_basic_alloc",                      (DL_FUNC) &_ZamCovid_dust_cpu_basic_alloc,                      9},
+    {"_ZamCovid_dust_cpu_basic_capabilities",               (DL_FUNC) &_ZamCovid_dust_cpu_basic_capabilities,               0},
     {"_ZamCovid_dust_cpu_basic_compare_data",               (DL_FUNC) &_ZamCovid_dust_cpu_basic_compare_data,               1},
     {"_ZamCovid_dust_cpu_basic_filter",                     (DL_FUNC) &_ZamCovid_dust_cpu_basic_filter,                     5},
     {"_ZamCovid_dust_cpu_basic_n_state",                    (DL_FUNC) &_ZamCovid_dust_cpu_basic_n_state,                    1},

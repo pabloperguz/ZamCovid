@@ -12,7 +12,8 @@ ZamCovid_parameters_severity(
   p_H_D = NULL,
   p_G_D = NULL,
   p_R = NULL,
-  p_star = NULL
+  p_star = NULL,
+  p_sero_pos = NULL
 )
 }
 \arguments{
