@@ -878,6 +878,13 @@ parameters_piecewise_linear <- function (date, value, dt) {
 }
 
 
+ZamCovid_parameters_expand_step <- function(step, value_step) {
+  # Convert between the values passed to parameters_piecewise_linear()
+  # and the actual values for a given set of steps.
+  value_step[pmin(step, length(value_step) - 1L) + 1L]
+}
+
+
 #' Recover fitted parameters model samples
 #'
 #' @param samples A `samples` object from a pMCMC model run.
