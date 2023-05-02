@@ -9,38 +9,9 @@
 ##'
 ##' @param p A [ZamCovid_parameters()] object
 ##'
-##' @param prob_strain A (n groups x n strains) x n time steps matrix of
-##'   "prob_strain" outputs from the model. For a 2 strain model for example,
-##'   `prob_strain[1, j]` and `prob_strain[n_groups + 1, j]` should give, for
-##'   the j^th time step, the probabilities that new infections
-##'   in group 1 are of strains 1 and 2 respectively.
-##'   The default is `NULL`, but it must
-##'   be specified if there is more than one strain
-##'
 ##' @param type A character vector of possible Rt types to
 ##'   compute. Can be `eff_Rt_general` or `Rt_general`, for Rt accounting or
 ##'   not accounting for immunity in the population, respectively.
-##'
-##' @param interpolate_every Spacing (in days) to use between interpolated
-##'   points
-##'
-##' @param interpolate_critical_dates Optional vector of critical ZamCovid
-##'   dates to use when interpolating. Interpolation will be done in
-##'   blocks between the first time step of these dates, with each block
-##'   starting on the first time step of the date given.
-##'   So if you give a `interpolate_critical_dates` of `c(20,
-##'   50)` then blocks *start* on first time step of days 20 and 50,
-##'   i.e.: `[1, 20)`, `[20, 50)`, `[50, end]`.
-##'
-##' @param interpolate_min The minimum number of steps to include
-##'   within a block. If there are fewer points than this then all
-##'   points are used (i.e., no interpolation is done) or
-##'   `interpolate_every` is reduced until at least this many points
-##'   were used. This can be used to specify a lower bound on the
-##'   error of small regions. If Rt is small it won't matter that
-##'   much. You do need to specify something though or interpolation
-##'   will not happen, and do not use less than 3 as we use spline
-##'   interpolation and that will not work with fewer than 3 points.
 ##'
 ##' @param eigen_method The eigenvalue method to use (passed to
 ##'   [eigen1::eigen1] as `method`)
@@ -52,22 +23,14 @@
 ##'  of the Rt for all strains, otherwise all calculations are returned with
 ##'  an additional dimension to index each strain.
 ##'
-##' @param keep_strains_Rt Additional argument for when `weight_Rt` is `TRUE`
-##'  (has no impact otherwise). If `TRUE`, then the Rt for each strain is
-##'  returned along with the weighted average, otherwise just the weighted
-##'  average is returned. When `TRUE`, the dimension indexing these lists
-##'  strains first, and then the weighted average.
-##'
 ##' @return A list with elements `time`, `beta`, and any of the `type`
 ##'   values specified above.
 ##'
 ##' @export
-ZamCovid_Rt <- function(time, S, p, prob_strain = NULL,
-                        type = NULL, interpolate_every = NULL,
-                        interpolate_critical_dates = NULL,
-                        interpolate_min = NULL,
+ZamCovid_Rt <- function(time, S, p,
+                        type = NULL,
                         eigen_method = "power_iteration", R = NULL,
-                        weight_Rt = FALSE, keep_strains_Rt = FALSE) {
+                        weight_Rt = FALSE) {
 
   if (sum(p$hosp_transmission, p$ICU_transmission, p$G_D_transmission) > 0) {
     stop("Cannot currently compute Rt if any of 'hosp_transmission',
@@ -87,79 +50,8 @@ ZamCovid_Rt <- function(time, S, p, prob_strain = NULL,
   }
 
   n_strains <- 1
-  ## move prob_strain check up here and make NULL if not needed to shortcut
-  ##  checks and calculations
-  if (n_strains > 1) {
-    if (is.null(prob_strain) || is.null(R)) {
-      stop("Expected prob_strain and R input because there is more than one
-            strain")
-      ## deal with the prob_strain NA case at the beginning before any variables
-      ##  are modified
-    } else if (!is.null(prob_strain) && any(is.na(prob_strain)) && weight_Rt) {
-      which_nna <- !vlapply(seq(ncol(prob_strain)),
-                            function(i) any(is.na(prob_strain[, i])))
-
-      ## calculate Rt by first ignoring NA
-      if (any(which_nna)) {
-        ret <- ZamCovid_Rt(
-          time[which_nna], S[, which_nna, drop = FALSE], p,
-          prob_strain[, which_nna, drop = FALSE], type, interpolate_every,
-          interpolate_critical_dates, interpolate_min,
-          eigen_method, R[, which_nna, drop = FALSE], weight_Rt,
-          keep_strains_Rt)
-      } else {
-        ret <- vector("list", 3 + length(type))
-        names(ret) <- c("time", "date", "beta", type)
-      }
-
-      ## replace reduced time,date,beta with full values (no NA here)
-      ret$time <- time
-      ret$date <- time * p$dt
-      ret$beta <- beta <- ZamCovid_parameters_expand_step(time, p$beta_step)
-
-      ## restore full length Rt with NAs when prob_strain is NA
-      for (i in grep("Rt_", names(ret))) {
-        base <- rep(NA, length(time))
-        base[which_nna] <- ret[[i]]
-        ret[[i]] <- base
-      }
-
-      return(ret)
-    }
-  } else {
-    prob_strain <- array(1, length(time))
-    R <- NULL
-  }
-
-  if (!is.null(interpolate_every)) {
-    interpolate_critical_index <- match(interpolate_critical_dates / p$dt,
-                                        time)
-    # remove NA values and ensure vector order is decreasing
-    interpolate_critical_index <-
-      interpolate_critical_index[!is.na(interpolate_critical_index)]
-    interpolate_critical_index <-
-      interpolate_critical_index[order(interpolate_critical_index,
-                                       decreasing = FALSE)]
-
-    time_index_split <- interpolate_grid_critical_x(seq_along(time),
-                                                    interpolate_every,
-                                                    interpolate_critical_index,
-                                                    interpolate_min)
-    time_index <- unlist(time_index_split)
-    ret <- ZamCovid_Rt(time[time_index], S[, time_index, drop = FALSE], p,
-                       prob_strain[, time_index, drop = FALSE], type,
-                       R = R[, time_index, drop = FALSE],
-                       weight_Rt = weight_Rt, keep_strains_Rt = keep_strains_Rt)
-    if (!is.null(interpolate_every)) {
-      ret[type] <- lapply(ret[type], interpolate_grid_expand_y,
-                          time_index_split)
-    }
-    ## Also need to update these
-    ret$time <- time
-    ret$date <- time * p$dt
-    ret$beta <- ZamCovid_parameters_expand_step(time, p$beta_step)
-    return(ret)
-  }
+  n_real_strains <- 1
+  R <- NULL
 
   if (nrow(S) != nlayer(p$rel_susceptibility) * nrow(p$m)) {
     stop(sprintf(
@@ -183,31 +75,6 @@ ZamCovid_Rt <- function(time, S, p, prob_strain = NULL,
     if (ncol(R) != length(time)) {
       stop(sprintf("Expected 'R' to have %d columns, following 'time'",
                    length(time)))
-    }
-  }
-
-  if (n_strains == 1) {
-    n_real_strains <- 1
-  } else {
-    ## unmirror pseudo-strains value (with safety checks)
-    p <- unmirror_pars(p)
-    n_real_strains <- 2
-
-    if (!is.matrix(prob_strain)) {
-      stop(sprintf(
-        "Expected a %d strains x %d time steps matrix for 'prob_strain'",
-        n_real_strains, length(time)))
-    }
-
-    if (nrow(prob_strain) != n_real_strains) {
-      stop(sprintf(
-        "Expected 'prob_strain' to have %d rows, following number of strains",
-        n_real_strains))
-    }
-    if (ncol(prob_strain) != length(time)) {
-      stop(sprintf(
-        "Expected 'prob_strain' to have %d columns, following 'time'",
-        length(time)))
     }
   }
 
@@ -335,22 +202,11 @@ ZamCovid_Rt <- function(time, S, p, prob_strain = NULL,
 ##'   (shared parameters) or an unnamed list of
 ##'   [ZamCovid_parameters()] objects, the same length as `ncol(S)`.
 ##'
-##' @param prob_strain A 3d ((n groups x n strains) x n trajectories x n time
-##'   steps) array of "prob_strain" model outputs. Default is `NULL`, but it
-##'   must be specified if there is more than one strain.
-##'
 ##' @param initial_time_from_parameters If `TRUE`, then `time[[1]]` is
 ##'   replaced by the value of `initial_time` from the parameters.
-##'   This is usually what you want. (From ZamCovid 0.12.13 this
-##'   parameter means "initial time is zero" and will probably be
-##'   updated in a future version).
+##'   This is usually what you want.
 ##'
-##' @param shared_parameters Should `pars` be treated as a single
-##'   shared list? Leave as `NULL` to detect automatically, set to
-##'   `TRUE` or `FALSE` to force it to be interpreted one way or the
-##'   other which may give more easily interpretable error messages.
-##'
-##' @param R A 3d ((n groups x n strains x n vaccine classes) x
+##' @param R A 2d ((n groups x n strains x n vaccine classes) x
 ##'   n trajectories x n time steps) array of "R" compartment counts, required
 ##'   for multi-strain models.
 ##'
@@ -360,30 +216,19 @@ ZamCovid_Rt <- function(time, S, p, prob_strain = NULL,
 ##'   matrix, not a vector.
 ##'
 ##' @export
-ZamCovid_Rt_trajectories <- function(time, S, pars, prob_strain = NULL,
+ZamCovid_Rt_trajectories <- function(time, S, pars,
                                      initial_time_from_parameters = TRUE,
-                                     shared_parameters = NULL,
-                                     type = NULL,
-                                     interpolate_every = NULL,
-                                     interpolate_critical_dates = NULL,
-                                     interpolate_min = NULL,
+                                     type = c("eff_Rt_general", "Rt_general"),
                                      eigen_method = "power_iteration",
-                                     R = NULL, weight_Rt = FALSE,
-                                     keep_strains_Rt = FALSE) {
+                                     R = NULL, weight_Rt = FALSE) {
   calculate_Rt_trajectories(
     calculate_Rt = ZamCovid_Rt, time = time,
     S = S, pars = pars,
-    prob_strain = prob_strain,
     initial_time_from_parameters = initial_time_from_parameters,
-    shared_parameters = shared_parameters,
     type = type,
-    interpolate_every = interpolate_every,
-    interpolate_critical_dates = interpolate_critical_dates,
-    interpolate_min = interpolate_min,
     eigen_method = eigen_method,
     R = R,
-    weight_Rt = weight_Rt,
-    keep_strains_Rt = keep_strains_Rt)
+    weight_Rt = weight_Rt)
 }
 
 
@@ -437,9 +282,9 @@ ZamCovid_Rt_mean_duration_weighted_by_infectivity <- function(time, pars) {
 }
 
 
-calculate_Rt_trajectories <- function(calculate_Rt, time, S, pars, prob_strain,
+calculate_Rt_trajectories <- function(calculate_Rt, time, S, pars,
                                       initial_time_from_parameters,
-                                      shared_parameters, type, R = NULL, ...) {
+                                      type, R = NULL, ...) {
   if (length(dim(S)) != 3) {
     stop("Expected a 3d array of 'S'")
   }
@@ -448,22 +293,16 @@ calculate_Rt_trajectories <- function(calculate_Rt, time, S, pars, prob_strain,
     stop("Expected a 3d array of 'R'")
   }
 
-  shared_parameters <- shared_parameters %||% !is.null(names(pars))
-  if (shared_parameters) {
-    if (is.null(names(pars))) {
-      stop("If using shared parameters, expected a named list for 'pars'")
-    }
-    pars <- rep(list(pars), ncol(S))
-  } else {
-    if (!is.null(names(pars))) {
-      stop("If not using shared parameters, expected a unnamed list for 'pars'")
-    }
-    if (length(pars) != ncol(S)) {
-      stop(sprintf(
-        "Expected 2nd dimension of 'S' to have length %d, following 'pars'",
-        length(pars)))
-    }
+
+  if (!is.null(names(pars))) {
+    stop("If not using shared parameters, expected a unnamed list for 'pars'")
   }
+  if (length(pars) != ncol(S)) {
+    stop(sprintf(
+      "Expected 2nd dimension of 'S' to have length %d, following 'pars'",
+      length(pars)))
+  }
+
 
   if (dim(S)[[3]] != length(time)) {
     stop(sprintf(
@@ -477,39 +316,13 @@ calculate_Rt_trajectories <- function(calculate_Rt, time, S, pars, prob_strain,
       ncol(S), dim(S)[[3]]))
   }
 
-  if (!is.null(prob_strain)) {
-    if (length(dim(prob_strain)) != 3) {
-      stop("Expected a 3d array of 'prob_strain'")
-    }
-    if (dim(prob_strain)[[2]] != length(pars)) {
-      stop(sprintf(
-        "Expected 2nd dim of 'prob_strain' to have length %d, following 'pars'",
-        length(pars)))
-    }
-    if (dim(prob_strain)[[3]] != length(time)) {
-      stop(sprintf(
-        "Expected 3rd dim of 'prob_strain' to have length %d, following 'time'",
-        length(time)))
-    }
-  }
-
   calculate_rt_one_trajectory <- function(i) {
     if (initial_time_from_parameters) {
-      ## TODO: Ed (or someone else) this has been probably not ideal
-      ## since we moved to seeding as this is *always* zero now!
-      ## Similar problem in the ifr calculation.
-      ##
-      ## The current formulation will be backward compatible and leave
-      ## tests passing until we fix this properly.
       time[[1L]] <- pars[[i]]$initial_time %||% 0
     }
-    if (is.null(prob_strain)) {
-      rt_1 <- calculate_Rt(time, S[, i, ], pars[[i]], type = type,
-                           R = R[, i, ], ...)
-    } else {
-      rt_1 <- calculate_Rt(time, S[, i, ], pars[[i]], prob_strain[, i, ],
-                           type = type, R = R[, i, ], ...)
-    }
+
+    rt_1 <- calculate_Rt(time, S[, i, ], pars[[i]], type = type,
+                         R = R[, i, ], ...)
     rt_1
   }
 
@@ -528,18 +341,12 @@ calculate_Rt_trajectories <- function(calculate_Rt, time, S, pars, prob_strain,
   nms <- names(res[[1]])
   ret <- set_names(lapply(nms, collect), nms)
 
-  ## ensure backwards compatibility by dropping columns for single_strain and
-  ## separating classes
-  all_types <- c("eff_Rt_all", "eff_Rt_general", "Rt_all", "Rt_general")
-  if (length(dim(ret[[length(ret)]])) < 3) {
-    ret[intersect(all_types, names(ret))] <-
-      lapply(ret[intersect(all_types, names(ret))], drop)
-    class(ret) <- c("single_strain", "Rt_trajectories", "Rt")
-  } else if (dim(ret[[length(ret)]])[2] < 3) {
-    class(ret) <- c("multi_strain", "Rt_trajectories", "Rt")
-  } else {
-    class(ret) <- c("multi_strain_weighted", "Rt_trajectories", "Rt")
-  }
+  # Ensure backwards compatibility by dropping columns for single_strain and
+  # separating classes
+  all_types <- c("eff_Rt_general", "Rt_general")
+  ret[intersect(all_types, names(ret))] <-
+    lapply(ret[intersect(all_types, names(ret))], drop)
+  class(ret) <- c("single_strain", "Rt_trajectories", "Rt")
 
   ret
 }

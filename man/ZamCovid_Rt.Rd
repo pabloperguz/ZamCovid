@@ -8,15 +8,10 @@ ZamCovid_Rt(
   time,
   S,
   p,
-  prob_strain = NULL,
   type = NULL,
-  interpolate_every = NULL,
-  interpolate_critical_dates = NULL,
-  interpolate_min = NULL,
   eigen_method = "power_iteration",
   R = NULL,
-  weight_Rt = FALSE,
-  keep_strains_Rt = FALSE
+  weight_Rt = FALSE
 )
 }
 \arguments{
@@ -27,37 +22,9 @@ compartment counts}
 
 \item{p}{A \code{\link[=ZamCovid_parameters]{ZamCovid_parameters()}} object}
 
-\item{prob_strain}{A (n groups x n strains) x n time steps matrix of
-"prob_strain" outputs from the model. For a 2 strain model for example,
-\code{prob_strain[1, j]} and \code{prob_strain[n_groups + 1, j]} should give, for
-the j^th time step, the probabilities that new infections
-in group 1 are of strains 1 and 2 respectively.
-The default is \code{NULL}, but it must
-be specified if there is more than one strain}
-
 \item{type}{A character vector of possible Rt types to
 compute. Can be \code{eff_Rt_general} or \code{Rt_general}, for Rt accounting or
 not accounting for immunity in the population, respectively.}
-
-\item{interpolate_every}{Spacing (in days) to use between interpolated
-points}
-
-\item{interpolate_critical_dates}{Optional vector of critical ZamCovid
-dates to use when interpolating. Interpolation will be done in
-blocks between the first time step of these dates, with each block
-starting on the first time step of the date given.
-So if you give a \code{interpolate_critical_dates} of \code{c(20, 50)} then blocks \emph{start} on first time step of days 20 and 50,
-i.e.: \verb{[1, 20)}, \verb{[20, 50)}, \verb{[50, end]}.}
-
-\item{interpolate_min}{The minimum number of steps to include
-within a block. If there are fewer points than this then all
-points are used (i.e., no interpolation is done) or
-\code{interpolate_every} is reduced until at least this many points
-were used. This can be used to specify a lower bound on the
-error of small regions. If Rt is small it won't matter that
-much. You do need to specify something though or interpolation
-will not happen, and do not use less than 3 as we use spline
-interpolation and that will not work with fewer than 3 points.}
 
 \item{eigen_method}{The eigenvalue method to use (passed to
 \link[eigen1:eigen1]{eigen1::eigen1} as \code{method})}
@@ -68,12 +35,6 @@ interpolation and that will not work with fewer than 3 points.}
 \item{weight_Rt}{If \code{TRUE} then computes the weighted average
 of the Rt for all strains, otherwise all calculations are returned with
 an additional dimension to index each strain.}
-
-\item{keep_strains_Rt}{Additional argument for when \code{weight_Rt} is \code{TRUE}
-(has no impact otherwise). If \code{TRUE}, then the Rt for each strain is
-returned along with the weighted average, otherwise just the weighted
-average is returned. When \code{TRUE}, the dimension indexing these lists
-strains first, and then the weighted average.}
 }
 \value{
 A list with elements \code{time}, \code{beta}, and any of the \code{type}
