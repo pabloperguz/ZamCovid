@@ -756,6 +756,29 @@ update(I_weighted[, ]) <-
     (if (i == seed_age_band && j == 1) 1 else 0)
    else new_I_weighted[i, j])
 
+# TODO: need to introduce recovered classes and track re-infections
+delta_infections[, ] <- n_S_progress[i, j] # + n_RE[i, j]
+dim(delta_infections) <- c(n_groups, n_vacc_classes)
+delta_infections_total <- sum(delta_infections)
+
+initial(infections_inc) <- 0
+new_infections_inc <- if (step %% steps_per_day == 0)
+  delta_infections_total else infections_inc + delta_infections_total
+update(infections_inc) <- new_infections_inc
+
+
+dim(infections_inc_age) <- n_groups
+dim(delta_infections_age) <- n_groups
+dim(new_infections_inc_age) <- n_groups
+
+initial(infections_inc_age[]) <- 0
+delta_infections_age[] <- sum(delta_infections[i, ])
+new_infections_inc_age[] <-
+  if (step %% steps_per_day == 0)
+    delta_infections_age[i] else
+      infections_inc_age[i] + delta_infections_age[i]
+update(infections_inc_age[]) <- new_infections_inc_age[i]
+
 
 ## Sero-positive population by age
 initial(sero_pos_all) <- 0
@@ -778,6 +801,33 @@ update(sero_pos_40_49) <- sum(new_T_sero_pos[9:10, , ])
 
 initial(sero_pos_50_plus) <- 0
 update(sero_pos_50_plus) <- sum(new_T_sero_pos[11:n_groups, , ])
+
+
+## IFR trajectories
+dim(IFR_disag) <- c(n_groups, n_vacc_classes)
+dim(IFR_disag_weighted_inc) <- c(n_groups, n_vacc_classes)
+dim(new_IFR_disag_weighted_inc) <- c(n_groups, n_vacc_classes)
+
+
+IFR_disag[, ] <- p_C[i, j] * p_H[i, j] * p_H_D[i, j] +
+  p_C[i, j] * (1 - p_H[i, j]) * p_G_D[i, j]
+
+initial(IFR_disag_weighted_inc[, ]) <- 0
+update(IFR_disag_weighted_inc[, ]) <- new_IFR_disag_weighted_inc[i, j]
+
+new_IFR_disag_weighted_inc[, ] <- if (step %% steps_per_day == 0)
+  IFR_disag[i, j] * delta_infections[i, j] else
+    IFR_disag_weighted_inc[i, j] + IFR_disag[i, j] * delta_infections[i, j]
+
+# Output overall IFR trajectory
+initial(ifr) <- NA
+update(ifr) <- sum(new_IFR_disag_weighted_inc) / new_infections_inc
+
+# Output IFR by age
+dim(ifr_age) <- n_groups
+initial(ifr_age[]) <- NA
+update(ifr_age[]) <- sum(new_IFR_disag_weighted_inc[i, ]) /
+  new_infections_inc_age[i]
 
 
 ## Confirmed hospital admissions
