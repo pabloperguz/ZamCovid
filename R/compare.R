@@ -18,13 +18,17 @@
 ZamCovid_compare <- function(state, observed, pars) {
 
   model_admissions_conf <- state["admitted_inc", ]
-  model_deaths_hosp <- state["deaths_hosp_inc", ]
   model_sero_pos_over15 <- state["sero_pos_over15", ]
   model_sero_pos_15_19 <- state["sero_pos_15_19", ]
   model_sero_pos_20_29 <- state["sero_pos_20_29", ]
   model_sero_pos_30_39 <- state["sero_pos_30_39", ]
   model_sero_pos_40_49 <- state["sero_pos_40_49", ]
   model_sero_pos_50_plus <- state["sero_pos_50_plus", ]
+
+  model_base_deaths <- state["base_death_inc", ]
+  model_deaths_hosp <- state["deaths_hosp_inc", ]
+  model_deaths_comm <- state["deaths_comm_inc", ]
+  model_deaths_all <- model_base_deaths + model_deaths_hosp + model_deaths_comm
 
 
   ## Serology assay
@@ -88,6 +92,10 @@ ZamCovid_compare <- function(state, observed, pars) {
   ll_deaths_hosp <- ll_nbinom(observed$deaths_hosp,
                               pars$phi_death_hosp * model_deaths_hosp,
                               pars$kappa_death_hosp, pars$exp_noise)
+
+  ll_deaths_all <- ll_nbinom(observed$deaths_all,
+                             pars$phi_death_all * model_deaths_all,
+                             pars$kappa_death_all, pars$exp_noise)
 
   ll_serology_over15 <- ll_binom(observed$sero_pos_over15,
                                  observed$sero_tot_over15,

@@ -32,3 +32,12 @@ ll_binom <- function(data_x, data_size, model_prob) {
   }
   dbinom(data_x, data_size, model_prob, log = TRUE)
 }
+
+
+##' @importFrom stats dpois
+ll_dpois <- function(data, model_lambda) {
+  if (is.na(data)) {
+    return(numeric(length(model_lambda)))
+  }
+  dpois(data, model_lambda, log = TRUE)
+}

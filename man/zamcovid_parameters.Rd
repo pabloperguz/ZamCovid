@@ -9,12 +9,15 @@ ZamCovid_parameters(
   steps_per_day = 4L,
   beta_date = NULL,
   beta_value = NULL,
+  base_death_date = NULL,
+  base_death_value = NULL,
   population = NULL,
   contact_matrix = NULL,
   N_tot = NULL,
   n_groups = NULL,
   severity = NULL,
   progression = NULL,
+  observation = NULL,
   sens_and_spec = NULL,
   vaccination = NULL,
   vaccine_progression_rate = NULL,
@@ -71,6 +74,9 @@ and \code{contact_matrix} are not \code{NULL}.}
 
 \item{progression}{Either \code{NULL} or a named \code{list} containing all elements in
 \link{ZamCovid_parameters_progression}.}
+
+\item{observation}{Either \code{NULL} or a named \code{list} containing all elements in
+\link{ZamCovid_parameters_observation}.}
 
 \item{sens_and_spec}{Either \code{NULL} or a named \code{list} containing all elements
 in \link{ZamCovid_parameters_sens_and_spec}.}

@@ -47,6 +47,9 @@ NULL
 #' @param progression Either `NULL` or a named `list` containing all elements in
 #'    [ZamCovid::ZamCovid_parameters_progression].
 #'
+#' @param observation Either `NULL` or a named `list` containing all elements in
+#'    [ZamCovid::ZamCovid_parameters_observation].
+#'
 #' @param sens_and_spec Either `NULL` or a named `list` containing all elements
 #'    in [ZamCovid::ZamCovid_parameters_sens_and_spec].
 #'
@@ -63,12 +66,15 @@ ZamCovid_parameters <- function(start_date,
                                 steps_per_day = 4L,
                                 beta_date = NULL,
                                 beta_value = NULL,
+                                base_death_date = NULL,
+                                base_death_value = NULL,
                                 population = NULL,
                                 contact_matrix = NULL,
                                 N_tot = NULL,
                                 n_groups = NULL,
                                 severity = NULL,
                                 progression = NULL,
+                                observation = NULL,
                                 sens_and_spec = NULL,
                                 vaccination = NULL,
                                 vaccine_progression_rate = NULL,
@@ -153,15 +159,20 @@ ZamCovid_parameters <- function(start_date,
 
 
   ## Make piece-wise linear beta_step
-  # beta_date <- numeric_date(beta_date)
   beta_step <- parameters_piecewise_linear(beta_date,
                                            beta_value %||% 0.1, dt)
+
+  ## Make piece-wise constant step-function of baseline deaths
+  base_death_step <- parameters_piecewise_constant(base_death_date,
+                                                   base_death_value %||% 0,
+                                                   dt)
 
   ## Default parameters
   ret <- list(
     steps_per_day = steps_per_day,
     dt = dt,
     beta_step = beta_step,
+    base_death_step = base_death_step,
 
     m = contact_matrix,
     n_groups = n_groups, #  16 n_groups (5 year age bands and 75+)
@@ -184,6 +195,8 @@ ZamCovid_parameters <- function(start_date,
 
   sens_and_spec <- sens_and_spec %||% ZamCovid_parameters_sens_and_spec()
 
+  observation <- observation %||% ZamCovid_parameters_observation()
+
   vaccination <-
     vaccination %||% ZamCovid_parameters_vaccination(dt,
                                                      N_tot,
@@ -198,10 +211,9 @@ ZamCovid_parameters <- function(start_date,
                                                      vaccine_schedule,
                                                      vaccine_index_dose2)
 
-  ret <- c(ret, severity, progression, vaccination, sens_and_spec)
+  ret <- c(ret, severity, progression, vaccination, sens_and_spec, observation)
 
   ## Parameters to support compare function
-  ret$exp_noise <- 1e6
   ret$N_tot <- N_tot
   ret$N_tot_over15 <- sum(N_tot[4:length(N_tot)])
   ret$N_tot_15_19 <- N_tot[4]
@@ -209,16 +221,6 @@ ZamCovid_parameters <- function(start_date,
   ret$N_tot_30_39 <- sum(N_tot[7:8])
   ret$N_tot_40_49 <- sum(N_tot[9:10])
   ret$N_tot_50_plus <- sum(N_tot[11:length(N_tot)])
-
-  ## TODO: we need observation parameters! kappas will be observation
-  ## probabilities in dnbinom (prob success in trial)
-  # kappa_death <- 1 / alpha_D
-  # kappa_pcr_cases <- 1 / x
-  # phi_pcr_cases <- 1
-  ret$phi_admitted <- 1
-  ret$kappa_admitted <- 2
-  ret$phi_death_hosp <- 1
-  ret$kappa_death_hosp <- 2
 
   ## Add some bespoke rel_p parameters
   rel_p_death <- build_rel_param(n_groups, rel_p_death,
@@ -401,7 +403,7 @@ ZamCovid_parameters_progression <- function(dt,
 }
 
 
-##' ZamCovid observation parameters
+##' ZamCovid diagnostic test performance parameters
 ##'
 ##' @title ZamCovid sensitivity and specificity parameters
 ##'
@@ -436,6 +438,41 @@ ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.99,
   ret
 }
 
+
+##' ZamCovid diagnostic test performance parameters
+##'
+##' @title ZamCovid sensitivity and specificity parameters
+##'
+##' @return A list of parameter values
+##'
+##' @param sero_specificity Specificity of the serology test assay
+##'
+##' @param sero_sensitivity Sensitivity of the serology test assay
+##'
+##' @param PCR_specificity Specificity of the PCR test
+##'
+##' @param PCR_sensitivity Sensitivity of the PCR test
+##'
+##' @export
+ZamCovid_parameters_observation <- function(exp_noise = 1e6) {
+
+  ## Note alphas should be fitted observation probabilities; so 1 / alpha in
+  ## dnbinom will be `size` (i.e. we assume overdispersion, hence not using
+  ## Poisson for observation counts).
+  ## Also note we assume perfect reporting here (phis = 1), but "inflate" counts
+  ## were relevant in ZamCovid-outputs/src/ZamCovid_parameters for now
+  list(
+    phi_death_all = 1,
+    kappa_death_all = 2,
+    # kappa_pcr_cases = 1 / x
+    # phi_pcr_cases = 1
+    phi_admitted = 1,
+    kappa_admitted = 2,
+    phi_death_hosp = 1,
+    kappa_death_hosp = 2,
+    exp_noise = exp_noise
+  )
+}
 
 ##' ZamCovid severity parameters
 ##'
@@ -876,6 +913,32 @@ parameters_piecewise_linear <- function (date, value, dt) {
   }
   value
 }
+
+
+parameters_piecewise_constant <- function (date, value, dt) {
+
+  if (is.null(date)) {
+    if (length(value) != 1L) {
+      stop("As 'date' is NULL, expected single value")
+    }
+    return(value)
+  }
+
+  if (length(date) != length(value)) {
+    stop("'date' and 'value' must have the same length")
+  }
+
+  if (!is.null(date)) {
+    if (date[1L] != 0) {
+      stop("As 'date' is not NULL, first date should be 0")
+    }
+  }
+
+  times <- seq(0, date[[length(date)]], by = dt)
+  stats::approx(date, value, method = "constant",
+                xout = times)$y
+}
+
 
 
 ZamCovid_parameters_expand_step <- function(step, value_step) {
