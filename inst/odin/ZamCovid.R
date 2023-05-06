@@ -868,3 +868,6 @@ base_death <- if (step >= length(base_death_step))
 
 initial(base_death_inc) <- 0
 update(base_death_inc) <- base_death / steps_per_day
+
+initial(all_deaths_inc) <- 0
+update(all_deaths_inc) <- base_death_inc + hosp_deaths_inc + comm_deaths_inc

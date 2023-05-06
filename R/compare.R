@@ -28,7 +28,7 @@ ZamCovid_compare <- function(state, observed, pars) {
   model_base_deaths <- state["base_death_inc", ]
   model_deaths_hosp <- state["deaths_hosp_inc", ]
   model_deaths_comm <- state["deaths_comm_inc", ]
-  model_deaths_all <- model_base_deaths + model_deaths_hosp + model_deaths_comm
+  model_deaths_all <- state["deaths_all_inc", ]
 
 
   ## Serology assay
@@ -121,7 +121,7 @@ ZamCovid_compare <- function(state, observed, pars) {
                                  observed$sero_tot_50_plus,
                                  model_sero_prob_pos_50_plus)
 
-  ll_admitted + ll_deaths_hosp + ll_serology_over15 + ll_serology_15_19 +
+  ll_admitted + ll_deaths_all + ll_serology_over15 + ll_serology_15_19 +
     ll_serology_20_29 + ll_serology_30_39 + ll_serology_40_49 +
     ll_serology_50_plus
 }
