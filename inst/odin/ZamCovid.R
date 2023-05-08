@@ -353,7 +353,6 @@ initial(beta_out) <- beta_step[1]
 update(beta_out) <- beta
 
 
-
 ## Track number of individuals vaccinated
 n_vaccinated[, ] <-
   n_S_next_vacc_class[i, j] +
@@ -705,6 +704,8 @@ phi_admitted <- user() # ignore.unused
 kappa_admitted <- user() # ignore.unused
 phi_death_hosp <- user() # ignore.unused
 kappa_death_hosp <- user() # ignore.unused
+phi_death_all <- user() # ignore.unused
+kappa_death_all <- user() # ignore.unused
 
 
 ## Total number of susceptible (used for initialising population)
@@ -856,3 +857,17 @@ update(cum_deaths_comm) <- cum_deaths_comm + delta_deaths_comm
 initial(comm_deaths_inc) <- 0
 update(comm_deaths_inc) <- if (step %% steps_per_day == 0)
   delta_deaths_comm else comm_deaths_inc + delta_deaths_comm
+
+
+
+## Baseline deaths
+base_death_step[] <- user()
+dim(base_death_step) <- user()
+base_death <- if (step >= length(base_death_step))
+  base_death_step[length(base_death_step)] else base_death_step[step + 1]
+
+initial(base_death_inc) <- 0
+update(base_death_inc) <- base_death / steps_per_day
+
+initial(all_deaths_inc) <- 0
+update(all_deaths_inc) <- base_death_inc + hosp_deaths_inc + comm_deaths_inc

@@ -12,7 +12,7 @@ test_that("can run ZamCovid model", {
   mod$update_state(state = initial)
 
   res <- mod$run(end)
-  expect_equal(c(674, 5), dim(res))
+  expect_equal(c(726, 5), dim(res))
 
   index <- ZamCovid_index(info)$run
 
@@ -20,17 +20,19 @@ test_that("can run ZamCovid model", {
   res <- mod$run(end)
 
   expected <- rbind(
-    time =                 c(274,     274,  274,     274,     274),
-    admitted_inc =           c(0,       1,    0,       1,       0),
-    deaths_hosp_inc =        c(0,       1,    0,       2,       2),
-    deaths_comm_inc =       c(39,      54,    0,      25,      81),
+    time =             c(274,     274,  274,     274,     274),
+    admitted_inc =     c(0,       1,    0,       1,       0),
+    deaths_hosp_inc =  c(0,       1,    0,       2,       2),
+    deaths_comm_inc =  c(39,      54,    0,      25,      81),
+    base_death_inc =   c(0,       0,    0,       0,       0),
+    deaths_all_inc =   c(28,      44,    0,      22,      60),
     sero_pos_all =     c(2165173, 2149797,    0, 1587775, 2526417),
     sero_pos_over15 =  c(1258374, 1250039,    0,  922442, 1469582),
-    sero_pos_15_19 =    c(258108,  255407,    0,  188805,  300134),
-    sero_pos_20_29 =    c(374755,  372427,    0,  274911,  437320),
-    sero_pos_30_39 =    c(276178,  274552,    0,  202239,  322025),
-    sero_pos_40_49 =    c(178880,  178160,    0,  131595,  210484),
-    sero_pos_50_plus =  c(170453,  169493,    0,  124892,  199619))
+    sero_pos_15_19 =   c(258108,  255407,    0,  188805,  300134),
+    sero_pos_20_29 =   c(374755,  372427,    0,  274911,  437320),
+    sero_pos_30_39 =   c(276178,  274552,    0,  202239,  322025),
+    sero_pos_40_49 =   c(178880,  178160,    0,  131595,  210484),
+    sero_pos_50_plus = c(170453,  169493,    0,  124892,  199619))
 
   expect_equal(res, expected)
 })
@@ -149,6 +151,49 @@ test_that("people sero-convert", {
   sero_pos <- sum(res[info$index$sero_pos_over15, , dim(res)[3]])
 
   expect_true(sero_pos > 0)
+})
+
+
+test_that("Can model baseline deaths", {
+  start_date <- numeric_date("2020-01-01")
+  p <- ZamCovid_parameters(start_date)
+  mod <- ZamCovid$new(p, 0, 5, seed = 1L)
+  end <- numeric_date("2020-12-31") / p$dt
+
+  info <- mod$info()
+  initial <- ZamCovid_initial(info, 10, p)
+  mod$update_state(state = initial)
+
+  t <- seq(4, end)
+  res <- mod$simulate(t)
+
+  ## No baseline deaths with default parameters
+  base_deaths <- res[info$index$base_death_inc, , ]
+  expect_true(sum(base_deaths) == 0)
+
+  ## Can introduce constant value of baseline deaths
+  base_death_value <- 4
+  base_death_date <- 0
+  p <- ZamCovid_parameters(start_date, base_death_date = base_death_date,
+                           base_death_value = base_death_value)
+  mod <- ZamCovid$new(p, 0, 5, seed = 1L)
+  mod$update_state(state = initial)
+  res <- mod$simulate(t)
+  base_deaths <- colMeans(res[info$index$base_death_inc, , ])
+  expect_true(all(base_deaths == 1))
+
+
+  ## Can introduce time-varying baseline deaths
+  base_death_value <- c(4, 5, 3)
+  base_death_date <- c(0, numeric_date(c("2020-06-01", "2020-10-01")))
+  p <- ZamCovid_parameters(start_date, base_death_date = base_death_date,
+                           base_death_value = base_death_value)
+  mod <- ZamCovid$new(p, 0, 5, seed = 1L)
+  mod$update_state(state = initial)
+  res <- mod$simulate(t)
+  base_deaths <- colMeans(res[info$index$base_death_inc, , ])
+  expect_true(all(base_deaths %in% c(4 / 4, 5 / 4, 3 / 4)))
+
 })
 
 

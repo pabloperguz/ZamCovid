@@ -40,13 +40,17 @@ test_that("ZamCovid_parameters returns a list of parameters", {
                      names(vaccination), names(sens_and_spec)))
   expect_equal(
     extra,
-    c("steps_per_day", "beta_step", "n_groups", "seed_size", "seed_age_band",
-      "seed_step_start", "seed_value", "I_A_transmission", "I_P_transmission",
-      "I_C_1_transmission", "I_C_2_transmission", "hosp_transmission",
-      "G_D_transmission", "exp_noise", "N_tot", "N_tot_over15", "N_tot_15_19",
-      "N_tot_20_29", "N_tot_30_39", "N_tot_40_49", "N_tot_50_plus",
-      "phi_admitted", "kappa_admitted", "phi_death_hosp", "kappa_death_hosp",
-      "rel_p_H_D", "rel_p_G_D", "rel_p_R"))
+    c("steps_per_day",      "beta_step",          "base_death_step",
+      "n_groups",           "seed_size",          "seed_age_band",
+      "seed_step_start",    "seed_value",         "I_A_transmission",
+      "I_P_transmission",   "I_C_1_transmission", "I_C_2_transmission",
+      "hosp_transmission",  "G_D_transmission",   "phi_death_all",
+      "kappa_death_all",    "phi_admitted",       "kappa_admitted",
+      "phi_death_hosp",     "kappa_death_hosp",   "exp_noise",
+      "N_tot",              "N_tot_over15",       "N_tot_15_19",
+      "N_tot_20_29",        "N_tot_30_39",        "N_tot_40_49",
+      "N_tot_50_plus",      "rel_p_H_D",          "rel_p_G_D",
+      "rel_p_R"))
 })
 
 
