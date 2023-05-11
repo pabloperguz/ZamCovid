@@ -1030,6 +1030,13 @@ public:
     }
     state_next[20] = base_death;
     state_next[1] = beta;
+    state_next[8] = odin_sum3<real_type>(T_sero_pos, 3, 4, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
+    state_next[9] = odin_sum3<real_type>(T_sero_pos, 4, 6, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
+    state_next[10] = odin_sum3<real_type>(T_sero_pos, 6, 8, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
+    state_next[11] = odin_sum3<real_type>(T_sero_pos, 8, 10, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
+    state_next[12] = odin_sum3<real_type>(T_sero_pos, 10, shared->n_groups, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
+    state_next[6] = odin_sum3<real_type>(T_sero_pos, 0, shared->n_groups, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
+    state_next[7] = odin_sum3<real_type>(T_sero_pos, 3, shared->n_groups, 0, shared->dim_T_sero_pos_2, 0, shared->dim_T_sero_pos_3, shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_12);
     for (int i = 1; i <= shared->dim_I_trans_1; ++i) {
       for (int j = 1; j <= shared->dim_I_trans_2; ++j) {
         internal.I_trans[i - 1 + shared->dim_I_trans_1 * (j - 1)] = shared->rel_infectivity[shared->dim_rel_infectivity_1 * (j - 1) + i - 1] * (shared->I_A_transmission * odin_sum2<real_type>(I_A, i - 1, i, j - 1, j, shared->dim_I_A_1) + shared->I_P_transmission * odin_sum2<real_type>(I_P, i - 1, i, j - 1, j, shared->dim_I_P_1) + shared->I_C_1_transmission * odin_sum2<real_type>(I_C_1, i - 1, i, j - 1, j, shared->dim_I_C_1_1) + shared->I_C_2_transmission * odin_sum2<real_type>(I_C_2, i - 1, i, j - 1, j, shared->dim_I_C_2_1) + shared->hosp_transmission * (odin_sum3<real_type>(H_R_conf, i - 1, i, j - 1, j, 0, shared->dim_H_R_conf_3, shared->dim_H_R_conf_1, shared->dim_H_R_conf_12) + odin_sum3<real_type>(H_R_unconf, i - 1, i, j - 1, j, 0, shared->dim_H_R_unconf_3, shared->dim_H_R_unconf_1, shared->dim_H_R_unconf_12) + odin_sum3<real_type>(H_D_conf, i - 1, i, j - 1, j, 0, shared->dim_H_D_conf_3, shared->dim_H_D_conf_1, shared->dim_H_D_conf_12) + odin_sum3<real_type>(H_D_unconf, i - 1, i, j - 1, j, 0, shared->dim_H_D_unconf_3, shared->dim_H_D_unconf_1, shared->dim_H_D_unconf_12)) + shared->G_D_transmission * odin_sum3<real_type>(G_D, i - 1, i, j - 1, j, 0, shared->dim_G_D_3, shared->dim_G_D_1, shared->dim_G_D_12));
@@ -1455,13 +1462,6 @@ public:
     state_next[18] = cum_deaths_comm + delta_deaths_comm;
     state_next[16] = cum_deaths_hosp + delta_deaths_hosp;
     state_next[17] = (fmodr<real_type>(step, shared->steps_per_day) == 0 ? delta_deaths_hosp : hosp_deaths_inc + delta_deaths_hosp);
-    state_next[8] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 3, 4, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
-    state_next[9] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 4, 6, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
-    state_next[10] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 6, 8, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
-    state_next[11] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 8, 10, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
-    state_next[12] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 10, shared->n_groups, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
-    state_next[6] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 0, shared->n_groups, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
-    state_next[7] = odin_sum3<real_type>(internal.new_T_sero_pos.data(), 3, shared->n_groups, 0, shared->dim_new_T_sero_pos_2, 0, shared->dim_new_T_sero_pos_3, shared->dim_new_T_sero_pos_1, shared->dim_new_T_sero_pos_12);
     for (int i = 1; i <= shared->dim_tmp_vaccine_probability_1; ++i) {
       for (int j = 1; j <= shared->dim_tmp_vaccine_probability_2; ++j) {
         state_next[shared->offset_variable_tmp_vaccine_probability + i - 1 + shared->dim_tmp_vaccine_probability_1 * (j - 1)] = internal.vaccine_probability[shared->dim_vaccine_probability_1 * (j - 1) + i - 1];
