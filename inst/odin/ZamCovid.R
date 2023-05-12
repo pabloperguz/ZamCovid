@@ -783,25 +783,25 @@ update(infections_inc_age[]) <- new_infections_inc_age[i]
 
 ## Sero-positive population by age
 initial(sero_pos_all) <- 0
-update(sero_pos_all) <- sum(new_T_sero_pos[1:n_groups, , ])
+update(sero_pos_all) <- sum(T_sero_pos[1:n_groups, , ])
 
 initial(sero_pos_over15) <- 0
-update(sero_pos_over15) <- sum(new_T_sero_pos[4:n_groups, , ])
+update(sero_pos_over15) <- sum(T_sero_pos[4:n_groups, , ])
 
 initial(sero_pos_15_19) <- 0
-update(sero_pos_15_19) <- sum(new_T_sero_pos[4, , ])
+update(sero_pos_15_19) <- sum(T_sero_pos[4, , ])
 
 initial(sero_pos_20_29) <- 0
-update(sero_pos_20_29) <- sum(new_T_sero_pos[5:6, , ])
+update(sero_pos_20_29) <- sum(T_sero_pos[5:6, , ])
 
 initial(sero_pos_30_39) <- 0
-update(sero_pos_30_39) <- sum(new_T_sero_pos[7:8, , ])
+update(sero_pos_30_39) <- sum(T_sero_pos[7:8, , ])
 
 initial(sero_pos_40_49) <- 0
-update(sero_pos_40_49) <- sum(new_T_sero_pos[9:10, , ])
+update(sero_pos_40_49) <- sum(T_sero_pos[9:10, , ])
 
 initial(sero_pos_50_plus) <- 0
-update(sero_pos_50_plus) <- sum(new_T_sero_pos[11:n_groups, , ])
+update(sero_pos_50_plus) <- sum(T_sero_pos[11:n_groups, , ])
 
 
 ## IFR trajectories
