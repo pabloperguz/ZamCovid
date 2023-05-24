@@ -12,7 +12,7 @@ test_that("can run ZamCovid model", {
   mod$update_state(state = initial)
 
   res <- mod$run(end)
-  expect_equal(c(726, 5), dim(res))
+  expect_equal(c(727, 5), dim(res))
 
   index <- ZamCovid_index(info)$run
 
@@ -21,18 +21,20 @@ test_that("can run ZamCovid model", {
 
   expected <- rbind(
     time =             c(274,     274,  274,     274,     274),
-    admitted_inc =     c(0,       1,    0,       1,       0),
-    deaths_hosp_inc =  c(0,       1,    0,       2,       2),
-    deaths_comm_inc =  c(39,      54,    0,      25,      81),
+    infections_inc =   c(0,       441,  414,     236,     300),
+    reinfections_inc = c(0,       19,   24,      14,      20),
+    admitted_inc =     c(0,       1,    2,       0,       0),
+    deaths_hosp_inc =  c(0,       8,    2,       5,       2),
+    deaths_comm_inc =  c(0,      90,    96,      46,      63),
     base_death_inc =   c(0,       0,    0,       0,       0),
-    deaths_all_inc =   c(28,      44,    0,      22,      60),
-    sero_pos_all =     c(2165173, 2149797,    0, 1587775, 2526417),
-    sero_pos_over15 =  c(1258374, 1250039,    0,  922442, 1469582),
-    sero_pos_15_19 =   c(258108,  255407,    0,  188805,  300134),
-    sero_pos_20_29 =   c(374755,  372427,    0,  274911,  437320),
-    sero_pos_30_39 =   c(276178,  274552,    0,  202239,  322025),
-    sero_pos_40_49 =   c(178880,  178160,    0,  131595,  210484),
-    sero_pos_50_plus = c(170453,  169493,    0,  124892,  199619))
+    deaths_all_inc =   c(0,      70,    72,      42,      46),
+    sero_pos_all =     c(0, 2578183, 2580027, 2093048, 2227440),
+    sero_pos_over15 =  c(0, 1500464, 1499770, 1215733, 1294641),
+    sero_pos_15_19 =   c(0,  308283,  307152,  249633,  265300),
+    sero_pos_20_29 =   c(0,  446149,  446504,  361405,  385586),
+    sero_pos_30_39 =   c(0,  329893,  329645,  267284,  285029),
+    sero_pos_40_49 =   c(0,  213917,  214045,  172901,  184010),
+    sero_pos_50_plus = c(0,  202222,  202424,  164510,  174716))
 
   expect_equal(res, expected)
 })
@@ -180,7 +182,7 @@ test_that("Can model baseline deaths", {
   mod$update_state(state = initial)
   res <- mod$simulate(t)
   base_deaths <- colMeans(res[info$index$base_death_inc, , ])
-  expect_true(all(base_deaths == 1))
+  expect_true(all(base_deaths == base_death_value))
 
 
   ## Can introduce time-varying baseline deaths
@@ -192,7 +194,7 @@ test_that("Can model baseline deaths", {
   mod$update_state(state = initial)
   res <- mod$simulate(t)
   base_deaths <- colMeans(res[info$index$base_death_inc, , ])
-  expect_true(all(base_deaths %in% c(4 / 4, 5 / 4, 3 / 4)))
+  expect_true(all(base_deaths %in% base_death_value))
 
 })
 
