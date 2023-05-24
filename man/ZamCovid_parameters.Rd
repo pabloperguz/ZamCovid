@@ -11,6 +11,8 @@ ZamCovid_parameters(
   beta_value = NULL,
   base_death_date = NULL,
   base_death_value = NULL,
+  cross_immunity_date = NULL,
+  cross_immunity_value = NULL,
   population = NULL,
   contact_matrix = NULL,
   N_tot = NULL,
@@ -52,6 +54,18 @@ linear interpolate function for beta (transmission scaling) parameter.}
 
 \item{beta_value}{A vector of \code{double} values for constructing piece-wise
 linear interpolate function for beta (transmission scaling) parameter.}
+
+\item{base_death_date}{A vector of \code{numeric_deaths}s for constructing
+piece-wise linear interpolate function of daily baseline deaths.}
+
+\item{base_death_value}{A vector of \code{double} values for constructing
+piece-wise linear interpolate function of daily baseline deaths.}
+
+\item{cross_immunity_date}{A vector of \code{numeric_deaths}s for constructing
+piece-wise linear interpolate function of cross-immunity vs infection.}
+
+\item{cross_immunity_value}{A vector of \code{double} values for constructing
+piece-wise linear interpolate function of cross-immunity vs infection.}
 
 \item{population}{Either \code{NULL} or a \code{data.frame} with columns \code{age_group}
 and \code{n} of same length (age groups) as \code{contact_matrix} supplied. If

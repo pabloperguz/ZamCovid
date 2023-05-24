@@ -284,13 +284,7 @@ p_G_D_step[, ] <- user()
 n_p_G_D_steps <- user()
 p_R_step[, ] <- user()
 n_p_R_steps <- user()
-cross_immunity_step[] <- user()
-n_cross_immunity_steps <- user()
 
-
-cross_immunity <- if (as.integer(step) >= n_cross_immunity_steps)
-  cross_immunity_step[n_cross_immunity_steps] else
-    cross_immunity_step[step + 1]
 
 p_C[, ] <- if (as.integer(step) >= n_p_C_steps)
   min(p_C_step[n_p_C_steps, i] * rel_p_sympt[i, j], as.numeric(1)) else
@@ -314,6 +308,14 @@ p_R[, ] <- if (as.integer(step) >= n_p_R_steps)
 
 p_star[] <- if (as.integer(step) >= n_p_star_steps)
   p_star_step[n_p_star_steps, i] else p_star_step[step + 1, i]
+
+
+## Cross-immunity
+cross_immunity_step[] <- user()
+dim(cross_immunity_step) <- user()
+cross_immunity <- if (step >= length(cross_immunity_step))
+  cross_immunity_step[length(cross_immunity_step)] else
+    cross_immunity_step[step + 1]
 
 
 ## Seeding model for first epidemic wave
@@ -661,7 +663,6 @@ dim(p_H_D_step) <- c(n_p_H_D_steps, n_groups)
 dim(p_G_D_step) <- c(n_p_G_D_steps, n_groups)
 dim(p_R_step) <- c(n_p_R_steps, n_groups)
 dim(p_star_step) <- c(n_p_star_steps, n_groups)
-dim(cross_immunity_step) <- c(n_cross_immunity_steps)
 
 dim(m) <- c(n_groups, n_groups)
 dim(s_ij) <- c(n_groups, n_groups)

@@ -12,7 +12,9 @@ ZamCovid_index <- function(info) {
   index <- info$index
 
   # Model states required for the particle filter to run:
-  index_core <- c(admitted_inc = index[["admit_conf_inc"]],
+  index_core <- c(infections_inc = index[["infections_inc"]],
+                  reinfections_inc = index[["reinfections_inc"]],
+                  admitted_inc = index[["admit_conf_inc"]],
                   deaths_hosp_inc = index[["hosp_deaths_inc"]],
                   deaths_comm_inc = index[["comm_deaths_inc"]],
                   base_death_inc = index[["base_death_inc"]],
