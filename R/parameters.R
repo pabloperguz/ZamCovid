@@ -439,13 +439,14 @@ ZamCovid_parameters_progression <- function(dt,
 ##' @param PCR_sensitivity Sensitivity of the PCR test
 ##'
 ##' @export
-ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.99,
-                                              sero_sensitivity = 0.831,
+ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.999,
+                                              sero_sensitivity = 0.927,
                                               PCR_specificity = 0.99,
                                               PCR_sensitivity = 0.99) {
 
-  ## Sero_sens of Abbott Architect IgG in LMIC settings from
-  ## https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0256566
+  ## Sero_sens of Abbott Architect IgG from PHE 2020:
+  # Evaluation of sensitivity and specificity of four commercially available
+  # SARS-CoV-2 antibody immunoassays
 
   ret <- list(
     sero_specificity = sero_specificity,

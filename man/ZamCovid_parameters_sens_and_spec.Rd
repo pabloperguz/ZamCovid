@@ -5,8 +5,8 @@
 \title{ZamCovid sensitivity and specificity parameters}
 \usage{
 ZamCovid_parameters_sens_and_spec(
-  sero_specificity = 0.99,
-  sero_sensitivity = 0.831,
+  sero_specificity = 0.999,
+  sero_sensitivity = 0.927,
   PCR_specificity = 0.99,
   PCR_sensitivity = 0.99
 )
