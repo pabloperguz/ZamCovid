@@ -25,6 +25,18 @@ NULL
 #' @param beta_value A vector of `double` values for constructing piece-wise
 #'    linear interpolate function for beta (transmission scaling) parameter.
 #'
+#' @param base_death_date A vector of `numeric_deaths`s for constructing
+#'    piece-wise linear interpolate function of daily baseline deaths.
+#'
+#' @param base_death_value A vector of `double` values for constructing
+#'    piece-wise linear interpolate function of daily baseline deaths.
+#'
+#' @param cross_immunity_date A vector of `numeric_deaths`s for constructing
+#'    piece-wise linear interpolate function of cross-immunity vs infection.
+#'
+#' @param cross_immunity_value A vector of `double` values for constructing
+#'    piece-wise linear interpolate function of cross-immunity vs infection.
+#'
 #' @param population Either `NULL` or a `data.frame` with columns `age_group`
 #'    and `n` of same length (age groups) as `contact_matrix` supplied. If
 #'    `NULL` defaults to nationally representative values for Zambia.
@@ -68,6 +80,8 @@ ZamCovid_parameters <- function(start_date,
                                 beta_value = NULL,
                                 base_death_date = NULL,
                                 base_death_value = NULL,
+                                cross_immunity_date = NULL,
+                                cross_immunity_value = NULL,
                                 population = NULL,
                                 contact_matrix = NULL,
                                 N_tot = NULL,
@@ -167,12 +181,19 @@ ZamCovid_parameters <- function(start_date,
                                                    base_death_value %||% 0,
                                                    dt)
 
+  ## Make piece-wise linear function of cross_immunity (proxy for VOC emergence)
+  cross_immunity_step <-
+    parameters_piecewise_linear(cross_immunity_date,
+                                cross_immunity_value %||% 0.95,
+                                dt)
+
   ## Default parameters
   ret <- list(
     steps_per_day = steps_per_day,
     dt = dt,
     beta_step = beta_step,
     base_death_step = base_death_step,
+    cross_immunity_step = cross_immunity_step,
 
     m = contact_matrix,
     n_groups = n_groups, #  16 n_groups (5 year age bands and 75+)
@@ -418,13 +439,14 @@ ZamCovid_parameters_progression <- function(dt,
 ##' @param PCR_sensitivity Sensitivity of the PCR test
 ##'
 ##' @export
-ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.99,
-                                              sero_sensitivity = 0.831,
+ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.999,
+                                              sero_sensitivity = 0.927,
                                               PCR_specificity = 0.99,
                                               PCR_sensitivity = 0.99) {
 
-  ## Sero_sens of Abbott Architect IgG in LMIC settings from
-  ## https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0256566
+  ## Sero_sens of Abbott Architect IgG from PHE 2020:
+  # Evaluation of sensitivity and specificity of four commercially available
+  # SARS-CoV-2 antibody immunoassays
 
   ret <- list(
     sero_specificity = sero_specificity,

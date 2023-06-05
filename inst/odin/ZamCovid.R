@@ -63,13 +63,13 @@ update(T_PCR_neg[, ]) <- new_T_PCR_neg[i, j]
 
 
 ## Work out new individuals entering compartments
-new_S[, ] <- S[i, j] + n_R_progress[i, j] + n_infected_to_S[i, j] -
+new_S[, ] <- S[i, j] + n_RS[i, j] + n_infected_to_S[i, j] -
   n_S_progress[i, j] - n_S_next_vacc_class[i, j] +
   (if (j == 1) n_S_next_vacc_class[i, n_vacc_classes] else
     n_S_next_vacc_class[i, j - 1])
 
 new_E[, , ] <- E[i, j, k] +
-  (if (k == 1) n_S_progress[i, j] else n_E_progress[i, j, k - 1]) -
+  (if (k == 1) n_S_progress[i, j] + n_RE[i, j] else n_E_progress[i, j, k - 1]) -
   n_E_progress[i, j, k] -
   n_E_next_vacc_class[i, j, k] +
   (if (j == 1) n_E_next_vacc_class[i, n_vacc_classes, k] else
@@ -121,8 +121,7 @@ new_G_D[, , ] <- G_D[i, j, k] +
   (if (k == 1) n_I_C_2_to_G_D[i, j] else
     n_G_D_progress[i, j, k - 1]) - n_G_D_progress[i, j, k]
 
-new_R[, ] <- R[i, j] -
-  n_R_progress[i, j] - n_R_next_vacc_class[i, j] +
+new_R[, ] <- R[i, j] - n_RS[i, j] - n_RE[i, j] - n_R_next_vacc_class[i, j] +
   n_infected_to_R[i, j] +
   (if (j == 1) n_R_next_vacc_class[i, n_vacc_classes] else
     n_R_next_vacc_class[i, j - 1])
@@ -178,8 +177,16 @@ n_infected_to_R[, ] <- rbinom(n_infection_end[i, j], p_R[i, j])
 n_infected_to_S[, ] <- n_infection_end[i, j] - n_infected_to_R[i, j]
 
 n_G_D_progress[, , ] <- rbinom(G_D[i, j, k], p_G_D_progress)
-n_R_progress[, ] <- rbinom(R[i, j], p_R_progress)
-n_R_next_vacc_class[, ] <- rbinom(R[i, j] - n_R_progress[i, j],
+
+
+## Handle recovery classes and flows:
+# We will allow re-infections, with cross-immunity referring to protection
+# against re-infection conferred by a prior infection episode whilst not fully
+# susceptible. As a proxy of the emergence of VOCs, cross_immunity will be
+# time-varying, as informed by literature
+n_RS[, ] <- rbinom(R[i, j], p_RS)
+n_RE[, ] <- rbinom(R[i, j] - n_RS[i, j], p_RE[i, j])
+n_R_next_vacc_class[, ] <- rbinom(R[i, j] - n_RS[i, j] - n_RE[i, j],
                                   p_R_next_vacc_class[i, j])
 
 
@@ -237,7 +244,8 @@ p_I_C_2_progress <- 1 - exp(-gamma_C_2 * dt)
 p_H_R_progress <- 1 - exp(-gamma_H_R * dt)
 p_H_D_progress <- 1 - exp(-gamma_H_D * dt)
 p_G_D_progress <- 1 - exp(-gamma_G_D * dt)
-p_R_progress <- 1 - exp(-gamma_R * dt)
+p_RS <- 1 - exp(-gamma_R * dt)
+p_RE[, ] <- 1 - exp(-lambda_susc[i, j] * dt * (1 - cross_immunity))
 p_test <- 1 - exp(-gamma_U * dt)
 
 p_sero_pos[] <- user()
@@ -277,6 +285,7 @@ n_p_G_D_steps <- user()
 p_R_step[, ] <- user()
 n_p_R_steps <- user()
 
+
 p_C[, ] <- if (as.integer(step) >= n_p_C_steps)
   min(p_C_step[n_p_C_steps, i] * rel_p_sympt[i, j], as.numeric(1)) else
     min(p_C_step[step + 1, i] * rel_p_sympt[i, j], as.numeric(1))
@@ -299,6 +308,14 @@ p_R[, ] <- if (as.integer(step) >= n_p_R_steps)
 
 p_star[] <- if (as.integer(step) >= n_p_star_steps)
   p_star_step[n_p_star_steps, i] else p_star_step[step + 1, i]
+
+
+## Cross-immunity
+cross_immunity_step[] <- user()
+dim(cross_immunity_step) <- user()
+cross_immunity <- if (step >= length(cross_immunity_step))
+  cross_immunity_step[length(cross_immunity_step)] else
+    cross_immunity_step[step + 1]
 
 
 ## Seeding model for first epidemic wave
@@ -575,7 +592,8 @@ dim(new_T_PCR_neg) <- c(n_groups, n_vacc_classes)
 
 dim(n_S_progress) <- c(n_groups, n_vacc_classes)
 dim(n_infected_to_S) <- c(n_groups, n_vacc_classes)
-dim(n_R_progress) <- c(n_groups, n_vacc_classes)
+dim(n_RS) <- c(n_groups, n_vacc_classes)
+dim(n_RE) <- c(n_groups, n_vacc_classes)
 dim(n_S_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(n_E_progress) <- c(n_groups, n_vacc_classes, k_E)
 dim(n_E_next_vacc_class) <- c(n_groups, n_vacc_classes, k_E)
@@ -623,6 +641,7 @@ dim(p_E_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(p_I_A_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(p_I_P_next_vacc_class) <- c(n_groups, n_vacc_classes)
 dim(p_R_next_vacc_class) <- c(n_groups, n_vacc_classes)
+dim(p_RE) <- c(n_groups, n_vacc_classes)
 dim(rel_infectivity) <- c(n_groups, n_vacc_classes)
 dim(rel_susceptibility) <- c(n_groups, n_vacc_classes)
 dim(rel_p_sympt) <- c(n_groups, n_vacc_classes)
@@ -757,15 +776,24 @@ update(I_weighted[, ]) <-
     (if (i == seed_age_band && j == 1) 1 else 0)
    else new_I_weighted[i, j])
 
-# TODO: need to introduce recovered classes and track re-infections
-delta_infections[, ] <- n_S_progress[i, j] # + n_RE[i, j]
+
+
+delta_infections[, ] <- n_S_progress[i, j] + n_RE[i, j]
 dim(delta_infections) <- c(n_groups, n_vacc_classes)
 delta_infections_total <- sum(delta_infections)
 
+# Output all new infections
 initial(infections_inc) <- 0
 new_infections_inc <- if (step %% steps_per_day == 0)
   delta_infections_total else infections_inc + delta_infections_total
 update(infections_inc) <- new_infections_inc
+
+# Output all new re-infections
+initial(reinfections_inc) <- 0
+new_reinfections_inc <- if (step %% steps_per_day == 0)
+  sum(n_RE) else reinfections_inc + sum(n_RE)
+update(reinfections_inc) <- new_reinfections_inc
+
 
 
 dim(infections_inc_age) <- n_groups
