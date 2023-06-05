@@ -82,7 +82,14 @@ test_that("ZamCovid severity pathways work as expected", {
     }
   }
 
-  ## Also check all deaths happen in the community (G_D)
+
+  ## With p_H zeroed, IFR should be equal to p_C * p_G_D
+  ifr_input <- as.vector(round(sev$p_C_step * sev$p_G_D_step, 4))
+  ifr_output <- round(res[info$index$ifr_age, 6, dim(res)[3]], 4)
+  expect_true(all(ifr_input == ifr_output))
+
+
+  ## Also, all deaths should happen in the community (G_D)
   deaths <- c("G_D", "D_hosp", "D_non_hosp")
   for (i in deaths) {
     tmp <- res[info$index[[i]], , ]
