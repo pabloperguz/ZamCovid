@@ -18,6 +18,7 @@
 ZamCovid_compare <- function(state, observed, pars) {
 
   model_admissions_conf <- state["admitted_inc", ]
+  model_sero_pos_all <- state["sero_pos_all", ]
   model_sero_pos_over15 <- state["sero_pos_over15", ]
   model_sero_pos_15_19 <- state["sero_pos_15_19", ]
   model_sero_pos_20_29 <- state["sero_pos_20_29", ]
@@ -34,12 +35,20 @@ ZamCovid_compare <- function(state, observed, pars) {
   ## Serology assay
   # It is possible that model_sero_pos > pars$N_tot; this is capped here to
   # avoid probabilities > 1
+  model_sero_capped_all <- pmin(model_sero_pos_all, pars$N_tot)
   model_sero_capped_over15 <- pmin(model_sero_pos_over15, pars$N_tot_over15)
   model_sero_capped_15_19 <- pmin(model_sero_pos_15_19, pars$N_tot_15_19)
   model_sero_capped_20_29 <- pmin(model_sero_pos_20_29, pars$N_tot_20_29)
   model_sero_capped_30_39 <- pmin(model_sero_pos_30_39, pars$N_tot_30_39)
   model_sero_capped_40_49 <- pmin(model_sero_pos_40_49, pars$N_tot_40_49)
   model_sero_capped_50_plus <- pmin(model_sero_pos_50_plus, pars$N_tot_50_plus)
+
+  model_sero_prob_pos_all <-
+    test_prob_pos(model_sero_capped_all,
+                  pars$N_tot - model_sero_capped_all,
+                  pars$sero_sensitivity,
+                  pars$sero_specificity,
+                  pars$exp_noise)
 
   model_sero_prob_pos_over15 <-
     test_prob_pos(model_sero_capped_over15,
@@ -97,6 +106,10 @@ ZamCovid_compare <- function(state, observed, pars) {
                              pars$phi_death_all * model_deaths_all,
                              pars$kappa_death_all, pars$exp_noise)
 
+  ll_serology_all <- ll_binom(observed$sero_pos_all,
+                              observed$sero_tot_all,
+                              model_sero_prob_pos_all)
+
   ll_serology_over15 <- ll_binom(observed$sero_pos_over15,
                                  observed$sero_tot_over15,
                                  model_sero_prob_pos_over15)
@@ -121,9 +134,9 @@ ZamCovid_compare <- function(state, observed, pars) {
                                  observed$sero_tot_50_plus,
                                  model_sero_prob_pos_50_plus)
 
-  ll_admitted + ll_deaths_all + ll_serology_over15 + ll_serology_15_19 +
-    ll_serology_20_29 + ll_serology_30_39 + ll_serology_40_49 +
-    ll_serology_50_plus
+  ll_admitted + ll_deaths_all + ll_serology_all + ll_serology_over15 +
+    ll_serology_15_19 + ll_serology_20_29 + ll_serology_30_39 +
+    ll_serology_40_49 + ll_serology_50_plus
 }
 
 
