@@ -236,6 +236,7 @@ ZamCovid_parameters <- function(start_date,
 
   ## Parameters to support compare function
   ret$N_tot <- N_tot
+  ret$N_tot_all <- sum(N_tot[1:length(N_tot)])
   ret$N_tot_over15 <- sum(N_tot[4:length(N_tot)])
   ret$N_tot_15_19 <- N_tot[4]
   ret$N_tot_20_29 <- sum(N_tot[5:6])
@@ -434,25 +435,24 @@ ZamCovid_parameters_progression <- function(dt,
 ##'
 ##' @param sero_sensitivity Sensitivity of the serology test assay
 ##'
-##' @param PCR_specificity Specificity of the PCR test
+##' @param pcr_specificity Specificity of the PCR test
 ##'
-##' @param PCR_sensitivity Sensitivity of the PCR test
+##' @param pcr_sensitivity Sensitivity of the PCR test
 ##'
 ##' @export
 ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.999,
                                               sero_sensitivity = 0.927,
-                                              PCR_specificity = 0.99,
-                                              PCR_sensitivity = 0.99) {
+                                              pcr_specificity = 0.99,
+                                              pcr_sensitivity = 0.99) {
 
   ## Sero_sens of Abbott Architect IgG from PHE 2020:
   # Evaluation of sensitivity and specificity of four commercially available
   # SARS-CoV-2 antibody immunoassays
-
   ret <- list(
     sero_specificity = sero_specificity,
     sero_sensitivity = sero_sensitivity,
-    PCR_specificity = PCR_specificity,
-    PCR_sensitivity = PCR_sensitivity)
+    pcr_specificity = pcr_specificity,
+    pcr_sensitivity = pcr_sensitivity)
 
   lapply(seq_len(length(ret)),
          function(i) assert_proportion(ret[i], names(ret)[i]))
@@ -471,10 +471,6 @@ ZamCovid_parameters_sens_and_spec <- function(sero_specificity = 0.999,
 ##'
 ##' @param sero_sensitivity Sensitivity of the serology test assay
 ##'
-##' @param PCR_specificity Specificity of the PCR test
-##'
-##' @param PCR_sensitivity Sensitivity of the PCR test
-##'
 ##' @export
 ZamCovid_parameters_observation <- function(exp_noise = 1e6) {
 
@@ -486,6 +482,7 @@ ZamCovid_parameters_observation <- function(exp_noise = 1e6) {
   list(
     phi_death_all = 1,
     kappa_death_all = 2,
+    rho_pcr_tests = 0.1,
     # kappa_pcr_cases = 1 / x
     # phi_pcr_cases = 1
     phi_admitted = 1,

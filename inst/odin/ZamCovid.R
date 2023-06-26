@@ -713,11 +713,13 @@ dim(gamma_sero_pre_step) <- n_gamma_sero_pre_steps
 
 ## Parameters to support the compare function. Since these do not appear in any
 ## odin equation, they are marked as "ignore.unused"
+N_tot_all <- user() # ignore.unused
 N_tot_over15 <- user() # ignore.unused
 sero_sensitivity <- user() # ignore.unused
 sero_specificity <- user() # ignore.unused
-PCR_sensitivity <- user() # ignore.unused
-PCR_specificity <- user() # ignore.unused
+pcr_sensitivity <- user() # ignore.unused
+pcr_specificity <- user() # ignore.unused
+rho_pcr_tests <- user() # ignore.unused
 exp_noise <- user() # ignore.unused
 phi_admitted <- user() # ignore.unused
 kappa_admitted <- user() # ignore.unused
@@ -831,6 +833,10 @@ update(sero_pos_40_49) <- sum(T_sero_pos[9:10, , ])
 initial(sero_pos_50_plus) <- 0
 update(sero_pos_50_plus) <- sum(T_sero_pos[11:n_groups, , ])
 
+
+## PCR-positive population
+initial(pcr_pos_all) <- 0
+update(pcr_pos_all) <- sum(T_PCR_pos[1:n_groups, , ])
 
 ## IFR trajectories
 dim(IFR_disag) <- c(n_groups, n_vacc_classes)

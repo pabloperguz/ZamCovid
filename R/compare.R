@@ -18,6 +18,7 @@
 ZamCovid_compare <- function(state, observed, pars) {
 
   model_admissions_conf <- state["admitted_inc", ]
+  model_pcr_pos_all <- state["pcr_pos_all", ]
   model_sero_pos_all <- state["sero_pos_all", ]
   model_sero_pos_over15 <- state["sero_pos_over15", ]
   model_sero_pos_15_19 <- state["sero_pos_15_19", ]
@@ -32,10 +33,12 @@ ZamCovid_compare <- function(state, observed, pars) {
   model_deaths_all <- state["deaths_all_inc", ]
 
 
-  ## Serology assay
+  ## Serology and PCR assays
   # It is possible that model_sero_pos > pars$N_tot; this is capped here to
   # avoid probabilities > 1
-  model_sero_capped_all <- pmin(model_sero_pos_all, pars$N_tot)
+  model_pcr_capped_all <- pmin(model_pcr_pos_all, pars$N_tot_all)
+
+  model_sero_capped_all <- pmin(model_sero_pos_all, pars$N_tot_all)
   model_sero_capped_over15 <- pmin(model_sero_pos_over15, pars$N_tot_over15)
   model_sero_capped_15_19 <- pmin(model_sero_pos_15_19, pars$N_tot_15_19)
   model_sero_capped_20_29 <- pmin(model_sero_pos_20_29, pars$N_tot_20_29)
@@ -43,9 +46,15 @@ ZamCovid_compare <- function(state, observed, pars) {
   model_sero_capped_40_49 <- pmin(model_sero_pos_40_49, pars$N_tot_40_49)
   model_sero_capped_50_plus <- pmin(model_sero_pos_50_plus, pars$N_tot_50_plus)
 
+  model_pcr_prob_pos_all <- test_prob_pos(model_pcr_capped_all,
+                                          pars$N_tot - model_pcr_capped_all,
+                                          pars$pcr_sensitivity,
+                                          pars$pcr_specificity,
+                                          pars$exp_noise)
+
   model_sero_prob_pos_all <-
     test_prob_pos(model_sero_capped_all,
-                  pars$N_tot - model_sero_capped_all,
+                  pars$N_tot_all - model_sero_capped_all,
                   pars$sero_sensitivity,
                   pars$sero_specificity,
                   pars$exp_noise)
@@ -94,6 +103,11 @@ ZamCovid_compare <- function(state, observed, pars) {
 
 
   ## Log-likelihood
+  ll_pcr_all <- ll_betabinom(observed$pcr_pos_all,
+                             observed$pcr_tot_all,
+                             model_pcr_prob_pos_all,
+                             pars$rho_pcr_tests)
+
   ll_admitted <- ll_nbinom(observed$hosp_admissions,
                            pars$phi_admitted * model_admissions_conf,
                            pars$kappa_admitted, pars$exp_noise)
@@ -134,9 +148,9 @@ ZamCovid_compare <- function(state, observed, pars) {
                                  observed$sero_tot_50_plus,
                                  model_sero_prob_pos_50_plus)
 
-  ll_admitted + ll_deaths_all + ll_serology_all + ll_serology_over15 +
-    ll_serology_15_19 + ll_serology_20_29 + ll_serology_30_39 +
-    ll_serology_40_49 + ll_serology_50_plus
+  ll_admitted + ll_deaths_all + ll_pcr_all + ll_serology_all +
+    ll_serology_over15 + ll_serology_15_19 + ll_serology_20_29 +
+    ll_serology_30_39 + ll_serology_40_49 + ll_serology_50_plus
 }
 
 

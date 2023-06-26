@@ -1,7 +1,7 @@
 Package: ZamCovid
 Type: Package
 Title: SIR Model for the Zambian COVID-19 epidemic
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     c(person(given = "Pablo",
            family = "Perez-Guzman",
@@ -12,8 +12,8 @@ Description: Mechanistic models of transmission of the SARS-Cov-2 (COVID-19)
     dust. Uses mcstate to perfom Bayesian evidence synthesis from
     seroprevalence and deaths data.
 License: MIT + file LICENSE
-URL: https://github.com/pabloperguz/zam_covid
-BugReports: https://github.com/pabloperguz/zam_covid/issues
+URL: https://github.com/mrc-ide/ZamCovid
+BugReports: https://github.com/mrc-ide/ZamCovid/issues
 Encoding: UTF-8
 LazyData: true
 Language: en-GB
