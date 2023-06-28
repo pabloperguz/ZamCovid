@@ -47,10 +47,10 @@ test_that("ZamCovid_parameters returns a list of parameters", {
       "I_C_2_transmission",  "hosp_transmission",  "G_D_transmission",
       "phi_death_all",       "kappa_death_all",    "phi_admitted",
       "kappa_admitted",      "phi_death_hosp",     "kappa_death_hosp",
-      "exp_noise",           "N_tot",              "N_tot_over15",
-      "N_tot_15_19",         "N_tot_20_29",        "N_tot_30_39",
-      "N_tot_40_49",         "N_tot_50_plus",      "rel_p_H_D",
-      "rel_p_G_D",           "rel_p_R"))
+      "exp_noise",           "N_tot",              "N_tot_all",
+      "N_tot_over15",        "N_tot_15_19",        "N_tot_20_29",
+      "N_tot_30_39",         "N_tot_40_49",        "N_tot_50_plus",
+      "rel_p_H_D",           "rel_p_G_D",           "rel_p_R"))
 })
 
 
