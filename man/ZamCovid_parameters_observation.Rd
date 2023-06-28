@@ -11,9 +11,9 @@ ZamCovid_parameters_observation(exp_noise = 1e+06)
 
 \item{sero_sensitivity}{Sensitivity of the serology test assay}
 
-\item{PCR_specificity}{Specificity of the PCR test}
+\item{pcr_specificity}{Specificity of the PCR test}
 
-\item{PCR_sensitivity}{Sensitivity of the PCR test}
+\item{pcr_sensitivity}{Sensitivity of the PCR test}
 }
 \value{
 A list of parameter values

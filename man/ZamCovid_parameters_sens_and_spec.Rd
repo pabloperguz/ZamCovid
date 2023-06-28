@@ -7,8 +7,8 @@
 ZamCovid_parameters_sens_and_spec(
   sero_specificity = 0.999,
   sero_sensitivity = 0.927,
-  PCR_specificity = 0.99,
-  PCR_sensitivity = 0.99
+  pcr_specificity = 0.99,
+  pcr_sensitivity = 0.99
 )
 }
 \arguments{
@@ -16,9 +16,9 @@ ZamCovid_parameters_sens_and_spec(
 
 \item{sero_sensitivity}{Sensitivity of the serology test assay}
 
-\item{PCR_specificity}{Specificity of the PCR test}
+\item{pcr_specificity}{Specificity of the PCR test}
 
-\item{PCR_sensitivity}{Sensitivity of the PCR test}
+\item{pcr_sensitivity}{Sensitivity of the PCR test}
 }
 \value{
 A list of parameter values
