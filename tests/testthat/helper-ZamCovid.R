@@ -26,6 +26,7 @@ helper_data <- function(data, start_date, dt) {
   data
 }
 
+
 helper_particle_filter <- function(data, n_particles, n_threads = 1L,
                                    seed = NULL) {
   ZamCovid_check_data(data)
@@ -38,4 +39,53 @@ helper_particle_filter <- function(data, n_particles, n_threads = 1L,
     ZamCovid_initial,
     n_threads = n_threads,
     seed = seed)
+}
+
+
+test_vaccine_schedule <- function(daily_doses = 250, n_days = 100,
+                                  dose_waste = 0.1, start = 0,
+                                  days_between_doses = 12 * 7,
+                                  uptake = NULL, age_priority = NULL,
+                                  population = NULL) {
+  if (is.null(uptake)) {
+    uptake <- c(rep(0, 3), # no vaccination in <15
+                (2 / 5) * 0.75, # no vaccination in 15-17yo
+                rep(0.75, 12))
+  }
+  if (is.null(age_priority)) {
+    age_priority <- list(16, 15, 14, 13, 12, 11, 9:10, 7:8, 1:6)
+  }
+  if (is.null(population)) {
+    population <- c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
+                    10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512)
+  }
+
+  daily_doses <- rep(round(daily_doses * (1 - dose_waste)), n_days)
+  pop_to_vaccinate <-
+    vaccine_priority_population(population, uptake, age_priority)
+
+  vaccine_schedule_historic(data = NULL, uptake = NULL, age_priority = NULL,
+                            pop_to_vaccinate, daily_doses, days_between_doses,
+                            start)
+
+}
+
+
+expect_vector_equal <- function(x, y, digits = 100, tol = 0) {
+  if (is.numeric(x) && is.numeric(y)) {
+    expect_true(all(abs(round(x, digits) - round(y, digits)) <= tol),
+                sprintf("\nNot all '%s' equal to '%s' (tol %s)",
+                        deparse(substitute(x)), deparse(substitute(y)), tol))
+  } else {
+    expect_true(all(x == y))
+  }
+}
+
+
+expect_approx_equal <- function(x1, x2, rel_tol = 0.05) {
+  x1_zeros <- x1 == 0
+  x2_zeros <- x2 == 0
+  expect_true(all(abs(x1[!x1_zeros] - x2[!x1_zeros]) / x1[!x1_zeros] < rel_tol))
+  expect_true(all(abs(x1[x1_zeros & !x2_zeros] - x2[x1_zeros & !x2_zeros]) /
+                    x2[x1_zeros & !x2_zeros] < rel_tol))
 }
