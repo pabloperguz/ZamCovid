@@ -643,9 +643,6 @@ ZamCovid_parameters_vaccination <- function(dt,
 
   stopifnot(length(N_tot) == n_groups)
   calc_n_vacc_classes <- function(x) {
-    nlayer <- function(x) {
-      dim(x)[2L]
-    }
     if (is.array(x)) nlayer(x) else length(x)
   }
 
@@ -676,14 +673,36 @@ ZamCovid_parameters_vaccination <- function(dt,
     }
     ret$vaccine_dose_step <- array(0, c(n_groups, n_doses, 1))
     ret$index_dose <- rep(1L, n_doses)
+
   } else {
-    stop("Let's cross that bridge when we get to it!")
+
+    assert_is(vaccine_schedule, "vaccine_schedule")
+    vaccine_index_dose2 <- vaccine_index_dose2 %||% 1L
+    if (vaccine_index_dose2 > n_vacc_classes) {
+      stop(sprintf(
+        "Invalid value for 'vaccine_index_dose2', must be in [1, %d]",
+        n_vacc_classes))
+    }
+    stopifnot(vaccine_schedule$n_doses == n_doses)
+
+    n_days <- dim(vaccine_schedule$doses)[[3]]
+    i <- rep(seq_len(n_days), each = 1 / dt)
+    len <- vaccine_schedule$date / dt
+    ret$index_dose <- c(1L, vaccine_index_dose2)
+
+    ret$vaccine_dose_step <- mcstate::array_bind(
+      array(0, c(n_groups, n_doses, len)),
+      (vaccine_schedule$doses * dt)[, , i])
+
   }
 
-  ret$index_dose_inverse <- 2L
+  ret$index_dose_inverse <- create_index_dose_inverse(n_vacc_classes,
+                                                      ret$index_dose)
 
   ret$n_vacc_classes <- n_vacc_classes
-  ret$vaccine_progression_rate_base <- matrix(0, n_groups, n_vacc_classes)
+  ret$vaccine_progression_rate_base <- build_vaccine_progression_rate(
+    vaccine_progression_rate, n_vacc_classes, ret$index_dose)
+
 
   assert_scalar(vaccine_catchup_fraction)
   assert_proportion(vaccine_catchup_fraction)
@@ -693,6 +712,7 @@ ZamCovid_parameters_vaccination <- function(dt,
 
   ret
 }
+
 
 
 ##' Create initial conditions for the ZamCovid model. This matches the
@@ -1080,7 +1100,7 @@ check_severity <- function(pars) {
       stop(sprintf("Parameter '%s' is missing", p_step))
     }
 
-    if (!(ncol(pars[[rel_p]]) == 1)) {
+    if (!(ncol(pars[[rel_p]]) %in% c(1, 2))) {
       stop(sprintf("%s should have 1 column", rel_p))
     }
 
@@ -1106,8 +1126,8 @@ build_rel_param <- function(n_groups, rel_param, n_vacc_classes, name_param) {
     mat_rel_param <- array(rel_param, c(n_groups, n_vacc_classes))
   } else if (is.array(rel_param)) {
     if (length(dim(rel_param)) != 2) {
-      stop(paste(name_param, "should be a three dimensional array with",
-                 "dimensions: age groups, strains, vaccine classes"))
+      stop(paste(name_param, "should be a two dimensional array with",
+                 "dimensions: age groups, vaccine classes"))
     }
     if (nrow(rel_param) != n_groups) {
       stop(paste(name_param, "should have as many rows as age groups"))
@@ -1124,6 +1144,8 @@ build_rel_param <- function(n_groups, rel_param, n_vacc_classes, name_param) {
   }
   mat_rel_param
 }
+
+
 
 make_contact_matrix <- function(file, N_tot) {
 
