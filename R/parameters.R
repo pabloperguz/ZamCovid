@@ -1100,7 +1100,7 @@ check_severity <- function(pars) {
       stop(sprintf("Parameter '%s' is missing", p_step))
     }
 
-    if (!(ncol(pars[[rel_p]]) %in% c(1, 2))) {
+    if (!(ncol(pars[[rel_p]]) %in% c(1, 2, 5))) {
       stop(sprintf("%s should have 1 column", rel_p))
     }
 

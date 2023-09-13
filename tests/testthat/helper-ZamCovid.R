@@ -60,13 +60,12 @@ test_vaccine_schedule <- function(daily_doses = 250, n_days = 100,
                     10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512)
   }
 
-  daily_doses <- rep(round(daily_doses * (1 - dose_waste)), n_days)
-  pop_to_vaccinate <-
-    vaccine_priority_population(population, uptake, age_priority)
-
   vaccine_schedule_historic(data = NULL, uptake = NULL, age_priority = NULL,
-                            pop_to_vaccinate, daily_doses, days_between_doses,
-                            start)
+                            pop_to_vaccinate = population, uptake = uptake,
+                            age_priority = age_priority,
+                            daily_doses_value = daily_doses,
+                            days_between_doses = days_between_doses,
+                            start = start)
 
 }
 

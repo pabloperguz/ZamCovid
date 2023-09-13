@@ -11,7 +11,9 @@ vaccine_schedule_historic(
   pop_to_vaccinate = NULL,
   daily_doses_value = NULL,
   days_between_doses = NULL,
-  start = NULL
+  start = NULL,
+  dose_waste = 0,
+  n_days = NULL
 )
 }
 \arguments{

@@ -18,33 +18,37 @@ vaccine_schedule_historic <- function(data = NULL, uptake = NULL,
                                       pop_to_vaccinate = NULL,
                                       daily_doses_value = NULL,
                                       days_between_doses = NULL,
-                                      start = NULL) {
+                                      start = NULL, dose_waste = 0,
+                                      n_days = NULL) {
 
   if (is.null(data)) {
     # If no data provided, we need all these to create hypothetical data
-    stopifnot(!is.null(daily_doses_value) && !is.null(pop_to_vaccinate) &&
-                !is.null(days_between_doses) && !is.null(start))
+    stopifnot(
+      !is.null(pop_to_vaccinate) && !is.null(uptake) && !is.na(n_days) &&
+        !is.null(age_priority) && !is.null(daily_doses_value))
+
+    pop_to_vaccinate <-
+      vaccine_priority_population(pop_to_vaccinate, uptake, age_priority)
+
+    daily_doses <- rep(round(daily_doses_value * (1 - dose_waste)), n_days)
 
     n_groups <- dim(pop_to_vaccinate)[1]
     n_priority_groups <- dim(pop_to_vaccinate)[2]
     n_doses <- 2L
-    n_days <- length(daily_doses_value)
 
     population_to_vaccinate_mat <-
       array(0, c(n_groups, n_priority_groups, n_doses, n_days))
-
 
     population_left <- array(rep(c(pop_to_vaccinate), n_doses),
                              c(n_groups, n_priority_groups, n_doses))
 
     daily_doses_prev <- matrix(0, n_doses, 0)
-    # n_prev <- 0L
     daily_doses_date <- start
 
     daily_doses_tt <- cbind(daily_doses_prev, matrix(0, n_doses, n_days))
 
     population_to_vaccinate_mat <- vaccination_schedule_exec(
-      daily_doses_tt, daily_doses_value, population_left,
+      daily_doses_tt, daily_doses, population_left,
       population_to_vaccinate_mat, days_between_doses, 1:2)
 
     doses <- apply(population_to_vaccinate_mat, c(1, 3, 4), sum)
@@ -132,12 +136,11 @@ vaccine_schedule_historic <- function(data = NULL, uptake = NULL,
     doses <- aperm(doses, c(1, 3, 2))
     doses[is.na(doses)] <- 0
 
-    ## We have 16 groups, 10 priority groups
     priority_population <-
       vapply(seq_len(n_doses),
-             function(j) vaccine_priority_population(pop, uptake[, j],
-                                                     age_priority),
-             array(0, c(16, 10)))
+             function(j) vaccine_priority_population(
+               pop_to_vaccinate, uptake[, j], age_priority),
+             array(0, c(16, length(age_priority))))
 
     ## Now distribute age-aggregated doses (if any) and add in
     if (any(agg_doses > 0)) {
@@ -213,7 +216,8 @@ vaccine_priority_population <- function(pop, uptake, age_priority) {
 
 
 vaccine_priority_proportion <- function(uptake, age_priority) {
-  n_groups <- 16
+
+  n_groups <- 16L
   if(length(uptake) == n_groups) {
     uptake <- uptake
   } else {
@@ -221,7 +225,7 @@ vaccine_priority_proportion <- function(uptake, age_priority) {
   }
 
 
-  n_priority_groups <- 10
+  n_priority_groups <- length(age_priority)
   p <- matrix(0, n_groups, n_priority_groups)
 
   ## 2. Add aged base priority
@@ -357,4 +361,74 @@ build_vaccine_progression_rate <- function(vaccine_progression_rate,
     }
   }
   mat_vaccine_progression_rate
+}
+
+
+##' Inflate model state, so that additional vacc class compartments are
+##' created but zeroed. Use this to run the model for a while, then set
+##' it up to work with new vacc classes.
+##'
+##' @title Inflate vacc classes in model state
+##'
+##' @param state1 The state matrix with X vacc classes
+##' @param info1 The model info with X vacc classes
+##' @param info2 The model info with Y > X vacc classes
+##'
+##' @return An expanded model state with Y > X vacc classes
+##'
+##' @export
+inflate_state_vacc_classes <- function(state1, info1, info2) {
+
+  fn <- function(state1, info1, info2, d1, d2, i1, i2, ny, x1, x2, nm) {
+    if (length(d2) == 2) {
+      x2[, seq_len(d1[2L]), ] <- x1
+    } else if (length(d2) == 3) {
+      x2[, , seq(d1[3L]), ] <- x1
+    } else if (length(d2) == 4) {
+      x2[, , , seq(d1[4L]), ] <- x1
+    } else {
+      ## This will trigger if someone adds a vacc-including
+      ## compartment with rank 1 or 4+
+      stop("Unexpected dimension of output") # nocov
+    }
+
+    x2
+  }
+
+  inflate_state(state1, info1, info2, fn)
+}
+
+
+inflate_state <- function(state1, info1, info2, fn) {
+  if (!is.matrix(state1)) {
+    stop("Expected a matrix for 'state1'")
+  }
+  if (nrow(state1) != info1$len) {
+    stop(sprintf("Expected a matrix with %d rows for 'state1'",
+                 info1$len))
+  }
+
+  if (!setequal(names(info1$index), names(info2$index))) {
+    stop("Can't inflate state (try upgrading first)")
+  }
+
+  ny <- ncol(state1)
+  state2 <- matrix(0.0, info2$len, ny)
+  for (nm in names(info1$index)) {
+    d1 <- info1$dim[[nm]]
+    d2 <- info2$dim[[nm]]
+    i1 <- info1$index[[nm]]
+    i2 <- info2$index[[nm]]
+
+    if (!identical(d1, d2)) {
+      x1 <- state1[i1, ]
+      dim(x1) <- c(d1, ny)
+      x2 <- array(0, c(d2, ny))
+      state2[i2, ] <- fn(state1, info1, info2, d1, d2, i1, i2, ny, x1, x2, nm)
+    } else {
+      state2[i2, ] <- state1[i1, ]
+    }
+  }
+
+  state2
 }
