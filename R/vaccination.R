@@ -17,6 +17,7 @@ vaccine_schedule_historic <- function(data = NULL, uptake = NULL,
                                       age_priority = NULL,
                                       pop_to_vaccinate = NULL,
                                       daily_doses_value = NULL,
+                                      weekly_doses = FALSE,
                                       days_between_doses = NULL,
                                       start = NULL, dose_waste = 0,
                                       n_days = NULL) {
@@ -30,7 +31,28 @@ vaccine_schedule_historic <- function(data = NULL, uptake = NULL,
     pop_to_vaccinate <-
       vaccine_priority_population(pop_to_vaccinate, uptake, age_priority)
 
-    daily_doses <- rep(round(daily_doses_value * (1 - dose_waste)), n_days)
+    if (length(daily_doses_value) == 1) {
+
+      daily_doses <- rep(round(daily_doses_value * (1 - dose_waste)), n_days)
+
+    } else if (weekly_doses) {
+
+      daily_doses_value <- unname(daily_doses_value)
+      daily_doses <- rep(round(daily_doses_value / 7), each = 7,
+                         length.out = n_days)
+
+      if (length(daily_doses) < n_days) {
+        add_days <- n_days - length(daily_doses)
+        daily_doses <- c(daily_doses, rep(tail(daily_doses, 1), add_days))
+      } else if (length(daily_doses) > n_days) {
+        stop("vector of daily doses must be of length == n_days")
+      }
+
+      daily_doses <- round(daily_doses * (1 - dose_waste))
+
+    } else {
+      stop("daily_doses_value not supported")
+    }
 
     n_groups <- dim(pop_to_vaccinate)[1]
     n_priority_groups <- dim(pop_to_vaccinate)[2]

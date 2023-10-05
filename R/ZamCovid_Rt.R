@@ -258,8 +258,8 @@ ZamCovid_Rt_mean_duration_weighted_by_infectivity <- function(time, pars) {
     rel_gamma <- 1
     k <- 1
     gamma <- aperm(outer(outer(gamma_step, rel_gamma),
-                         array(1, pars$n_groups)),
-                   c(3, 2, 1))
+                         array(1, c(pars$n_groups, pars$n_vacc_classes))),
+                   c(3, 2, 4, 1))[, 1, , ]
     transmission * k * prob / stats::pexp(gamma, dt)
   }
 

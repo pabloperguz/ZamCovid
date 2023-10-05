@@ -66,8 +66,12 @@ ZamCovid_index <- function(info) {
                       calculate_index(index, "ifr_age",
                                       list(), age_suffix))
 
+  index_vaccinated <- calculate_index(index, "cum_n_vaccinated",
+                                      list(n_vacc_classes), age_suffix)
+
   index_state <- c(index_core, index_save, index_S, index_R, index_D,
-                   index_severity, index_inf_inc_age, index_reinf_inc_age)
+                   index_severity, index_vaccinated,
+                   index_inf_inc_age, index_reinf_inc_age)
 
   list(run = index_run, state = index_state)
 }

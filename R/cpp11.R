@@ -20,6 +20,10 @@ dust_cpu_basic_simulate <- function(ptr, time_end) {
   .Call(`_ZamCovid_dust_cpu_basic_simulate`, ptr, time_end)
 }
 
+dust_cpu_basic_run_adjoint <- function(ptr) {
+  .Call(`_ZamCovid_dust_cpu_basic_run_adjoint`, ptr)
+}
+
 dust_cpu_basic_set_index <- function(ptr, r_index) {
   .Call(`_ZamCovid_dust_cpu_basic_set_index`, ptr, r_index)
 }
@@ -98,6 +102,10 @@ dust_cpu_ZamCovid_run <- function(ptr, r_time_end) {
 
 dust_cpu_ZamCovid_simulate <- function(ptr, time_end) {
   .Call(`_ZamCovid_dust_cpu_ZamCovid_simulate`, ptr, time_end)
+}
+
+dust_cpu_ZamCovid_run_adjoint <- function(ptr) {
+  .Call(`_ZamCovid_dust_cpu_ZamCovid_run_adjoint`, ptr)
 }
 
 dust_cpu_ZamCovid_set_index <- function(ptr, r_index) {

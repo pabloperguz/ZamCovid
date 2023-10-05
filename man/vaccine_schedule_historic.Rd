@@ -10,6 +10,7 @@ vaccine_schedule_historic(
   age_priority = NULL,
   pop_to_vaccinate = NULL,
   daily_doses_value = NULL,
+  weekly_doses = FALSE,
   days_between_doses = NULL,
   start = NULL,
   dose_waste = 0,
