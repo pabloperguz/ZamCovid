@@ -43,30 +43,30 @@ helper_particle_filter <- function(data, n_particles, n_threads = 1L,
 
 
 test_vaccine_schedule <- function(daily_doses = 250, n_days = 100,
-                                  dose_waste = 0.1, start = 0,
+                                  start = 0,
                                   days_between_doses = 12 * 7,
                                   uptake = NULL, age_priority = NULL,
                                   population = NULL) {
-  if (is.null(uptake)) {
-    uptake <- c(rep(0, 3), # no vaccination in <15
-                (2 / 5) * 0.75, # no vaccination in 15-17yo
-                rep(0.75, 12))
-  }
-  if (is.null(age_priority)) {
-    age_priority <- list(16, 15, 14, 13, 12, 11, 9:10, 7:8, 1:6)
-  }
+
   if (is.null(population)) {
-    population <- c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
-                    10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512)
+    population <- test_population()$n
   }
 
-  vaccine_schedule_historic(data = NULL,
-                            pop_to_vaccinate = population, uptake = uptake,
-                            age_priority = age_priority,
-                            daily_doses_value = daily_doses,
+  uptake <- c(rep(0, 3), # no vaccination in <15
+              rep(1, 13))
+  age_priority <- list(16, 15, 14, 13, 12, 11, 9:10, 7:8, 1:6)
+
+  vaccine_schedule_historic(NULL, uptake, age_priority,
+                            population, daily_doses,
                             days_between_doses = days_between_doses,
                             start = start, n_days = n_days)
+}
 
+
+test_population <- function() {
+  data.frame(
+  n = c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
+        10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512))
 }
 
 

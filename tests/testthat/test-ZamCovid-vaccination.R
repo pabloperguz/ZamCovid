@@ -3,22 +3,11 @@ context("ZamCovid (vaccination)")
 
 test_that("Can create a hypothetical vaccination schedule", {
 
-  population <- c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
-                  10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512)
-  uptake <- c(rep(0, 3), # no vaccination in <15
-              (2 / 5) * 0.75, # no vaccination in 15-17yo
-              rep(0.75, 12))
-  age_priority <- list(16, 15, 14, 13, 12, 11, 9:10, 7:8, 1:6)
-  daily_doses <- rep(250, 100) # a vector of number of doses to give each day
   mean_days_between_doses <- 12 * 7
-
-  n <- vaccine_priority_population(population, uptake, age_priority)
-
-  schedule <- vaccine_schedule_historic(pop_to_vaccinate = n,
-                                        daily_doses_value = daily_doses,
-                                        days_between_doses =
-                                          mean_days_between_doses,
-                                        start = 0)
+  daily_doses <- rep(250, 100)
+  schedule <- test_vaccine_schedule(
+    days_between_doses = mean_days_between_doses,
+    daily_doses = 250)
 
   doses <- schedule$doses
   n_to_vaccinate1 <- schedule$doses[, 1, ]
@@ -49,16 +38,12 @@ test_that("Can vaccinate susceptible individuals", {
   ## Tests that:
   ## Every susceptible moves to vaccinated and stays there if
   ## there is an infinite supply of vaccines and 100% uptake
-  population <- data.frame(
-    n = c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
-          10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512))
+  population <- test_population()
+  schedule <- test_vaccine_schedule(daily_doses = 1e7,
+                                    days_between_doses = 1000,
+                                    population = population$n)
 
-  vaccine_schedule <- test_vaccine_schedule(daily_doses = Inf,
-                                            uptake = 1,
-                                            days_between_doses = 1000)
-  start_date <- numeric_date("2020-02-01")
-
-  p <- ZamCovid_parameters(start_date,
+  p <- ZamCovid_parameters(0,
                            population = population,
                            beta_value = c(0, 0, 1),
                            beta_date = c(0, 4, 5),
@@ -66,7 +51,7 @@ test_that("Can vaccinate susceptible individuals", {
                            rel_p_sympt = c(1, 1),
                            rel_p_hosp_if_sympt = c(1, 1),
                            rel_p_death = c(1, 1),
-                           vaccine_schedule = vaccine_schedule,
+                           vaccine_schedule = schedule,
                            vaccine_index_dose2 = 2L)
 
   mod <- ZamCovid$new(p, 0, 1, seed = 1L)
@@ -79,6 +64,9 @@ test_that("Can vaccinate susceptible individuals", {
   ## Predefined schedule means we may end up not vaccinating exactly everyone
   ## hence the approximate comparison
   expect_true(all(abs(y$S[i, 1, 1] - y$S[i, 2, 2]) / y$S[i, 1, 1] < 0.01))
+
+  ## VE is 100% protective against infection, we expect everyone to remain in
+  ## the susceptible-dose 1 vaccinated class
   expect_equal(y$S[i, , 101], y$S[i, , 2])
 })
 
@@ -86,19 +74,18 @@ test_that("Can vaccinate susceptible individuals", {
 test_that("Vaccination of other eligible compartments works", {
   ## Every exposed moves to vaccinated and stays there if everyone
   ## quickly gets vaccinated with a perfect vaccine.
-  population <- data.frame(
-    n = c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
-          10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512))
-  vaccine_schedule <- test_vaccine_schedule(daily_doses = Inf,
-                                            days_between_doses = 1000,
-                                            uptake = 1)
+  population <- test_population()
+  schedule <- test_vaccine_schedule(daily_doses = 1e7,
+                                    days_between_doses = 1000,
+                                    population = population$n)
+
   p <- ZamCovid_parameters(0,
                            population = population,
                            rel_susceptibility = c(1, 0),
                            rel_p_sympt = c(1, 1),
                            rel_p_hosp_if_sympt = c(1, 1),
                            rel_p_death = c(1, 1),
-                           vaccine_schedule = vaccine_schedule,
+                           vaccine_schedule = schedule,
                            vaccine_index_dose2 = 2L)
 
   # Perfect vaccine: stop disease progression after E
@@ -148,7 +135,7 @@ test_that("Vaccination of other eligible compartments works", {
                            rel_p_sympt = c(1, 1),
                            rel_p_hosp_if_sympt = c(1, 1),
                            rel_p_death = c(1, 1),
-                           vaccine_schedule = vaccine_schedule,
+                           vaccine_schedule = schedule,
                            vaccine_index_dose2 = 2L)
 
   #stop disease progression after I_A
@@ -187,7 +174,7 @@ test_that("Vaccination of other eligible compartments works", {
                            rel_p_sympt = c(1, 1),
                            rel_p_hosp_if_sympt = c(1, 1),
                            rel_p_death = c(1, 1),
-                           vaccine_schedule = vaccine_schedule,
+                           vaccine_schedule = schedule,
                            vaccine_index_dose2 = 2L)
 
   #stop disease progression after I_P
@@ -226,7 +213,7 @@ test_that("Vaccination of other eligible compartments works", {
                            rel_p_sympt = c(1, 1),
                            rel_p_hosp_if_sympt = c(1, 1),
                            rel_p_death = c(1, 1),
-                           vaccine_schedule = vaccine_schedule,
+                           vaccine_schedule = schedule,
                            vaccine_index_dose2 = 2L)
 
   p$gamma_R <- 0
@@ -358,4 +345,48 @@ test_that("Some infections with imperfect vaccine wrt rel_susceptibility", {
 
 
   expect_true(sum(y_1[, 2, 101]) > sum(y_2[, 2, 101]))
+})
+
+
+test_that("Vaccine progression through 5 classes works for susceptibles", {
+
+  ## Every susceptible moves to waning immunity stage and stays there if
+  ## everyone quickly gets vaccinated and loses immunity
+  population <- test_population()
+  schedule <- test_vaccine_schedule(daily_doses = 1e7,
+                                    days_between_doses = 7 * 12,
+                                    population = population$n)
+
+  vaccine_progression_rate <- c(0,            # unvaccinated
+                                1 / (7 * 3),  # first dose no effect
+                                0,            # first dose full effect
+                                1 / (7 * 21), # second dose
+                                0)            # waned
+
+  p <- ZamCovid_parameters(0,
+                           population = population,
+                           rel_susceptibility = c(1, 0, 0, 0, 0),
+                           rel_p_sympt = c(1, 1, 1, 1, 1),
+                           rel_p_hosp_if_sympt = c(1, 1, 1, 1, 1),
+                           rel_p_death = c(1, 1, 1, 1, 1),
+                           vaccine_schedule = schedule,
+                           vaccine_index_dose2 = 3L,
+                           vaccine_progression_rate = vaccine_progression_rate)
+
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 1L)
+  info <- mod$info()
+  mod$update_state(state = ZamCovid_initial(info, 1, p))
+  i <- 4:16
+  y <- mod$transform_variables(drop(mod$simulate(seq(0, 400, by = 4))))
+  S <- apply(y$S[i, ,], c(2, 3), sum)
+
+  ## By day two virtually all eligible have received a first dose
+  expect_approx_equal(S[1L, 1L], sum(S[, 2L]))
+
+  ## By day of second dose, virually all eligibile will move onto second dose
+  expect_approx_equal(S[1L, 1L], sum(S[3L, 7 * 12 + 1]))
+
+  ## Some will have waned by the end of simulation
+  expect_true(S[5L, 101] > 0)
 })
