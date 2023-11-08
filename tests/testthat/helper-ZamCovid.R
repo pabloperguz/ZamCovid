@@ -26,6 +26,7 @@ helper_data <- function(data, start_date, dt) {
   data
 }
 
+
 helper_particle_filter <- function(data, n_particles, n_threads = 1L,
                                    seed = NULL) {
   ZamCovid_check_data(data)
@@ -38,4 +39,52 @@ helper_particle_filter <- function(data, n_particles, n_threads = 1L,
     ZamCovid_initial,
     n_threads = n_threads,
     seed = seed)
+}
+
+
+test_vaccine_schedule <- function(daily_doses = 250, n_days = 100,
+                                  start = 0,
+                                  days_between_doses = 12 * 7,
+                                  uptake = NULL, age_priority = NULL,
+                                  population = NULL) {
+
+  if (is.null(population)) {
+    population <- test_population()$n
+  }
+
+  uptake <- c(rep(0, 3), # no vaccination in <15
+              rep(1, 13))
+  age_priority <- list(16, 15, 14, 13, 12, 11, 9:10, 7:8, 1:6)
+
+  vaccine_schedule_historic(NULL, uptake, age_priority,
+                            population, daily_doses,
+                            days_between_doses = days_between_doses,
+                            start = start, n_days = n_days)
+}
+
+
+test_population <- function() {
+  data.frame(
+  n = c(39460, 36388, 32525, 28413, 23396, 19197, 15983, 13281,
+        10824, 8111, 5807, 4388, 3181, 2227, 1510, 1512))
+}
+
+
+expect_vector_equal <- function(x, y, digits = 100, tol = 0) {
+  if (is.numeric(x) && is.numeric(y)) {
+    expect_true(all(abs(round(x, digits) - round(y, digits)) <= tol),
+                sprintf("\nNot all '%s' equal to '%s' (tol %s)",
+                        deparse(substitute(x)), deparse(substitute(y)), tol))
+  } else {
+    expect_true(all(x == y))
+  }
+}
+
+
+expect_approx_equal <- function(x1, x2, rel_tol = 0.05) {
+  x1_zeros <- x1 == 0
+  x2_zeros <- x2 == 0
+  expect_true(all(abs(x1[!x1_zeros] - x2[!x1_zeros]) / x1[!x1_zeros] < rel_tol))
+  expect_true(all(abs(x1[x1_zeros & !x2_zeros] - x2[x1_zeros & !x2_zeros]) /
+                    x2[x1_zeros & !x2_zeros] < rel_tol))
 }

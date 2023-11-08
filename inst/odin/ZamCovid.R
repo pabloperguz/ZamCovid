@@ -378,6 +378,8 @@ n_vaccinated[, ] <-
   n_I_P_next_vacc_class[i, j] +
   n_R_next_vacc_class[i, j]
 
+update(cum_n_vaccinated[, ]) <- cum_n_vaccinated[i, j] + n_vaccinated[i, j]
+
 update(cum_n_S_vaccinated[, ]) <-
   cum_n_S_vaccinated[i, j] + n_S_next_vacc_class[i, j]
 
@@ -465,6 +467,7 @@ initial(T_PCR_pre[, , ]) <- 0
 initial(T_PCR_pos[, , ]) <- 0
 initial(T_PCR_neg[, ]) <- 0
 
+initial(cum_n_vaccinated[, ]) <- 0
 initial(cum_n_S_vaccinated[, ]) <- 0
 initial(cum_n_E_vaccinated[, ]) <- 0
 initial(cum_n_I_A_vaccinated[, ]) <- 0
@@ -671,6 +674,7 @@ dim(lambda_susc) <- c(n_groups, n_vacc_classes)
 dim(I_trans) <- c(n_groups, n_vacc_classes)
 
 dim(n_vaccinated) <- c(n_groups, n_vacc_classes)
+dim(cum_n_vaccinated) <- c(n_groups, n_vacc_classes)
 dim(cum_n_S_vaccinated) <- c(n_groups, n_vacc_classes)
 dim(cum_n_E_vaccinated) <- c(n_groups, n_vacc_classes)
 dim(cum_n_I_A_vaccinated) <- c(n_groups, n_vacc_classes)

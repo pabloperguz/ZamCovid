@@ -10,6 +10,14 @@ read_csv <- function(...) {
   if (is.null(a)) b else a
 }
 
+assert_is <- function(x, what, name = deparse(substitute(x))) {
+  if (!inherits(x, what)) {
+    stop(sprintf("'%s' must be a %s", name, paste(what, collapse = " / ")),
+         call. = FALSE)
+  }
+  invisible(x)
+}
+
 assert_proportion <- function(x, name = deparse(substitute(x))) {
   if (any(x < 0 | x > 1)) {
     stop(sprintf("'%s' must lie in [0, 1]", name),
