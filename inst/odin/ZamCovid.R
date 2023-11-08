@@ -714,10 +714,11 @@ dim(gamma_sero_pre_step) <- n_gamma_sero_pre_steps
 ## Parameters to support the compare function. Since these do not appear in any
 ## odin equation, they are marked as "ignore.unused"
 N_tot_over15 <- user() # ignore.unused
+N_tot_all <- user() # ignore.unused
 sero_sensitivity <- user() # ignore.unused
 sero_specificity <- user() # ignore.unused
-PCR_sensitivity <- user() # ignore.unused
-PCR_specificity <- user() # ignore.unused
+pcr_sensitivity <- user() # ignore.unused
+pcr_specificity <- user() # ignore.unused
 exp_noise <- user() # ignore.unused
 phi_admitted <- user() # ignore.unused
 kappa_admitted <- user() # ignore.unused
@@ -782,19 +783,13 @@ delta_infections[, ] <- n_S_progress[i, j] + n_RE[i, j]
 dim(delta_infections) <- c(n_groups, n_vacc_classes)
 delta_infections_total <- sum(delta_infections)
 
+
+
 # Output all new infections
 initial(infections_inc) <- 0
 new_infections_inc <- if (step %% steps_per_day == 0)
   delta_infections_total else infections_inc + delta_infections_total
 update(infections_inc) <- new_infections_inc
-
-# Output all new re-infections
-initial(reinfections_inc) <- 0
-new_reinfections_inc <- if (step %% steps_per_day == 0)
-  sum(n_RE) else reinfections_inc + sum(n_RE)
-update(reinfections_inc) <- new_reinfections_inc
-
-
 
 dim(infections_inc_age) <- n_groups
 dim(delta_infections_age) <- n_groups
@@ -807,6 +802,26 @@ new_infections_inc_age[] <-
     delta_infections_age[i] else
       infections_inc_age[i] + delta_infections_age[i]
 update(infections_inc_age[]) <- new_infections_inc_age[i]
+
+
+
+# Output all new re-infections
+initial(reinfections_inc) <- 0
+new_reinfections_inc <- if (step %% steps_per_day == 0)
+  sum(n_RE) else reinfections_inc + sum(n_RE)
+update(reinfections_inc) <- new_reinfections_inc
+
+dim(reinfections_inc_age) <- n_groups
+dim(delta_reinfections_age) <- n_groups
+dim(new_reinfections_inc_age) <- n_groups
+
+initial(reinfections_inc_age[]) <- n_groups
+delta_reinfections_age[] <- sum(n_RE[i, ])
+new_reinfections_inc_age[] <-
+  if (step %% steps_per_day == 0)
+    delta_reinfections_age[i] else
+      reinfections_inc_age[i] + delta_reinfections_age[i]
+update(reinfections_inc_age[]) <- new_reinfections_inc_age[i]
 
 
 ## Sero-positive population by age
@@ -830,6 +845,36 @@ update(sero_pos_40_49) <- sum(T_sero_pos[9:10, , ])
 
 initial(sero_pos_50_plus) <- 0
 update(sero_pos_50_plus) <- sum(T_sero_pos[11:n_groups, , ])
+
+
+## New infections by same age groups as serology
+initial(inf_cum_all) <- 0
+update(inf_cum_all) <- inf_cum_all +
+  sum(infections_inc_age[1:n_groups]) - sum(reinfections_inc_age[1:n_groups])
+
+initial(inf_cum_over15) <- 0
+update(inf_cum_over15) <- inf_cum_over15 +
+  sum(infections_inc_age[4:n_groups]) - sum(reinfections_inc_age[4:n_groups])
+
+initial(inf_cum_15_19) <- 0
+update(inf_cum_15_19) <- inf_cum_15_19 +
+  sum(infections_inc_age[4]) - sum(reinfections_inc_age[4])
+
+initial(inf_cum_20_29) <- 0
+update(inf_cum_20_29) <- inf_cum_20_29 +
+  sum(infections_inc_age[5:6]) - sum(reinfections_inc_age[5:6])
+
+initial(inf_cum_30_39) <- 0
+update(inf_cum_30_39) <- inf_cum_30_39 +
+  sum(infections_inc_age[7:8]) - sum(reinfections_inc_age[7:8])
+
+initial(inf_cum_40_49) <- 0
+update(inf_cum_40_49) <- inf_cum_40_49 +
+  sum(infections_inc_age[9:10]) - sum(reinfections_inc_age[9:10])
+
+initial(inf_cum_50_plus) <- 0
+update(inf_cum_50_plus) <- inf_cum_50_plus +
+  sum(infections_inc_age[11:n_groups]) - sum(reinfections_inc_age[11:n_groups])
 
 
 ## IFR trajectories

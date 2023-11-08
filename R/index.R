@@ -25,7 +25,14 @@ ZamCovid_index <- function(info) {
                   sero_pos_20_29 = index[["sero_pos_20_29"]],
                   sero_pos_30_39 = index[["sero_pos_30_39"]],
                   sero_pos_40_49 = index[["sero_pos_40_49"]],
-                  sero_pos_50_plus = index[["sero_pos_50_plus"]])
+                  sero_pos_50_plus = index[["sero_pos_50_plus"]],
+                  inf_cum_all = index[["inf_cum_all"]],
+                  inf_cum_over15 = index[["inf_cum_over15"]],
+                  inf_cum_15_19 = index[["inf_cum_15_19"]],
+                  inf_cum_20_29 = index[["inf_cum_20_29"]],
+                  inf_cum_30_39 = index[["inf_cum_30_39"]],
+                  inf_cum_40_49 = index[["inf_cum_40_49"]],
+                  inf_cum_50_plus = index[["inf_cum_50_plus"]])
 
   # An index of only incidence versions for the likelihood function
   # For now, this is basically the same as index_core, but we will need to
@@ -49,12 +56,18 @@ ZamCovid_index <- function(info) {
 
   index_D <- calculate_index(index, "D", list(n_vacc_classes), age_suffix)
 
+  index_inf_inc_age <- calculate_index(index, "infections_inc_age",
+                                       list(n_vacc_classes), age_suffix)
+
+  index_reinf_inc_age <- calculate_index(index, "reinfections_inc_age",
+                                       list(n_vacc_classes), age_suffix)
+
   index_severity <- c(ifr = index[["ifr"]],
                       calculate_index(index, "ifr_age",
                                       list(n_vacc_classes), age_suffix))
 
   index_state <- c(index_core, index_save, index_S, index_R, index_D,
-                   index_severity)
+                   index_severity, index_inf_inc_age, index_reinf_inc_age)
 
   list(run = index_run, state = index_state)
 }
