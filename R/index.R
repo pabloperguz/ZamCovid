@@ -19,6 +19,8 @@ ZamCovid_index <- function(info) {
                   deaths_comm_inc = index[["comm_deaths_inc"]],
                   base_death_inc = index[["base_death_inc"]],
                   deaths_all_inc = index[["all_deaths_inc"]],
+                  deaths_cum_hosp = index[["cum_deaths_hosp"]],
+                  deaths_cum_comm = index[["cum_deaths_comm"]],
                   sero_pos_all = index[["sero_pos_all"]],
                   sero_pos_over15 = index[["sero_pos_over15"]],
                   sero_pos_15_19 = index[["sero_pos_15_19"]],
