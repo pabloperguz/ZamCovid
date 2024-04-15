@@ -1,16 +1,9 @@
 ## TODO: checklist
-# Create mock dataset and write tests for pMCMC
-# Create mock vaccination schedule and write tests for vaccine engine
-# Add S, E, R classes tracking re-infections
-# If boosters are needed further down the line, implement vaccine skip
+# If boosters are needed further down the line, implement vaccine skip
 # Assess hospitalisation data, as and when available, and think whether
 # conf/uncof still make sense or it might need re-factoring
-# Check N_tot_ for parallel flows, as new_T_PCR_neg (e.g.) is an absorbing
-# state, so the N_tot_ might be not quite right
 # For a fixed seed, we can do -50 odd days after the first 15 deaths recorded
 # ass OJ did in squire
-# exp_noise for seropos ll might not be necessary here, as we will be explicitly
-# accounting for test performance characteristics
 
 ## Compartment indexes: age groups (i), vaccine class (j)
 # Note k index is used for shape parameter of erlang distributed rates
