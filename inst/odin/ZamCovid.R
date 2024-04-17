@@ -1,16 +1,9 @@
 ## TODO: checklist
-# Create mock dataset and write tests for pMCMC
-# Create mock vaccination schedule and write tests for vaccine engine
-# Add S, E, R classes tracking re-infections
-# If boosters are needed further down the line, implement vaccine skip
+# If boosters are needed further down the line, implement vaccine skip
 # Assess hospitalisation data, as and when available, and think whether
 # conf/uncof still make sense or it might need re-factoring
-# Check N_tot_ for parallel flows, as new_T_PCR_neg (e.g.) is an absorbing
-# state, so the N_tot_ might be not quite right
 # For a fixed seed, we can do -50 odd days after the first 15 deaths recorded
 # ass OJ did in squire
-# exp_noise for seropos ll might not be necessary here, as we will be explicitly
-# accounting for test performance characteristics
 
 ## Compartment indexes: age groups (i), vaccine class (j)
 # Note k index is used for shape parameter of erlang distributed rates
@@ -948,3 +941,24 @@ update(base_death_inc) <- base_death
 
 initial(all_deaths_inc) <- 0
 update(all_deaths_inc) <- base_death_inc + hosp_deaths_inc + comm_deaths_inc
+
+
+## Calculate effective immunity
+# Weight each person in S/R by their relative susceptibility. For those in R,
+# we will further account for cross immunity.
+dim(eff_sus_S) <- c(n_groups, n_vacc_classes)
+dim(eff_sus_R) <- c(n_groups, n_vacc_classes)
+eff_sus_S[, ] <- new_S[i, j] * rel_susceptibility[i, j]
+eff_sus_R[, ] <- new_R[i, j] * (1 - cross_immunity) * rel_susceptibility[i, j]
+
+initial(effective_susceptible) <- 0
+update(effective_susceptible) <- sum(eff_sus_S[, ]) + sum(eff_sus_R[, ])
+
+## Calculate the (weighted) number of individuals protected against infection
+initial(protected_S_vaccinated) <- 0
+initial(protected_R_unvaccinated) <- 0
+initial(protected_R_vaccinated) <- 0
+update(protected_S_vaccinated) <- sum(new_S) - sum(eff_sus_S)
+update(protected_R_unvaccinated) <- sum(new_R[, 1]) - sum(eff_sus_R[, 1])
+update(protected_R_vaccinated) <- sum(new_R) - sum(new_R[, 1]) -
+  (sum(eff_sus_R) - sum(eff_sus_R[, 1]))

@@ -19,6 +19,8 @@ ZamCovid_index <- function(info) {
                   deaths_comm_inc = index[["comm_deaths_inc"]],
                   base_death_inc = index[["base_death_inc"]],
                   deaths_all_inc = index[["all_deaths_inc"]],
+                  deaths_cum_hosp = index[["cum_deaths_hosp"]],
+                  deaths_cum_comm = index[["cum_deaths_comm"]],
                   sero_pos_all = index[["sero_pos_all"]],
                   sero_pos_over15 = index[["sero_pos_over15"]],
                   sero_pos_15_19 = index[["sero_pos_15_19"]],
@@ -32,7 +34,10 @@ ZamCovid_index <- function(info) {
                   inf_cum_20_29 = index[["inf_cum_20_29"]],
                   inf_cum_30_39 = index[["inf_cum_30_39"]],
                   inf_cum_40_49 = index[["inf_cum_40_49"]],
-                  inf_cum_50_plus = index[["inf_cum_50_plus"]])
+                  inf_cum_50_plus = index[["inf_cum_50_plus"]],
+                  immune_S_vacc = index[["protected_S_vaccinated"]],
+                  immune_R_vacc = index[["protected_R_vaccinated"]],
+                  immune_R_unvacc = index[["protected_R_unvaccinated"]])
 
   # An index of only incidence versions for the likelihood function
   # For now, this is basically the same as index_core, but we will need to

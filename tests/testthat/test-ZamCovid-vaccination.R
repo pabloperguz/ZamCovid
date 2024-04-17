@@ -37,7 +37,7 @@ test_that("Can create a hypothetical vaccination schedule", {
 test_that("Can vaccinate susceptible individuals", {
   ## Tests that:
   ## Every susceptible moves to vaccinated and stays there if
-  ## there is an infinite supply of vaccines and 100% uptake
+  ## there is an infinite supply of vaccines and 100% uptake
   population <- test_population()
   schedule <- test_vaccine_schedule(daily_doses = 1e7,
                                     days_between_doses = 1000,
@@ -282,6 +282,7 @@ test_that("No infections with perfect vaccine wrt rel_susceptibility", {
 
 test_that("Some infections with imperfect vaccine wrt rel_susceptibility", {
 
+  population <- test_population()
   ## Infections occur with a 50% effective vaccine
   p <- ZamCovid_parameters(0,
                            population = population,
@@ -389,4 +390,91 @@ test_that("Vaccine progression through 5 classes works for susceptibles", {
 
   ## Some will have waned by the end of simulation
   expect_true(S[5L, 101] > 0)
+})
+
+
+test_that("Perfect vaccine averts all deaths", {
+
+  data <- read_csv(ZamCovid_file("extdata/severity_default.csv"))
+  severity <- ZamCovid_parameters_severity(1, data)
+
+  ## Simulate with perfect vaccine
+  p <- ZamCovid_parameters(0,
+                           severity = severity,
+                           rel_susceptibility = c(1, 0),
+                           rel_p_sympt = c(1, 0),
+                           rel_p_hosp_if_sympt = c(1, 0),
+                           rel_p_death = c(1, 0),
+                           rel_infectivity = c(1, 0))
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 10L)
+  info <- mod$info()
+  state <- ZamCovid_initial(info, 1, p)
+  index_S <- array(info$index$S, info$dim$S)
+
+  # Move half of S into vaccinated class
+  state[index_S[, 2]] <- state[index_S[, 1]] / 2
+  state[index_S[, 1]] <- state[index_S[, 1]] / 2
+
+  mod$update_state(state = state)
+  t <- seq(0, 400)
+  res <- mod$simulate(t)
+
+  # Reshape simulated compartment
+  S <- array(res[info$index$S, 1, ], c(info$dim$S, 101))
+  D <- array(res[info$index$D, 1, ], c(info$dim$D, 101))
+
+  # Deaths in the unvaccinated
+  expect_true(sum(D[, 1, ]) > 0)
+
+  # Everyone vaccinated remained in S
+  expect_true(all(S[, 2, 1] == S[, 2, 101]))
+
+
+
+  ## Perfect vaccine against death only
+  # sev <- severity
+  p <- ZamCovid_parameters(0,
+                           rel_susceptibility = c(1, 1),
+                           rel_p_sympt = c(1, 1),
+                           rel_p_hosp_if_sympt = c(1, 1),
+                           rel_p_death = c(1, 0),
+                           rel_infectivity = c(1, 1))
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 10L)
+  info <- mod$info()
+  state <- ZamCovid_initial(info, 1, p)
+  index_S <- array(info$index$S, info$dim$S)
+
+  # Move half of S into vaccinated class
+  state[index_S[, 2]] <- state[index_S[, 1]] / 2
+  state[index_S[, 1]] <- state[index_S[, 1]] / 2
+
+  mod$update_state(state = state)
+  t <- seq(0, 400)
+  res <- mod$simulate(t)
+
+  # Vaccinated got infected
+  S <- array(res[info$index$S, 1, ], c(info$dim$S, 101))
+  expect_true(all(S[, 2, 1] > S[, 2, 101]))
+
+  # Vaccinated got sick
+  E <- array(res[info$index$E, 1, ], c(info$dim$E, 101))
+  I_P <- array(res[info$index$I_P, 1, ], c(info$dim$I_P, 101))
+  I_C_2 <- array(res[info$index$I_C_2, 1, ], c(info$dim$I_C_2, 101))
+  expect_true(all(rowSums(E[, 2, 1, ]) > 0))
+  expect_true(sum(I_P[, 2, ]) > 0)
+  expect_true(sum(I_C_2[, 2, ]) > 0)
+
+
+  # Unvaccinated died, but no vaccinated did
+  R <- array(res[info$index$R, 1, ], c(info$dim$R, 101))
+  D <- array(res[info$index$D, 1, ], c(info$dim$D, 101))
+
+  expect_true(sum(D[, 1, ]) > 0)
+  expect_true(sum(D[, 2, ]) == 0)
+
+  # Expect vaccinated and unvaccinated recovered
+  expect_true(all(c(sum(R[, 1, ]), sum(R[, 2, ])) > 0))
+
 })
