@@ -363,7 +363,7 @@ initial(beta_out) <- beta_step[1]
 update(beta_out) <- beta
 
 
-## Track number of individuals vaccinated
+## Track number of individuals vaccinated
 n_vaccinated[, ] <-
   n_S_next_vacc_class[i, j] +
   sum(n_E_next_vacc_class[i, j, ]) +
@@ -930,7 +930,7 @@ update(comm_deaths_inc) <- if (step %% steps_per_day == 0)
 
 
 
-## Baseline deaths
+## Baseline deaths
 base_death_step[] <- user()
 dim(base_death_step) <- user()
 base_death <- if (step >= length(base_death_step))
@@ -962,3 +962,36 @@ update(protected_S_vaccinated) <- sum(new_S) - sum(eff_sus_S)
 update(protected_R_unvaccinated) <- sum(new_R[, 1]) - sum(eff_sus_R[, 1])
 update(protected_R_vaccinated) <- sum(new_R) - sum(new_R[, 1]) -
   (sum(eff_sus_R) - sum(eff_sus_R[, 1]))
+
+## Calculate years of life lost
+life_exp[] <- user()
+dim(life_exp) <- n_groups
+dim(delta_yll_age) <- n_groups
+dim(yll_age) <- n_groups
+
+initial(yll_age[]) <- 0
+initial(yll_tot) <- 0
+
+delta_yll_age[] <- (sum(delta_D_hosp_disag[i, ]) +
+                      sum(delta_D_non_hosp_disag[i, ])) * life_exp[i]
+
+update(yll_age[]) <- yll_age[i] + delta_yll_age[i]
+update(yll_tot) <- yll_tot + sum(delta_yll_age[])
+
+## Calculate severe/mild for downstream YLD and cost calculation
+p_sev[] <- user()
+dim(p_sev) <- n_groups
+dim(delta_severe_age) <- n_groups
+dim(delta_mild_age) <- n_groups
+dim(severe_age) <- n_groups
+dim(mild_age) <- n_groups
+
+initial(severe_age[]) <- 0
+initial(mild_age[]) <- 0
+
+delta_severe_age[] <- sum(n_I_C_2_to_RS[i, ]) * p_sev[i] +
+  sum(n_I_C_2_to_H_R[i, ])
+delta_mild_age[] <- sum(n_I_C_2_to_RS[i, ]) * (1 - p_sev[i])
+
+update(severe_age[]) <- severe_age[i] + delta_severe_age[i]
+update(mild_age[]) <- mild_age[i] + delta_mild_age[i]

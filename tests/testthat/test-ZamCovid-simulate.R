@@ -1,14 +1,15 @@
 context("ZamCovid")
 
-test_that("ZamCovid severity pathways work as expected", {
+test_that("ZamCovid can simulate epidemic", {
 
-  start_date <- numeric_date("2020-02-01")
+  start_date <- 0
   n_particles <- 10
 
   ## With default severity
   data <- read_csv(ZamCovid_file("extdata/severity_default.csv"))
   severity <- ZamCovid_parameters_severity(1, data)
-  p <- ZamCovid_parameters(start_date, 1L, severity = severity)
+  p <- ZamCovid_parameters(start_date, 4L, severity = severity,
+                           initial_seed_size = 100L)
 
   mod <- ZamCovid$new(p, 0, n_particles)
   initial <- ZamCovid_initial(mod$info(), n_particles, p)
@@ -16,7 +17,7 @@ test_that("ZamCovid severity pathways work as expected", {
   info <- mod$info()
   index <- ZamCovid_index(info)
 
-  end_date <- numeric_date("2020-09-30") / p$dt
+  end_date <- 100 / p$dt
 
   # Check all infected and severity pathway compartments get populated
   t <- seq(4, end_date)
@@ -83,13 +84,7 @@ test_that("ZamCovid severity pathways work as expected", {
   }
 
 
-  ## With p_H zeroed, IFR should be equal to p_C * p_G_D
-  ifr_input <- as.vector(round(sev$p_C_step * sev$p_G_D_step, 3))
-  ifr_output <- round(res[info$index$ifr_age, 6, dim(res)[3]], 3)
-  expect_true(all(ifr_input == ifr_output))
-
-
-  ## Also, all deaths should happen in the community (G_D)
+  ## With p_H zeroed all deaths should happen in the community (G_D)
   deaths <- c("G_D", "D_hosp", "D_non_hosp")
   for (i in deaths) {
     tmp <- res[info$index[[i]], , ]

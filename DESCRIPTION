@@ -1,7 +1,7 @@
 Package: ZamCovid
 Type: Package
 Title: SEIR Model for the Zambian COVID-19 epidemic
-Version: 0.1.3
+Version: 0.2.0
 Authors@R:
     c(person(given = "Pablo",
            family = "Perez-Guzman",
@@ -36,7 +36,7 @@ Suggests:
     odin (>= 1.1.16),
     odin.dust (>= 0.2.26),
     testthat
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 SystemRequirements: C++11
 Remotes:

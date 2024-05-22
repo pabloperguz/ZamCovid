@@ -50,7 +50,8 @@ test_that("ZamCovid_parameters returns a list of parameters", {
       "exp_noise",           "N_tot",              "N_tot_all",
       "N_tot_over15",        "N_tot_15_19",        "N_tot_20_29",
       "N_tot_30_39",         "N_tot_40_49",        "N_tot_50_plus",
-      "rel_p_H_D",           "rel_p_G_D",           "rel_p_R"))
+      "rel_p_H_D",           "rel_p_G_D",          "rel_p_R",
+      "p_sev",               "life_exp"))
 })
 
 

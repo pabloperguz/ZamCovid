@@ -18,6 +18,8 @@ ZamCovid_parameters(
   N_tot = NULL,
   n_groups = NULL,
   severity = NULL,
+  p_sev = NULL,
+  life_exp = NULL,
   progression = NULL,
   observation = NULL,
   sens_and_spec = NULL,

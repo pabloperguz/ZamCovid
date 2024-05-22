@@ -87,6 +87,10 @@ ZamCovid_parameters <- function(start_date,
                                 N_tot = NULL,
                                 n_groups = NULL,
                                 severity = NULL,
+                                p_sev = NULL,
+                                life_exp = NULL,
+                                # disab_weight_mild = NULL,
+                                # disab_weight_sev = NULL,
                                 progression = NULL,
                                 observation = NULL,
                                 sens_and_spec = NULL,
@@ -250,6 +254,38 @@ ZamCovid_parameters <- function(start_date,
   ret$rel_p_H_D <- rel_p_death
   ret$rel_p_G_D <- rel_p_death
   ret$rel_p_R <- array(1, c(ret$n_groups, vaccination$n_vacc_classes))
+
+  ## Add pars to calculate YLL and YLD
+  if(is.null(p_sev)) {
+    ret$p_sev <- c(0.00446541463823346, 0.000799855237393074,
+                   0.000995168786628034, 0.00195362151389054,
+                   0.00386009161526863, 0.00570852834531752,
+                   0.00803051786136823, 0.00762024179033717,
+                   0.00859488534589212, 0.010046317721102,
+                   0.0169734086438121, 0.0229916518340002,
+                   0.0321514851105156, 0.0407796929489422,
+                   0.0733279215949092, 0.126136731554533)
+  } else {
+    ret$p_sev <- p_sev
+  }
+
+
+  if(is.null(life_exp)) {
+    ret$life_exp <- c(63.40, 61.59, 56.99, 52.22, 47.62, 43.14, 38.73,
+                      34.50, 30.46, 26.66, 23.03, 19.62, 16.39, 13.41,
+                      10.67, 6.39)
+  } else {
+    ret$life_exp <- life_exp
+  }
+
+
+  # ret$disab_weight_sev <- ifelse(is.null(disab_weight_sev),
+  #                                0.133,
+  #                                disab_weight_sev)
+  #
+  # ret$disab_weight_mild <- ifelse(is.null(disab_weight_mild),
+  #                                 0.051,
+  #                                 disab_weight_mild)
 
   check_severity(ret)
 }

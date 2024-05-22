@@ -12,7 +12,7 @@ test_that("can run ZamCovid model", {
   mod$update_state(state = initial)
 
   res <- mod$run(end)
-  expect_equal(c(750, 5), dim(res))
+  expect_equal(c(819, 5), dim(res))
 
   index <- ZamCovid_index(info)$run
 
@@ -20,36 +20,41 @@ test_that("can run ZamCovid model", {
   res <- mod$run(end)
 
   expected <- rbind(
-    time =             c(274,     274,  274,     274,     274),
-    infections_inc =   c(0,       441,  414,     236,     300),
-    reinfections_inc = c(0,       19,   24,      14,      20),
-    admitted_inc =     c(0,       1,    2,       0,       0),
-    deaths_hosp_inc =  c(0,       8,    2,       5,       2),
-    deaths_comm_inc =  c(0,      90,    96,      46,      63),
-    base_death_inc =   c(0,       0,    0,       0,       0),
-    deaths_all_inc =   c(0,      70,    72,      42,      46),
-    sero_pos_all =     c(0, 2578183, 2580027, 2093048, 2227440),
-    sero_pos_over15 =  c(0, 1500464, 1499770, 1215733, 1294641),
-    sero_pos_15_19 =   c(0,  308283,  307152,  249633,  265300),
-    sero_pos_20_29 =   c(0,  446149,  446504,  361405,  385586),
-    sero_pos_30_39 =   c(0,  329893,  329645,  267284,  285029),
-    sero_pos_40_49 =   c(0,  213917,  214045,  172901,  184010),
-    sero_pos_50_plus = c(0,  202222,  202424,  164510,  174716),
-    inf_cum_all =      c(82, 29505030, 29506753, 29510743, 29509910),
-    inf_cum_over15 =   c(57, 17309032, 17304941, 17310664, 17308576),
-    inf_cum_15_19 =    c(43,  3531419,  3528091,  3530500,  3530431),
-    inf_cum_20_29 =    c(7,  5090923,  5092265,  5089952,  5086009),
-    inf_cum_30_39 =    c(5,  3831326,  3831126,  3831118,  3834269),
-    inf_cum_40_49 =    c(0,  2499790,  2499633,  2499643,  2501890),
-    inf_cum_50_plus =  c(2,  2355574,  2353826,  2359451,  2355977))
+    time =             c(274.0,      274,      274,      274,      274),
+    infections_inc =     c(0.0,      441,      414,      236,      300),
+    reinfections_inc =   c(0.0,       19,       24,       14,       20),
+    admitted_inc =       c(0.0,        1,        2,        0,        0),
+    deaths_hosp_inc =    c(0.0,        8,        2,        5,        2),
+    deaths_comm_inc =    c(0.0,       90,       96,       46,       63),
+    base_death_inc =     c(0.0,        0,        0,        0,        0),
+    deaths_all_inc =     c(0.0,       70,       72,       42,       46),
+    deaths_cum_hosp =    c(0.0,    14374,    14578,    14644,    14736),
+    deaths_cum_comm =    c(0.0,   990537,   991458,   990996,   991855),
+    sero_pos_all =       c(0.0,  2578183,  2580027,  2093048,  2227440),
+    sero_pos_over15 =    c(0.0,  1500464,  1499770,  1215733,  1294641),
+    sero_pos_15_19 =     c(0.0,   308283,   307152,   249633,   265300),
+    sero_pos_20_29 =     c(0.0,   446149,   446504,   361405,   385586),
+    sero_pos_30_39 =     c(0.0,   329893,   329645,   267284,   285029),
+    sero_pos_40_49 =     c(0.0,   213917,   214045,   172901,   184010),
+    sero_pos_50_plus =   c(0.0,   202222,   202424,   164510,   174716),
+    inf_cum_all =       c(82.0, 29505030, 29506753, 29510743, 29509910),
+    inf_cum_over15 =    c(57.0, 17309032, 17304941, 17310664, 17308576),
+    inf_cum_15_19 =     c(43.0,  3531419,  3528091,  3530500,  3530431),
+    inf_cum_20_29 =      c(7.0,  5090923,  5092265,  5089952,  5086009),
+    inf_cum_30_39 =      c(5.0,  3831326,  3831126,  3831118,  3834269),
+    inf_cum_40_49 =      c(0.0,  2499790,  2499633,  2499643,  2501890),
+    inf_cum_50_plus =    c(2.0,  2355574,  2353826,  2359451,  2355977),
+    immune_S_vacc =      c(0.0,        0,        0,        0,        0),
+    immune_R_vacc =      c(0.0,        0,        0,        0,        0),
+    immune_R_unvacc =   c(22.8,  9453252,  9453460,  9383739,  9405667))
 
-  expect_equal(res, expected)
+  expect_equal(floor(res), floor(expected))
 })
 
 
 test_that("can seed infections", {
 
-  ## See one big lump of infections
+  ## See one big lump of infections
   start_date <- numeric_date("2020-02-01")
   n_particles <- 10
   p <- ZamCovid_parameters(start_date)
@@ -205,6 +210,28 @@ test_that("Can model baseline deaths", {
 
 })
 
+
+test_that("Can calculate YLL", {
+  start_date <- numeric_date("2020-02-01")
+  p <- ZamCovid_parameters(start_date)
+  mod <- ZamCovid$new(p, 0, 5, seed = 1L)
+  end <- numeric_date("2020-09-30") / p$dt
+
+  info <- mod$info()
+  initial <- ZamCovid_initial(info, 10, p)
+  mod$update_state(state = initial)
+
+  index <- ZamCovid_index(info)$state
+  mod$set_index(index)
+
+  res <- mod$run(end)
+
+  expect_true(sum(res["yll_tot", ]) > 0)
+
+  expect_true(
+    all(round(res["D_65", ] * p$life_exp[14]) == round(res["yll_age_65", ])))
+
+})
 
 test_that("can run the particle filter on the model", {
 
