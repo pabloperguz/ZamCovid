@@ -130,6 +130,7 @@ __host__ __device__ T odin_sign(T x) {
 // [[dust::param(gamma_G_D_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(gamma_H_D_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(gamma_H_R_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(gamma_H_sev_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(gamma_PCR_pos_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(gamma_PCR_pre_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(gamma_P_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
@@ -161,6 +162,7 @@ __host__ __device__ T odin_sign(T x) {
 // [[dust::param(n_gamma_G_D_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_gamma_H_D_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_gamma_H_R_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(n_gamma_H_sev_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_gamma_PCR_pos_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_gamma_PCR_pre_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_gamma_P_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
@@ -169,30 +171,39 @@ __host__ __device__ T odin_sign(T x) {
 // [[dust::param(n_gamma_sero_pre_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_groups, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_p_C_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(n_p_D_hosp_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_p_G_D_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_p_H_D_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_p_H_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_p_R_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(n_p_outpx_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(n_p_sev_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_p_star_steps, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(n_vacc_classes, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_C_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(p_D_hosp_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_G_D_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_H_D_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_H_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_R_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(p_outpx_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_sero_pos, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
-// [[dust::param(p_sev, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(p_sev_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(p_star_step, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(pcr_sensitivity, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(pcr_specificity, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(phi_admitted, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(phi_death_all, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(phi_death_hosp, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(re_seed_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_infectivity, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_p_G_D, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_p_H_D, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(rel_p_H_sev, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(rel_p_H_sev_D, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_p_R, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_p_hosp_if_sympt, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(rel_p_outpx, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_p_sympt, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(rel_susceptibility, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(seed_age_band, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
@@ -203,6 +214,9 @@ __host__ __device__ T odin_sign(T x) {
 // [[dust::param(steps_per_day, has_default = FALSE, default_value = NULL, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(vaccine_dose_step, has_default = FALSE, default_value = NULL, rank = 3, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(vaccine_progression_rate_base, has_default = FALSE, default_value = NULL, rank = 2, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(voc_ve_inf_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(voc_ve_sev_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
+// [[dust::param(voc_ve_symp_step, has_default = FALSE, default_value = NULL, rank = 1, min = -Inf, max = Inf, integer = FALSE)]]
 // [[dust::param(vaccine_catchup_fraction, has_default = TRUE, default_value = 0L, rank = 0, min = -Inf, max = Inf, integer = FALSE)]]
 class ZamCovid {
 public:
@@ -244,6 +258,9 @@ public:
     int dim_H_D_conf_12;
     int dim_H_D_conf_2;
     int dim_H_D_conf_3;
+    int dim_H_D_occup;
+    int dim_H_D_occup_1;
+    int dim_H_D_occup_2;
     int dim_H_D_unconf;
     int dim_H_D_unconf_1;
     int dim_H_D_unconf_12;
@@ -259,6 +276,9 @@ public:
     int dim_H_R_unconf_12;
     int dim_H_R_unconf_2;
     int dim_H_R_unconf_3;
+    int dim_H_sev_occup;
+    int dim_H_sev_occup_1;
+    int dim_H_sev_occup_2;
     int dim_IFR_disag;
     int dim_IFR_disag_1;
     int dim_IFR_disag_2;
@@ -284,6 +304,22 @@ public:
     int dim_I_weighted_1;
     int dim_I_weighted_2;
     int dim_N_tot;
+    int dim_P_H_rec;
+    int dim_P_H_rec_1;
+    int dim_P_H_rec_2;
+    int dim_P_H_sev_D;
+    int dim_P_H_sev_D_1;
+    int dim_P_H_sev_D_12;
+    int dim_P_H_sev_D_2;
+    int dim_P_H_sev_D_3;
+    int dim_P_H_sev_R;
+    int dim_P_H_sev_R_1;
+    int dim_P_H_sev_R_12;
+    int dim_P_H_sev_R_2;
+    int dim_P_H_sev_R_3;
+    int dim_P_mild;
+    int dim_P_mild_1;
+    int dim_P_mild_2;
     int dim_R;
     int dim_R_1;
     int dim_R_2;
@@ -338,6 +374,8 @@ public:
     int dim_aux_H_R_unconf_3;
     int dim_base_death_step;
     int dim_beta_step;
+    int dim_cases_age_mild;
+    int dim_cases_age_severe;
     int dim_cross_immunity_step;
     int dim_cum_n_E_vaccinated;
     int dim_cum_n_E_vaccinated_1;
@@ -363,13 +401,15 @@ public:
     int dim_delta_D_non_hosp_disag;
     int dim_delta_D_non_hosp_disag_1;
     int dim_delta_D_non_hosp_disag_2;
+    int dim_delta_hosp;
+    int dim_delta_hosp_1;
+    int dim_delta_hosp_2;
+    int dim_delta_hosp_age;
     int dim_delta_infections;
     int dim_delta_infections_1;
     int dim_delta_infections_2;
     int dim_delta_infections_age;
-    int dim_delta_mild_age;
     int dim_delta_reinfections_age;
-    int dim_delta_severe_age;
     int dim_delta_yll_age;
     int dim_eff_sus_R;
     int dim_eff_sus_R_1;
@@ -384,12 +424,14 @@ public:
     int dim_gamma_G_D_step;
     int dim_gamma_H_D_step;
     int dim_gamma_H_R_step;
+    int dim_gamma_H_sev_step;
     int dim_gamma_PCR_pos_step;
     int dim_gamma_PCR_pre_step;
     int dim_gamma_P_step;
     int dim_gamma_U_step;
     int dim_gamma_sero_pos_step;
     int dim_gamma_sero_pre_step;
+    int dim_hosp_inc_age;
     int dim_ifr_age;
     int dim_index_dose;
     int dim_index_dose_inverse;
@@ -402,7 +444,6 @@ public:
     int dim_m;
     int dim_m_1;
     int dim_m_2;
-    int dim_mild_age;
     int dim_n_EI_A;
     int dim_n_EI_A_1;
     int dim_n_EI_A_2;
@@ -472,6 +513,9 @@ public:
     int dim_n_I_C_2_to_G_D;
     int dim_n_I_C_2_to_G_D_1;
     int dim_n_I_C_2_to_G_D_2;
+    int dim_n_I_C_2_to_G_D_hosp;
+    int dim_n_I_C_2_to_G_D_hosp_1;
+    int dim_n_I_C_2_to_G_D_hosp_2;
     int dim_n_I_C_2_to_H_D;
     int dim_n_I_C_2_to_H_D_1;
     int dim_n_I_C_2_to_H_D_2;
@@ -484,18 +528,34 @@ public:
     int dim_n_I_C_2_to_H_R_conf;
     int dim_n_I_C_2_to_H_R_conf_1;
     int dim_n_I_C_2_to_H_R_conf_2;
+    int dim_n_I_C_2_to_H_sev;
+    int dim_n_I_C_2_to_H_sev_1;
+    int dim_n_I_C_2_to_H_sev_2;
     int dim_n_I_C_2_to_RS;
     int dim_n_I_C_2_to_RS_1;
     int dim_n_I_C_2_to_RS_2;
     int dim_n_I_C_2_to_hosp;
     int dim_n_I_C_2_to_hosp_1;
     int dim_n_I_C_2_to_hosp_2;
+    int dim_n_I_C_2_to_mild;
+    int dim_n_I_C_2_to_mild_1;
+    int dim_n_I_C_2_to_mild_2;
     int dim_n_I_P_next_vacc_class;
     int dim_n_I_P_next_vacc_class_1;
     int dim_n_I_P_next_vacc_class_2;
     int dim_n_I_P_progress;
     int dim_n_I_P_progress_1;
     int dim_n_I_P_progress_2;
+    int dim_n_P_H_sev_D_progress;
+    int dim_n_P_H_sev_D_progress_1;
+    int dim_n_P_H_sev_D_progress_12;
+    int dim_n_P_H_sev_D_progress_2;
+    int dim_n_P_H_sev_D_progress_3;
+    int dim_n_P_H_sev_progress;
+    int dim_n_P_H_sev_progress_1;
+    int dim_n_P_H_sev_progress_12;
+    int dim_n_P_H_sev_progress_2;
+    int dim_n_P_H_sev_progress_3;
     int dim_n_RE;
     int dim_n_RE_1;
     int dim_n_RE_2;
@@ -597,6 +657,22 @@ public:
     int dim_new_I_weighted;
     int dim_new_I_weighted_1;
     int dim_new_I_weighted_2;
+    int dim_new_P_H_rec;
+    int dim_new_P_H_rec_1;
+    int dim_new_P_H_rec_2;
+    int dim_new_P_H_sev;
+    int dim_new_P_H_sev_1;
+    int dim_new_P_H_sev_12;
+    int dim_new_P_H_sev_2;
+    int dim_new_P_H_sev_3;
+    int dim_new_P_H_sev_D;
+    int dim_new_P_H_sev_D_1;
+    int dim_new_P_H_sev_D_12;
+    int dim_new_P_H_sev_D_2;
+    int dim_new_P_H_sev_D_3;
+    int dim_new_P_mild;
+    int dim_new_P_mild_1;
+    int dim_new_P_mild_2;
     int dim_new_R;
     int dim_new_R_1;
     int dim_new_R_2;
@@ -629,6 +705,7 @@ public:
     int dim_new_T_sero_pre_12;
     int dim_new_T_sero_pre_2;
     int dim_new_T_sero_pre_3;
+    int dim_new_hosp_inc_age;
     int dim_new_infections_inc_age;
     int dim_new_reinfections_inc_age;
     int dim_p_C;
@@ -637,6 +714,12 @@ public:
     int dim_p_C_step;
     int dim_p_C_step_1;
     int dim_p_C_step_2;
+    int dim_p_D_hosp;
+    int dim_p_D_hosp_1;
+    int dim_p_D_hosp_2;
+    int dim_p_D_hosp_step;
+    int dim_p_D_hosp_step_1;
+    int dim_p_D_hosp_step_2;
     int dim_p_E_next_vacc_class;
     int dim_p_E_next_vacc_class_1;
     int dim_p_E_next_vacc_class_2;
@@ -682,12 +765,24 @@ public:
     int dim_p_S_next_vacc_class;
     int dim_p_S_next_vacc_class_1;
     int dim_p_S_next_vacc_class_2;
+    int dim_p_outpx;
+    int dim_p_outpx_1;
+    int dim_p_outpx_2;
+    int dim_p_outpx_step;
+    int dim_p_outpx_step_1;
+    int dim_p_outpx_step_2;
     int dim_p_sero_pos;
     int dim_p_sev;
+    int dim_p_sev_1;
+    int dim_p_sev_2;
+    int dim_p_sev_step;
+    int dim_p_sev_step_1;
+    int dim_p_sev_step_2;
     int dim_p_star;
     int dim_p_star_step;
     int dim_p_star_step_1;
     int dim_p_star_step_2;
+    int dim_re_seed_step;
     int dim_reinfections_inc_age;
     int dim_rel_infectivity;
     int dim_rel_infectivity_1;
@@ -698,12 +793,21 @@ public:
     int dim_rel_p_H_D;
     int dim_rel_p_H_D_1;
     int dim_rel_p_H_D_2;
+    int dim_rel_p_H_sev;
+    int dim_rel_p_H_sev_1;
+    int dim_rel_p_H_sev_2;
+    int dim_rel_p_H_sev_D;
+    int dim_rel_p_H_sev_D_1;
+    int dim_rel_p_H_sev_D_2;
     int dim_rel_p_R;
     int dim_rel_p_R_1;
     int dim_rel_p_R_2;
     int dim_rel_p_hosp_if_sympt;
     int dim_rel_p_hosp_if_sympt_1;
     int dim_rel_p_hosp_if_sympt_2;
+    int dim_rel_p_outpx;
+    int dim_rel_p_outpx_1;
+    int dim_rel_p_outpx_2;
     int dim_rel_p_sympt;
     int dim_rel_p_sympt_1;
     int dim_rel_p_sympt_2;
@@ -714,7 +818,6 @@ public:
     int dim_s_ij_1;
     int dim_s_ij_2;
     int dim_seed_value;
-    int dim_severe_age;
     int dim_tmp_vaccine_n_candidates;
     int dim_tmp_vaccine_n_candidates_1;
     int dim_tmp_vaccine_n_candidates_2;
@@ -747,6 +850,9 @@ public:
     int dim_vaccine_progression_rate_base;
     int dim_vaccine_progression_rate_base_1;
     int dim_vaccine_progression_rate_base_2;
+    int dim_voc_ve_inf_step;
+    int dim_voc_ve_sev_step;
+    int dim_voc_ve_symp_step;
     int dim_yll_age;
     real_type dt;
     real_type exp_noise;
@@ -757,6 +863,7 @@ public:
     std::vector<real_type> gamma_G_D_step;
     std::vector<real_type> gamma_H_D_step;
     std::vector<real_type> gamma_H_R_step;
+    std::vector<real_type> gamma_H_sev_step;
     std::vector<real_type> gamma_PCR_pos_step;
     std::vector<real_type> gamma_PCR_pre_step;
     std::vector<real_type> gamma_P_step;
@@ -773,9 +880,11 @@ public:
     std::vector<real_type> initial_E;
     std::vector<real_type> initial_G_D;
     std::vector<real_type> initial_H_D_conf;
+    std::vector<real_type> initial_H_D_occup;
     std::vector<real_type> initial_H_D_unconf;
     std::vector<real_type> initial_H_R_conf;
     std::vector<real_type> initial_H_R_unconf;
+    std::vector<real_type> initial_H_sev_occup;
     std::vector<real_type> initial_IFR_disag_weighted_inc;
     std::vector<real_type> initial_I_A;
     std::vector<real_type> initial_I_C_1;
@@ -785,6 +894,10 @@ public:
     std::vector<real_type> initial_N_tot;
     real_type initial_N_tot_PCR;
     real_type initial_N_tot_sero;
+    std::vector<real_type> initial_P_H_rec;
+    std::vector<real_type> initial_P_H_sev_D;
+    std::vector<real_type> initial_P_H_sev_R;
+    std::vector<real_type> initial_P_mild;
     std::vector<real_type> initial_R;
     std::vector<real_type> initial_S;
     std::vector<real_type> initial_T_PCR_neg;
@@ -797,6 +910,8 @@ public:
     real_type initial_all_deaths_inc;
     real_type initial_base_death_inc;
     real_type initial_beta_out;
+    std::vector<real_type> initial_cases_age_mild;
+    std::vector<real_type> initial_cases_age_severe;
     real_type initial_comm_deaths_inc;
     real_type initial_cum_admit_conf;
     real_type initial_cum_deaths_comm;
@@ -809,6 +924,8 @@ public:
     std::vector<real_type> initial_cum_n_vaccinated;
     real_type initial_effective_susceptible;
     real_type initial_hosp_deaths_inc;
+    real_type initial_hosp_inc;
+    std::vector<real_type> initial_hosp_inc_age;
     real_type initial_ifr;
     std::vector<real_type> initial_ifr_age;
     real_type initial_inf_cum_15_19;
@@ -820,7 +937,6 @@ public:
     real_type initial_inf_cum_over15;
     real_type initial_infections_inc;
     std::vector<real_type> initial_infections_inc_age;
-    std::vector<real_type> initial_mild_age;
     real_type initial_protected_R_unvaccinated;
     real_type initial_protected_R_vaccinated;
     real_type initial_protected_S_vaccinated;
@@ -833,7 +949,6 @@ public:
     real_type initial_sero_pos_50_plus;
     real_type initial_sero_pos_all;
     real_type initial_sero_pos_over15;
-    std::vector<real_type> initial_severe_age;
     real_type initial_susceptible;
     real_type initial_time;
     std::vector<real_type> initial_tmp_vaccine_n_candidates;
@@ -862,6 +977,7 @@ public:
     int n_gamma_G_D_steps;
     int n_gamma_H_D_steps;
     int n_gamma_H_R_steps;
+    int n_gamma_H_sev_steps;
     int n_gamma_PCR_pos_steps;
     int n_gamma_PCR_pre_steps;
     int n_gamma_P_steps;
@@ -870,10 +986,13 @@ public:
     int n_gamma_sero_pre_steps;
     int n_groups;
     int n_p_C_steps;
+    int n_p_D_hosp_steps;
     int n_p_G_D_steps;
     int n_p_H_D_steps;
     int n_p_H_steps;
     int n_p_R_steps;
+    int n_p_outpx_steps;
+    int n_p_sev_steps;
     int n_p_star_steps;
     int n_vacc_classes;
     int offset_variable_D;
@@ -882,15 +1001,21 @@ public:
     int offset_variable_E;
     int offset_variable_G_D;
     int offset_variable_H_D_conf;
+    int offset_variable_H_D_occup;
     int offset_variable_H_D_unconf;
     int offset_variable_H_R_conf;
     int offset_variable_H_R_unconf;
+    int offset_variable_H_sev_occup;
     int offset_variable_IFR_disag_weighted_inc;
     int offset_variable_I_A;
     int offset_variable_I_C_1;
     int offset_variable_I_C_2;
     int offset_variable_I_P;
     int offset_variable_I_weighted;
+    int offset_variable_P_H_rec;
+    int offset_variable_P_H_sev_D;
+    int offset_variable_P_H_sev_R;
+    int offset_variable_P_mild;
     int offset_variable_R;
     int offset_variable_S;
     int offset_variable_T_PCR_neg;
@@ -899,40 +1024,47 @@ public:
     int offset_variable_T_sero_neg;
     int offset_variable_T_sero_pos;
     int offset_variable_T_sero_pre;
+    int offset_variable_cases_age_mild;
+    int offset_variable_cases_age_severe;
     int offset_variable_cum_n_E_vaccinated;
     int offset_variable_cum_n_I_A_vaccinated;
     int offset_variable_cum_n_I_P_vaccinated;
     int offset_variable_cum_n_R_vaccinated;
     int offset_variable_cum_n_S_vaccinated;
     int offset_variable_cum_n_vaccinated;
+    int offset_variable_hosp_inc_age;
     int offset_variable_ifr_age;
     int offset_variable_infections_inc_age;
-    int offset_variable_mild_age;
     int offset_variable_reinfections_inc_age;
-    int offset_variable_severe_age;
     int offset_variable_tmp_vaccine_n_candidates;
     int offset_variable_tmp_vaccine_probability;
     int offset_variable_vaccine_missed_doses;
     int offset_variable_yll_age;
     std::vector<real_type> p_C_step;
+    std::vector<real_type> p_D_hosp_step;
     std::vector<real_type> p_G_D_step;
     std::vector<real_type> p_H_D_step;
     std::vector<real_type> p_H_step;
     real_type p_RS;
     std::vector<real_type> p_R_step;
+    std::vector<real_type> p_outpx_step;
     std::vector<real_type> p_sero_pos;
-    std::vector<real_type> p_sev;
+    std::vector<real_type> p_sev_step;
     std::vector<real_type> p_star_step;
     real_type pcr_sensitivity;
     real_type pcr_specificity;
     real_type phi_admitted;
     real_type phi_death_all;
     real_type phi_death_hosp;
+    std::vector<real_type> re_seed_step;
     std::vector<real_type> rel_infectivity;
     std::vector<real_type> rel_p_G_D;
     std::vector<real_type> rel_p_H_D;
+    std::vector<real_type> rel_p_H_sev;
+    std::vector<real_type> rel_p_H_sev_D;
     std::vector<real_type> rel_p_R;
     std::vector<real_type> rel_p_hosp_if_sympt;
+    std::vector<real_type> rel_p_outpx;
     std::vector<real_type> rel_p_sympt;
     std::vector<real_type> rel_susceptibility;
     int seed_age_band;
@@ -945,6 +1077,9 @@ public:
     real_type vaccine_catchup_fraction;
     std::vector<real_type> vaccine_dose_step;
     std::vector<real_type> vaccine_progression_rate_base;
+    std::vector<real_type> voc_ve_inf_step;
+    std::vector<real_type> voc_ve_sev_step;
+    std::vector<real_type> voc_ve_symp_step;
   };
   struct internal_type {
     std::vector<real_type> IFR_disag;
@@ -955,11 +1090,11 @@ public:
     std::vector<real_type> aux_H_R_unconf;
     std::vector<real_type> delta_D_hosp_disag;
     std::vector<real_type> delta_D_non_hosp_disag;
+    std::vector<real_type> delta_hosp;
+    std::vector<real_type> delta_hosp_age;
     std::vector<real_type> delta_infections;
     std::vector<real_type> delta_infections_age;
-    std::vector<real_type> delta_mild_age;
     std::vector<real_type> delta_reinfections_age;
-    std::vector<real_type> delta_severe_age;
     std::vector<real_type> delta_yll_age;
     std::vector<real_type> eff_sus_R;
     std::vector<real_type> eff_sus_S;
@@ -982,14 +1117,19 @@ public:
     std::vector<real_type> n_I_C_2_NoHosp;
     std::vector<real_type> n_I_C_2_progress;
     std::vector<real_type> n_I_C_2_to_G_D;
+    std::vector<real_type> n_I_C_2_to_G_D_hosp;
     std::vector<real_type> n_I_C_2_to_H_D;
     std::vector<real_type> n_I_C_2_to_H_D_conf;
     std::vector<real_type> n_I_C_2_to_H_R;
     std::vector<real_type> n_I_C_2_to_H_R_conf;
+    std::vector<real_type> n_I_C_2_to_H_sev;
     std::vector<real_type> n_I_C_2_to_RS;
     std::vector<real_type> n_I_C_2_to_hosp;
+    std::vector<real_type> n_I_C_2_to_mild;
     std::vector<real_type> n_I_P_next_vacc_class;
     std::vector<real_type> n_I_P_progress;
+    std::vector<real_type> n_P_H_sev_D_progress;
+    std::vector<real_type> n_P_H_sev_progress;
     std::vector<real_type> n_RE;
     std::vector<real_type> n_RS;
     std::vector<real_type> n_R_next_vacc_class;
@@ -1017,6 +1157,10 @@ public:
     std::vector<real_type> new_I_C_2;
     std::vector<real_type> new_I_P;
     std::vector<real_type> new_I_weighted;
+    std::vector<real_type> new_P_H_rec;
+    std::vector<real_type> new_P_H_sev;
+    std::vector<real_type> new_P_H_sev_D;
+    std::vector<real_type> new_P_mild;
     std::vector<real_type> new_R;
     std::vector<real_type> new_S;
     std::vector<real_type> new_T_PCR_neg;
@@ -1025,9 +1169,11 @@ public:
     std::vector<real_type> new_T_sero_neg;
     std::vector<real_type> new_T_sero_pos;
     std::vector<real_type> new_T_sero_pre;
+    std::vector<real_type> new_hosp_inc_age;
     std::vector<real_type> new_infections_inc_age;
     std::vector<real_type> new_reinfections_inc_age;
     std::vector<real_type> p_C;
+    std::vector<real_type> p_D_hosp;
     std::vector<real_type> p_E_next_vacc_class;
     std::vector<real_type> p_G_D;
     std::vector<real_type> p_H;
@@ -1039,6 +1185,8 @@ public:
     std::vector<real_type> p_R_next_vacc_class;
     std::vector<real_type> p_SE;
     std::vector<real_type> p_S_next_vacc_class;
+    std::vector<real_type> p_outpx;
+    std::vector<real_type> p_sev;
     std::vector<real_type> p_star;
     std::vector<real_type> s_ij;
     std::vector<real_type> total_attempted_doses;
@@ -1051,10 +1199,10 @@ public:
     shared(pars.shared), internal(pars.internal) {
   }
   size_t size() const {
-    return shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pos + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
+    return shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_H_sev_D + shared->dim_P_H_sev_R + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pos + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
   }
   std::vector<real_type> initial(size_t step, rng_state_type& rng_state) {
-    std::vector<real_type> state(shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pos + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35);
+    std::vector<real_type> state(shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_H_sev_D + shared->dim_P_H_sev_R + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pos + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36);
     state[0] = shared->initial_time;
     state[1] = shared->initial_beta_out;
     state[2] = shared->initial_susceptible;
@@ -1090,13 +1238,15 @@ public:
     state[32] = shared->initial_protected_R_unvaccinated;
     state[33] = shared->initial_protected_R_vaccinated;
     state[34] = shared->initial_yll_tot;
-    std::copy(shared->initial_N_tot.begin(), shared->initial_N_tot.end(), state.begin() + 35);
+    state[35] = shared->initial_hosp_inc;
+    std::copy(shared->initial_N_tot.begin(), shared->initial_N_tot.end(), state.begin() + 36);
     std::copy(shared->initial_infections_inc_age.begin(), shared->initial_infections_inc_age.end(), state.begin() + shared->offset_variable_infections_inc_age);
     std::copy(shared->initial_reinfections_inc_age.begin(), shared->initial_reinfections_inc_age.end(), state.begin() + shared->offset_variable_reinfections_inc_age);
     std::copy(shared->initial_ifr_age.begin(), shared->initial_ifr_age.end(), state.begin() + shared->offset_variable_ifr_age);
     std::copy(shared->initial_yll_age.begin(), shared->initial_yll_age.end(), state.begin() + shared->offset_variable_yll_age);
-    std::copy(shared->initial_severe_age.begin(), shared->initial_severe_age.end(), state.begin() + shared->offset_variable_severe_age);
-    std::copy(shared->initial_mild_age.begin(), shared->initial_mild_age.end(), state.begin() + shared->offset_variable_mild_age);
+    std::copy(shared->initial_cases_age_severe.begin(), shared->initial_cases_age_severe.end(), state.begin() + shared->offset_variable_cases_age_severe);
+    std::copy(shared->initial_cases_age_mild.begin(), shared->initial_cases_age_mild.end(), state.begin() + shared->offset_variable_cases_age_mild);
+    std::copy(shared->initial_hosp_inc_age.begin(), shared->initial_hosp_inc_age.end(), state.begin() + shared->offset_variable_hosp_inc_age);
     std::copy(shared->initial_S.begin(), shared->initial_S.end(), state.begin() + shared->offset_variable_S);
     std::copy(shared->initial_I_A.begin(), shared->initial_I_A.end(), state.begin() + shared->offset_variable_I_A);
     std::copy(shared->initial_I_P.begin(), shared->initial_I_P.end(), state.begin() + shared->offset_variable_I_P);
@@ -1119,6 +1269,10 @@ public:
     std::copy(shared->initial_tmp_vaccine_probability.begin(), shared->initial_tmp_vaccine_probability.end(), state.begin() + shared->offset_variable_tmp_vaccine_probability);
     std::copy(shared->initial_I_weighted.begin(), shared->initial_I_weighted.end(), state.begin() + shared->offset_variable_I_weighted);
     std::copy(shared->initial_IFR_disag_weighted_inc.begin(), shared->initial_IFR_disag_weighted_inc.end(), state.begin() + shared->offset_variable_IFR_disag_weighted_inc);
+    std::copy(shared->initial_P_H_rec.begin(), shared->initial_P_H_rec.end(), state.begin() + shared->offset_variable_P_H_rec);
+    std::copy(shared->initial_P_mild.begin(), shared->initial_P_mild.end(), state.begin() + shared->offset_variable_P_mild);
+    std::copy(shared->initial_H_sev_occup.begin(), shared->initial_H_sev_occup.end(), state.begin() + shared->offset_variable_H_sev_occup);
+    std::copy(shared->initial_H_D_occup.begin(), shared->initial_H_D_occup.end(), state.begin() + shared->offset_variable_H_D_occup);
     std::copy(shared->initial_E.begin(), shared->initial_E.end(), state.begin() + shared->offset_variable_E);
     std::copy(shared->initial_H_R_conf.begin(), shared->initial_H_R_conf.end(), state.begin() + shared->offset_variable_H_R_conf);
     std::copy(shared->initial_H_R_unconf.begin(), shared->initial_H_R_unconf.end(), state.begin() + shared->offset_variable_H_R_unconf);
@@ -1129,6 +1283,8 @@ public:
     std::copy(shared->initial_T_sero_pos.begin(), shared->initial_T_sero_pos.end(), state.begin() + shared->offset_variable_T_sero_pos);
     std::copy(shared->initial_T_PCR_pre.begin(), shared->initial_T_PCR_pre.end(), state.begin() + shared->offset_variable_T_PCR_pre);
     std::copy(shared->initial_T_PCR_pos.begin(), shared->initial_T_PCR_pos.end(), state.begin() + shared->offset_variable_T_PCR_pos);
+    std::copy(shared->initial_P_H_sev_R.begin(), shared->initial_P_H_sev_R.end(), state.begin() + shared->offset_variable_P_H_sev_R);
+    std::copy(shared->initial_P_H_sev_D.begin(), shared->initial_P_H_sev_D.end(), state.begin() + shared->offset_variable_P_H_sev_D);
     return state;
   }
   void update(size_t step, const real_type * state, rng_state_type& rng_state, real_type * state_next) {
@@ -1181,8 +1337,14 @@ public:
     const real_type base_death_inc = state[28];
     const real_type * yll_age = state + shared->offset_variable_yll_age;
     const real_type yll_tot = state[34];
-    const real_type * severe_age = state + shared->offset_variable_severe_age;
-    const real_type * mild_age = state + shared->offset_variable_mild_age;
+    const real_type * P_H_sev_R = state + shared->offset_variable_P_H_sev_R;
+    const real_type * P_H_sev_D = state + shared->offset_variable_P_H_sev_D;
+    const real_type * P_H_rec = state + shared->offset_variable_P_H_rec;
+    const real_type * P_mild = state + shared->offset_variable_P_mild;
+    const real_type * cases_age_severe = state + shared->offset_variable_cases_age_severe;
+    const real_type * cases_age_mild = state + shared->offset_variable_cases_age_mild;
+    const real_type hosp_inc = state[35];
+    const real_type * hosp_inc_age = state + shared->offset_variable_hosp_inc_age;
     state_next[4] = odin_sum1<real_type>(S, 0, shared->dim_S) + odin_sum1<real_type>(T_PCR_pre, 0, shared->dim_T_PCR_pre) + odin_sum1<real_type>(T_PCR_pos, 0, shared->dim_T_PCR_pos) + odin_sum1<real_type>(T_PCR_neg, 0, shared->dim_T_PCR_neg);
     state_next[3] = odin_sum1<real_type>(S, 0, shared->dim_S) + odin_sum1<real_type>(T_sero_pre, 0, shared->dim_T_sero_pre) + odin_sum1<real_type>(T_sero_pos, 0, shared->dim_T_sero_pos) + odin_sum1<real_type>(T_sero_neg, 0, shared->dim_T_sero_neg) + odin_sum1<real_type>(E, 0, shared->dim_E);
     state_next[29] = base_death_inc + hosp_deaths_inc + comm_deaths_inc;
@@ -1196,7 +1358,11 @@ public:
     real_type base_death = (step >= shared->dim_base_death_step ? shared->base_death_step[shared->dim_base_death_step - 1] : shared->base_death_step[step + 1 - 1]);
     real_type beta = (step >= shared->dim_beta_step ? shared->beta_step[shared->dim_beta_step - 1] : shared->beta_step[step + 1 - 1]);
     real_type cross_immunity = (step >= shared->dim_cross_immunity_step ? shared->cross_immunity_step[shared->dim_cross_immunity_step - 1] : shared->cross_immunity_step[step + 1 - 1]);
+    real_type re_seed_rate = (step >= shared->dim_re_seed_step ? shared->re_seed_step[shared->dim_re_seed_step - 1] : shared->re_seed_step[step + 1 - 1]);
     state_next[0] = (step + 1) * shared->dt;
+    real_type voc_ve_inf = (step >= shared->dim_voc_ve_inf_step ? shared->voc_ve_inf_step[shared->dim_voc_ve_inf_step - 1] : shared->voc_ve_inf_step[step + 1 - 1]);
+    real_type voc_ve_sev = (step >= shared->dim_voc_ve_sev_step ? shared->voc_ve_sev_step[shared->dim_voc_ve_sev_step - 1] : shared->voc_ve_sev_step[step + 1 - 1]);
+    real_type voc_ve_symp = (step >= shared->dim_voc_ve_symp_step ? shared->voc_ve_symp_step[shared->dim_voc_ve_symp_step - 1] : shared->voc_ve_symp_step[step + 1 - 1]);
     real_type gamma_A = (static_cast<int>(step) >= shared->n_gamma_A_steps ? shared->gamma_A_step[shared->n_gamma_A_steps - 1] : shared->gamma_A_step[step + 1 - 1]);
     real_type gamma_C_1 = (static_cast<int>(step) >= shared->n_gamma_C_1_steps ? shared->gamma_C_1_step[shared->n_gamma_C_1_steps - 1] : shared->gamma_C_1_step[step + 1 - 1]);
     real_type gamma_C_2 = (static_cast<int>(step) >= shared->n_gamma_C_2_steps ? shared->gamma_C_2_step[shared->n_gamma_C_2_steps - 1] : shared->gamma_C_2_step[step + 1 - 1]);
@@ -1204,15 +1370,27 @@ public:
     real_type gamma_G_D = (static_cast<int>(step) >= shared->n_gamma_G_D_steps ? shared->gamma_G_D_step[shared->n_gamma_G_D_steps - 1] : shared->gamma_G_D_step[step + 1 - 1]);
     real_type gamma_H_D = (static_cast<int>(step) >= shared->n_gamma_H_D_steps ? shared->gamma_H_D_step[shared->n_gamma_H_D_steps - 1] : shared->gamma_H_D_step[step + 1 - 1]);
     real_type gamma_H_R = (static_cast<int>(step) >= shared->n_gamma_H_R_steps ? shared->gamma_H_R_step[shared->n_gamma_H_R_steps - 1] : shared->gamma_H_R_step[step + 1 - 1]);
+    real_type gamma_H_sev = (static_cast<int>(step) >= shared->n_gamma_H_sev_steps ? shared->gamma_H_sev_step[shared->n_gamma_H_sev_steps - 1] : shared->gamma_H_sev_step[step + 1 - 1]);
     real_type gamma_P = (static_cast<int>(step) >= shared->n_gamma_P_steps ? shared->gamma_P_step[shared->n_gamma_P_steps - 1] : shared->gamma_P_step[step + 1 - 1]);
     real_type gamma_PCR_pos = (static_cast<int>(step) >= shared->n_gamma_PCR_pos_steps ? shared->gamma_PCR_pos_step[shared->n_gamma_PCR_pos_steps - 1] : shared->gamma_PCR_pos_step[step + 1 - 1]);
     real_type gamma_PCR_pre = (static_cast<int>(step) >= shared->n_gamma_PCR_pre_steps ? shared->gamma_PCR_pre_step[shared->n_gamma_PCR_pre_steps - 1] : shared->gamma_PCR_pre_step[step + 1 - 1]);
     real_type gamma_U = (static_cast<int>(step) >= shared->n_gamma_U_steps ? shared->gamma_U_step[shared->n_gamma_U_steps - 1] : shared->gamma_U_step[step + 1 - 1]);
     real_type gamma_sero_pos = (static_cast<int>(step) >= shared->n_gamma_sero_pos_steps ? shared->gamma_sero_pos_step[shared->n_gamma_sero_pos_steps - 1] : shared->gamma_sero_pos_step[step + 1 - 1]);
     real_type gamma_sero_pre = (static_cast<int>(step) >= shared->n_gamma_sero_pre_steps ? shared->gamma_sero_pre_step[shared->n_gamma_sero_pre_steps - 1] : shared->gamma_sero_pre_step[step + 1 - 1]);
+    real_type re_seed = dust::random::poisson<real_type>(rng_state, re_seed_rate);
     real_type seed_rate = (step >= shared->seed_step_start && step < shared->seed_step_end ? shared->seed_value[static_cast<int>(step - shared->seed_step_start + 1) - 1] : 0);
+    for (int i = 1; i <= shared->dim_H_D_occup_1; ++i) {
+      for (int j = 1; j <= shared->dim_H_D_occup_2; ++j) {
+        state_next[shared->offset_variable_H_D_occup + i - 1 + shared->dim_H_D_occup_1 * (j - 1)] = P_H_sev_D[shared->dim_P_H_sev_D_12 * 0 + shared->dim_P_H_sev_D_1 * (j - 1) + i - 1] + (shared->k_H_R > 1 ? P_H_sev_D[shared->dim_P_H_sev_D_12 * (shared->k_H_R - 1) + shared->dim_P_H_sev_D_1 * (j - 1) + i - 1] : 0);
+      }
+    }
+    for (int i = 1; i <= shared->dim_H_sev_occup_1; ++i) {
+      for (int j = 1; j <= shared->dim_H_sev_occup_2; ++j) {
+        state_next[shared->offset_variable_H_sev_occup + i - 1 + shared->dim_H_sev_occup_1 * (j - 1)] = P_H_sev_R[shared->dim_P_H_sev_R_12 * 0 + shared->dim_P_H_sev_R_1 * (j - 1) + i - 1] + (shared->k_H_R > 1 ? P_H_sev_R[shared->dim_P_H_sev_R_12 * (shared->k_H_R - 1) + shared->dim_P_H_sev_R_1 * (j - 1) + i - 1] : 0);
+      }
+    }
     for (int i = 1; i <= shared->dim_N_tot; ++i) {
-      state_next[35 + i - 1] = odin_sum2<real_type>(S, i - 1, i, 0, shared->dim_S_2, shared->dim_S_1) + odin_sum2<real_type>(R, i - 1, i, 0, shared->dim_R_2, shared->dim_R_1) + odin_sum2<real_type>(D_hosp, i - 1, i, 0, shared->dim_D_hosp_2, shared->dim_D_hosp_1) + odin_sum3<real_type>(E, i - 1, i, 0, shared->dim_E_2, 0, shared->dim_E_3, shared->dim_E_1, shared->dim_E_12) + odin_sum2<real_type>(I_A, i - 1, i, 0, shared->dim_I_A_2, shared->dim_I_A_1) + odin_sum2<real_type>(I_P, i - 1, i, 0, shared->dim_I_P_2, shared->dim_I_P_1) + odin_sum2<real_type>(I_C_1, i - 1, i, 0, shared->dim_I_C_1_2, shared->dim_I_C_1_1) + odin_sum2<real_type>(I_C_2, i - 1, i, 0, shared->dim_I_C_2_2, shared->dim_I_C_2_1) + odin_sum3<real_type>(H_R_conf, i - 1, i, 0, shared->dim_H_R_conf_2, 0, shared->dim_H_R_conf_3, shared->dim_H_R_conf_1, shared->dim_H_R_conf_12) + odin_sum3<real_type>(H_R_unconf, i - 1, i, 0, shared->dim_H_R_unconf_2, 0, shared->dim_H_R_unconf_3, shared->dim_H_R_unconf_1, shared->dim_H_R_unconf_12) + odin_sum3<real_type>(H_D_conf, i - 1, i, 0, shared->dim_H_D_conf_2, 0, shared->dim_H_D_conf_3, shared->dim_H_D_conf_1, shared->dim_H_D_conf_12) + odin_sum3<real_type>(H_D_unconf, i - 1, i, 0, shared->dim_H_D_unconf_2, 0, shared->dim_H_D_unconf_3, shared->dim_H_D_unconf_1, shared->dim_H_D_unconf_12) + odin_sum3<real_type>(G_D, i - 1, i, 0, shared->dim_G_D_2, 0, shared->dim_G_D_3, shared->dim_G_D_1, shared->dim_G_D_12) + odin_sum2<real_type>(D_non_hosp, i - 1, i, 0, shared->dim_D_non_hosp_2, shared->dim_D_non_hosp_1);
+      state_next[36 + i - 1] = odin_sum2<real_type>(S, i - 1, i, 0, shared->dim_S_2, shared->dim_S_1) + odin_sum2<real_type>(R, i - 1, i, 0, shared->dim_R_2, shared->dim_R_1) + odin_sum2<real_type>(D_hosp, i - 1, i, 0, shared->dim_D_hosp_2, shared->dim_D_hosp_1) + odin_sum3<real_type>(E, i - 1, i, 0, shared->dim_E_2, 0, shared->dim_E_3, shared->dim_E_1, shared->dim_E_12) + odin_sum2<real_type>(I_A, i - 1, i, 0, shared->dim_I_A_2, shared->dim_I_A_1) + odin_sum2<real_type>(I_P, i - 1, i, 0, shared->dim_I_P_2, shared->dim_I_P_1) + odin_sum2<real_type>(I_C_1, i - 1, i, 0, shared->dim_I_C_1_2, shared->dim_I_C_1_1) + odin_sum2<real_type>(I_C_2, i - 1, i, 0, shared->dim_I_C_2_2, shared->dim_I_C_2_1) + odin_sum3<real_type>(H_R_conf, i - 1, i, 0, shared->dim_H_R_conf_2, 0, shared->dim_H_R_conf_3, shared->dim_H_R_conf_1, shared->dim_H_R_conf_12) + odin_sum3<real_type>(H_R_unconf, i - 1, i, 0, shared->dim_H_R_unconf_2, 0, shared->dim_H_R_unconf_3, shared->dim_H_R_unconf_1, shared->dim_H_R_unconf_12) + odin_sum3<real_type>(H_D_conf, i - 1, i, 0, shared->dim_H_D_conf_2, 0, shared->dim_H_D_conf_3, shared->dim_H_D_conf_1, shared->dim_H_D_conf_12) + odin_sum3<real_type>(H_D_unconf, i - 1, i, 0, shared->dim_H_D_unconf_2, 0, shared->dim_H_D_unconf_3, shared->dim_H_D_unconf_1, shared->dim_H_D_unconf_12) + odin_sum3<real_type>(G_D, i - 1, i, 0, shared->dim_G_D_2, 0, shared->dim_G_D_3, shared->dim_G_D_1, shared->dim_G_D_12) + odin_sum2<real_type>(D_non_hosp, i - 1, i, 0, shared->dim_D_non_hosp_2, shared->dim_D_non_hosp_1);
     }
     state_next[28] = base_death;
     state_next[1] = beta;
@@ -1235,28 +1413,34 @@ public:
     }
     for (int i = 1; i <= shared->dim_p_C_1; ++i) {
       for (int j = 1; j <= shared->dim_p_C_2; ++j) {
-        internal.p_C[i - 1 + shared->dim_p_C_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_C_steps ? dust::math::min(shared->p_C_step[shared->dim_p_C_step_1 * (i - 1) + shared->n_p_C_steps - 1] * shared->rel_p_sympt[shared->dim_rel_p_sympt_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_C_step[shared->dim_p_C_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_sympt[shared->dim_rel_p_sympt_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
+        internal.p_C[i - 1 + shared->dim_p_C_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_C_steps ? dust::math::min(shared->p_C_step[shared->dim_p_C_step_1 * (i - 1) + shared->n_p_C_steps - 1] * (j > 1 ? 1 - (1 - shared->rel_p_sympt[shared->dim_rel_p_sympt_1 * (j - 1) + i - 1]) * voc_ve_symp : 1), static_cast<real_type>(1)) : dust::math::min(shared->p_C_step[shared->dim_p_C_step_1 * (i - 1) + step + 1 - 1] * (j > 1 ? 1 - (1 - shared->rel_p_sympt[shared->dim_rel_p_sympt_1 * (j - 1) + i - 1]) * voc_ve_symp : 1), static_cast<real_type>(1)));
+      }
+    }
+    for (int i = 1; i <= shared->dim_p_D_hosp_1; ++i) {
+      for (int j = 1; j <= shared->dim_p_D_hosp_2; ++j) {
+        internal.p_D_hosp[i - 1 + shared->dim_p_D_hosp_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_D_hosp_steps ? dust::math::min(shared->p_D_hosp_step[shared->dim_p_D_hosp_step_1 * (i - 1) + shared->n_p_D_hosp_steps - 1] * shared->rel_p_H_sev_D[shared->dim_rel_p_H_sev_D_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_D_hosp_step[shared->dim_p_D_hosp_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_H_sev_D[shared->dim_rel_p_H_sev_D_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
       }
     }
     real_type p_E_progress = 1 - dust::math::exp(- gamma_E * shared->dt);
     for (int i = 1; i <= shared->dim_p_G_D_1; ++i) {
       for (int j = 1; j <= shared->dim_p_G_D_2; ++j) {
-        internal.p_G_D[i - 1 + shared->dim_p_G_D_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_G_D_steps ? dust::math::min(shared->p_G_D_step[shared->dim_p_G_D_step_1 * (i - 1) + shared->n_p_G_D_steps - 1] * shared->rel_p_G_D[shared->dim_rel_p_G_D_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_G_D_step[shared->dim_p_G_D_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_G_D[shared->dim_rel_p_G_D_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
+        internal.p_G_D[i - 1 + shared->dim_p_G_D_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_G_D_steps ? dust::math::min(shared->p_G_D_step[shared->dim_p_G_D_step_1 * (i - 1) + shared->n_p_G_D_steps - 1] * (j > 1 ? 1 - (1 - shared->rel_p_G_D[shared->dim_rel_p_G_D_1 * (j - 1) + i - 1]) * voc_ve_sev : 1), static_cast<real_type>(1)) : dust::math::min(shared->p_G_D_step[shared->dim_p_G_D_step_1 * (i - 1) + step + 1 - 1] * (j > 1 ? 1 - (1 - shared->rel_p_G_D[shared->dim_rel_p_G_D_1 * (j - 1) + i - 1]) * voc_ve_sev : 1), static_cast<real_type>(1)));
       }
     }
     real_type p_G_D_progress = 1 - dust::math::exp(- gamma_G_D * shared->dt);
     for (int i = 1; i <= shared->dim_p_H_1; ++i) {
       for (int j = 1; j <= shared->dim_p_H_2; ++j) {
-        internal.p_H[i - 1 + shared->dim_p_H_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_H_steps ? dust::math::min(shared->p_H_step[shared->dim_p_H_step_1 * (i - 1) + shared->n_p_H_steps - 1] * shared->rel_p_hosp_if_sympt[shared->dim_rel_p_hosp_if_sympt_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_H_step[shared->dim_p_H_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_hosp_if_sympt[shared->dim_rel_p_hosp_if_sympt_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
+        internal.p_H[i - 1 + shared->dim_p_H_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_H_steps ? dust::math::min(shared->p_H_step[shared->dim_p_H_step_1 * (i - 1) + shared->n_p_H_steps - 1] * (j > 1 ? 1 - (1 - shared->rel_p_hosp_if_sympt[shared->dim_rel_p_hosp_if_sympt_1 * (j - 1) + i - 1]) * voc_ve_sev : 1), static_cast<real_type>(1)) : dust::math::min(shared->p_H_step[shared->dim_p_H_step_1 * (i - 1) + step + 1 - 1] * (j > 1 ? 1 - (1 - shared->rel_p_hosp_if_sympt[shared->dim_rel_p_hosp_if_sympt_1 * (j - 1) + i - 1]) * voc_ve_sev : 1), static_cast<real_type>(1)));
       }
     }
     for (int i = 1; i <= shared->dim_p_H_D_1; ++i) {
       for (int j = 1; j <= shared->dim_p_H_D_2; ++j) {
-        internal.p_H_D[i - 1 + shared->dim_p_H_D_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_H_D_steps ? dust::math::min(shared->p_H_D_step[shared->dim_p_H_D_step_1 * (i - 1) + shared->n_p_H_D_steps - 1] * shared->rel_p_H_D[shared->dim_rel_p_H_D_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_H_D_step[shared->dim_p_H_D_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_H_D[shared->dim_rel_p_H_D_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
+        internal.p_H_D[i - 1 + shared->dim_p_H_D_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_H_D_steps ? dust::math::min(shared->p_H_D_step[shared->dim_p_H_D_step_1 * (i - 1) + shared->n_p_H_D_steps - 1] * (j > 1 ? 1 - (1 - shared->rel_p_H_D[shared->dim_rel_p_H_D_1 * (j - 1) + i - 1]) * voc_ve_sev : 1), static_cast<real_type>(1)) : dust::math::min(shared->p_H_D_step[shared->dim_p_H_D_step_1 * (i - 1) + step + 1 - 1] * (j > 1 ? 1 - (1 - shared->rel_p_H_D[shared->dim_rel_p_H_D_1 * (j - 1) + i - 1]) * voc_ve_sev : 1), static_cast<real_type>(1)));
       }
     }
     real_type p_H_D_progress = 1 - dust::math::exp(- gamma_H_D * shared->dt);
     real_type p_H_R_progress = 1 - dust::math::exp(- gamma_H_R * shared->dt);
+    real_type p_H_sev_progress = 1 - dust::math::exp(- gamma_H_sev * shared->dt);
     real_type p_I_A_progress = 1 - dust::math::exp(- gamma_A * shared->dt);
     real_type p_I_C_1_progress = 1 - dust::math::exp(- gamma_C_1 * shared->dt);
     real_type p_I_C_2_progress = 1 - dust::math::exp(- gamma_C_2 * shared->dt);
@@ -1270,6 +1454,16 @@ public:
     real_type p_T_PCR_pre_progress = 1 - dust::math::exp(- gamma_PCR_pre * shared->dt);
     real_type p_T_sero_pos_progress = 1 - dust::math::exp(- gamma_sero_pos * shared->dt);
     real_type p_T_sero_pre_progress = 1 - dust::math::exp(- gamma_sero_pre * shared->dt);
+    for (int i = 1; i <= shared->dim_p_outpx_1; ++i) {
+      for (int j = 1; j <= shared->dim_p_outpx_2; ++j) {
+        internal.p_outpx[i - 1 + shared->dim_p_outpx_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_outpx_steps ? dust::math::min(shared->p_outpx_step[shared->dim_p_outpx_step_1 * (i - 1) + shared->n_p_outpx_steps - 1] * shared->rel_p_outpx[shared->dim_rel_p_outpx_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_outpx_step[shared->dim_p_outpx_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_outpx[shared->dim_rel_p_outpx_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
+      }
+    }
+    for (int i = 1; i <= shared->dim_p_sev_1; ++i) {
+      for (int j = 1; j <= shared->dim_p_sev_2; ++j) {
+        internal.p_sev[i - 1 + shared->dim_p_sev_1 * (j - 1)] = (static_cast<int>(step) >= shared->n_p_sev_steps ? dust::math::min(shared->p_sev_step[shared->dim_p_sev_step_1 * (i - 1) + shared->n_p_sev_steps - 1] * shared->rel_p_H_sev[shared->dim_rel_p_H_sev_1 * (j - 1) + i - 1], static_cast<real_type>(1)) : dust::math::min(shared->p_sev_step[shared->dim_p_sev_step_1 * (i - 1) + step + 1 - 1] * shared->rel_p_H_sev[shared->dim_rel_p_H_sev_1 * (j - 1) + i - 1], static_cast<real_type>(1)));
+      }
+    }
     for (int i = 1; i <= shared->dim_p_star; ++i) {
       internal.p_star[i - 1] = (static_cast<int>(step) >= shared->n_p_star_steps ? shared->p_star_step[shared->dim_p_star_step_1 * (i - 1) + shared->n_p_star_steps - 1] : shared->p_star_step[shared->dim_p_star_step_1 * (i - 1) + step + 1 - 1]);
     }
@@ -1350,6 +1544,20 @@ public:
     for (int i = 1; i <= shared->dim_n_I_P_progress_1; ++i) {
       for (int j = 1; j <= shared->dim_n_I_P_progress_2; ++j) {
         internal.n_I_P_progress[i - 1 + shared->dim_n_I_P_progress_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, I_P[shared->dim_I_P_1 * (j - 1) + i - 1], p_I_P_progress);
+      }
+    }
+    for (int i = 1; i <= shared->dim_n_P_H_sev_D_progress_1; ++i) {
+      for (int j = 1; j <= shared->dim_n_P_H_sev_D_progress_2; ++j) {
+        for (int k = 1; k <= shared->dim_n_P_H_sev_D_progress_3; ++k) {
+          internal.n_P_H_sev_D_progress[i - 1 + shared->dim_n_P_H_sev_D_progress_1 * (j - 1) + shared->dim_n_P_H_sev_D_progress_12 * (k - 1)] = dust::random::binomial<real_type>(rng_state, P_H_sev_D[shared->dim_P_H_sev_D_12 * (k - 1) + shared->dim_P_H_sev_D_1 * (j - 1) + i - 1], p_H_D_progress);
+        }
+      }
+    }
+    for (int i = 1; i <= shared->dim_n_P_H_sev_progress_1; ++i) {
+      for (int j = 1; j <= shared->dim_n_P_H_sev_progress_2; ++j) {
+        for (int k = 1; k <= shared->dim_n_P_H_sev_progress_3; ++k) {
+          internal.n_P_H_sev_progress[i - 1 + shared->dim_n_P_H_sev_progress_1 * (j - 1) + shared->dim_n_P_H_sev_progress_12 * (k - 1)] = dust::random::binomial<real_type>(rng_state, P_H_sev_R[shared->dim_P_H_sev_R_12 * (k - 1) + shared->dim_P_H_sev_R_1 * (j - 1) + i - 1], p_H_sev_progress);
+        }
       }
     }
     for (int i = 1; i <= shared->dim_n_T_PCR_pos_progress_1; ++i) {
@@ -1466,6 +1674,11 @@ public:
         internal.new_I_C_2[i - 1 + shared->dim_new_I_C_2_1 * (j - 1)] = I_C_2[shared->dim_I_C_2_1 * (j - 1) + i - 1] + internal.n_I_C_1_progress[shared->dim_n_I_C_1_progress_1 * (j - 1) + i - 1] - internal.n_I_C_2_progress[shared->dim_n_I_C_2_progress_1 * (j - 1) + i - 1];
       }
     }
+    for (int i = 1; i <= shared->dim_new_P_H_rec_1; ++i) {
+      for (int j = 1; j <= shared->dim_new_P_H_rec_2; ++j) {
+        internal.new_P_H_rec[i - 1 + shared->dim_new_P_H_rec_1 * (j - 1)] = P_H_rec[shared->dim_P_H_rec_1 * (j - 1) + i - 1] + internal.n_P_H_sev_progress[shared->dim_n_P_H_sev_progress_12 * (shared->k_H_R - 1) + shared->dim_n_P_H_sev_progress_1 * (j - 1) + i - 1];
+      }
+    }
     for (int i = 1; i <= shared->dim_new_T_PCR_neg_1; ++i) {
       for (int j = 1; j <= shared->dim_new_T_PCR_neg_2; ++j) {
         internal.new_T_PCR_neg[i - 1 + shared->dim_new_T_PCR_neg_1 * (j - 1)] = T_PCR_neg[shared->dim_T_PCR_neg_1 * (j - 1) + i - 1] + internal.n_T_PCR_pos_progress[shared->dim_n_T_PCR_pos_progress_12 * (shared->k_PCR_pos - 1) + shared->dim_n_T_PCR_pos_progress_1 * (j - 1) + i - 1];
@@ -1490,7 +1703,7 @@ public:
     }
     for (int i = 1; i <= shared->dim_lambda_susc_1; ++i) {
       for (int j = 1; j <= shared->dim_lambda_susc_2; ++j) {
-        internal.lambda_susc[i - 1 + shared->dim_lambda_susc_1 * (j - 1)] = internal.lambda[i - 1] * shared->rel_susceptibility[shared->dim_rel_susceptibility_1 * (j - 1) + i - 1];
+        internal.lambda_susc[i - 1 + shared->dim_lambda_susc_1 * (j - 1)] = internal.lambda[i - 1] * (j == 3 || 5 ? 1 - (1 - shared->rel_susceptibility[shared->dim_rel_susceptibility_1 * (j - 1) + i - 1]) * voc_ve_inf / (real_type) 2 : (j == 4 ? 1 - (1 - shared->rel_susceptibility[shared->dim_rel_susceptibility_1 * (j - 1) + i - 1]) * voc_ve_inf : 1));
       }
     }
     for (int i = 1; i <= shared->dim_n_EI_P_1; ++i) {
@@ -1566,6 +1779,11 @@ public:
         state_next[shared->offset_variable_I_C_2 + i - 1 + shared->dim_I_C_2_1 * (j - 1)] = internal.new_I_C_2[shared->dim_new_I_C_2_1 * (j - 1) + i - 1];
       }
     }
+    for (int i = 1; i <= shared->dim_P_H_rec_1; ++i) {
+      for (int j = 1; j <= shared->dim_P_H_rec_2; ++j) {
+        state_next[shared->offset_variable_P_H_rec + i - 1 + shared->dim_P_H_rec_1 * (j - 1)] = internal.new_P_H_rec[shared->dim_new_P_H_rec_1 * (j - 1) + i - 1];
+      }
+    }
     for (int i = 1; i <= shared->dim_T_PCR_neg_1; ++i) {
       for (int j = 1; j <= shared->dim_T_PCR_neg_2; ++j) {
         state_next[shared->offset_variable_T_PCR_neg + i - 1 + shared->dim_T_PCR_neg_1 * (j - 1)] = internal.new_T_PCR_neg[shared->dim_new_T_PCR_neg_1 * (j - 1) + i - 1];
@@ -1583,9 +1801,6 @@ public:
         internal.vaccine_probability[i - 1 + shared->dim_vaccine_probability_1 * (j - 1)] = ((shared->index_dose_inverse[j - 1] > 0 ? internal.vaccine_probability_doses[shared->dim_vaccine_probability_doses_1 * (shared->index_dose_inverse[j - 1] - 1) + i - 1] : 1 - dust::math::exp(- shared->vaccine_progression_rate_base[shared->dim_vaccine_progression_rate_base_1 * (j - 1) + i - 1] * shared->dt)));
       }
     }
-    for (int i = 1; i <= shared->dim_delta_mild_age; ++i) {
-      internal.delta_mild_age[i - 1] = odin_sum2<real_type>(internal.n_I_C_2_to_RS.data(), i - 1, i, 0, shared->dim_n_I_C_2_to_RS_2, shared->dim_n_I_C_2_to_RS_1) * (1 - shared->p_sev[i - 1]);
-    }
     for (int i = 1; i <= shared->dim_n_I_C_2_to_G_D_1; ++i) {
       for (int j = 1; j <= shared->dim_n_I_C_2_to_G_D_2; ++j) {
         internal.n_I_C_2_to_G_D[i - 1 + shared->dim_n_I_C_2_to_G_D_1 * (j - 1)] = internal.n_I_C_2_progress[shared->dim_n_I_C_2_progress_1 * (j - 1) + i - 1] - internal.n_I_C_2_to_RS[shared->dim_n_I_C_2_to_RS_1 * (j - 1) + i - 1] - internal.n_I_C_2_to_hosp[shared->dim_n_I_C_2_to_hosp_1 * (j - 1) + i - 1];
@@ -1594,6 +1809,11 @@ public:
     for (int i = 1; i <= shared->dim_n_I_C_2_to_H_R_1; ++i) {
       for (int j = 1; j <= shared->dim_n_I_C_2_to_H_R_2; ++j) {
         internal.n_I_C_2_to_H_R[i - 1 + shared->dim_n_I_C_2_to_H_R_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, internal.n_I_C_2_to_hosp[shared->dim_n_I_C_2_to_hosp_1 * (j - 1) + i - 1], 1 - internal.p_H_D[shared->dim_p_H_D_1 * (j - 1) + i - 1]);
+      }
+    }
+    for (int i = 1; i <= shared->dim_n_I_C_2_to_H_sev_1; ++i) {
+      for (int j = 1; j <= shared->dim_n_I_C_2_to_H_sev_2; ++j) {
+        internal.n_I_C_2_to_H_sev[i - 1 + shared->dim_n_I_C_2_to_H_sev_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, internal.n_I_C_2_to_RS[shared->dim_n_I_C_2_to_RS_1 * (j - 1) + i - 1], internal.p_sev[shared->dim_p_sev_1 * (j - 1) + i - 1]);
       }
     }
     for (int i = 1; i <= shared->dim_n_infection_end_1; ++i) {
@@ -1668,9 +1888,6 @@ public:
       state_next[shared->offset_variable_yll_age + i - 1] = yll_age[i - 1] + internal.delta_yll_age[i - 1];
     }
     state_next[34] = yll_tot + odin_sum1<real_type>(internal.delta_yll_age.data(), 0, shared->dim_delta_yll_age);
-    for (int i = 1; i <= shared->dim_delta_severe_age; ++i) {
-      internal.delta_severe_age[i - 1] = odin_sum2<real_type>(internal.n_I_C_2_to_RS.data(), i - 1, i, 0, shared->dim_n_I_C_2_to_RS_2, shared->dim_n_I_C_2_to_RS_1) * shared->p_sev[i - 1] + odin_sum2<real_type>(internal.n_I_C_2_to_H_R.data(), i - 1, i, 0, shared->dim_n_I_C_2_to_H_R_2, shared->dim_n_I_C_2_to_H_R_1);
-    }
     for (int i = 1; i <= shared->dim_n_E_next_vacc_class_1; ++i) {
       for (int j = 1; j <= shared->dim_n_E_next_vacc_class_2; ++j) {
         for (int k = 1; k <= shared->dim_n_E_next_vacc_class_3; ++k) {
@@ -1683,6 +1900,11 @@ public:
         internal.n_I_A_next_vacc_class[i - 1 + shared->dim_n_I_A_next_vacc_class_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, I_A[shared->dim_I_A_1 * (j - 1) + i - 1] - internal.n_I_A_progress[shared->dim_n_I_A_progress_1 * (j - 1) + i - 1], internal.p_I_A_next_vacc_class[shared->dim_p_I_A_next_vacc_class_1 * (j - 1) + i - 1]);
       }
     }
+    for (int i = 1; i <= shared->dim_n_I_C_2_to_G_D_hosp_1; ++i) {
+      for (int j = 1; j <= shared->dim_n_I_C_2_to_G_D_hosp_2; ++j) {
+        internal.n_I_C_2_to_G_D_hosp[i - 1 + shared->dim_n_I_C_2_to_G_D_hosp_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, internal.n_I_C_2_to_G_D[shared->dim_n_I_C_2_to_G_D_1 * (j - 1) + i - 1], internal.p_D_hosp[shared->dim_p_D_hosp_1 * (j - 1) + i - 1]);
+      }
+    }
     for (int i = 1; i <= shared->dim_n_I_C_2_to_H_D_1; ++i) {
       for (int j = 1; j <= shared->dim_n_I_C_2_to_H_D_2; ++j) {
         internal.n_I_C_2_to_H_D[i - 1 + shared->dim_n_I_C_2_to_H_D_1 * (j - 1)] = internal.n_I_C_2_to_hosp[shared->dim_n_I_C_2_to_hosp_1 * (j - 1) + i - 1] - internal.n_I_C_2_to_H_R[shared->dim_n_I_C_2_to_H_R_1 * (j - 1) + i - 1];
@@ -1691,6 +1913,11 @@ public:
     for (int i = 1; i <= shared->dim_n_I_C_2_to_H_R_conf_1; ++i) {
       for (int j = 1; j <= shared->dim_n_I_C_2_to_H_R_conf_2; ++j) {
         internal.n_I_C_2_to_H_R_conf[i - 1 + shared->dim_n_I_C_2_to_H_R_conf_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, internal.n_I_C_2_to_H_R[shared->dim_n_I_C_2_to_H_R_1 * (j - 1) + i - 1], internal.p_star[i - 1]);
+      }
+    }
+    for (int i = 1; i <= shared->dim_n_I_C_2_to_mild_1; ++i) {
+      for (int j = 1; j <= shared->dim_n_I_C_2_to_mild_2; ++j) {
+        internal.n_I_C_2_to_mild[i - 1 + shared->dim_n_I_C_2_to_mild_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, internal.n_I_C_2_to_RS[shared->dim_n_I_C_2_to_RS_1 * (j - 1) + i - 1] - internal.n_I_C_2_to_H_sev[shared->dim_n_I_C_2_to_H_sev_1 * (j - 1) + i - 1], internal.p_outpx[shared->dim_p_outpx_1 * (j - 1) + i - 1]);
       }
     }
     for (int i = 1; i <= shared->dim_n_I_P_next_vacc_class_1; ++i) {
@@ -1713,6 +1940,11 @@ public:
        int j = 1;
        internal.n_S_progress[i - 1 + shared->dim_n_S_progress_1 * (j - 1)] = internal.n_S_progress[shared->dim_n_S_progress_1 * 0 + shared->seed_age_band - 1] + dust::math::min(S[shared->dim_S_1 * 0 + shared->seed_age_band - 1], seed);
     }
+    {
+       int i = shared->seed_age_band;
+       int j = 1;
+       internal.n_S_progress[i - 1 + shared->dim_n_S_progress_1 * (j - 1)] = internal.n_S_progress[shared->dim_n_S_progress_1 * 0 + shared->seed_age_band - 1] + dust::math::min(S[shared->dim_S_1 * 0 + shared->seed_age_band - 1], re_seed);
+    }
     for (int i = 1; i <= shared->dim_n_infected_to_R_1; ++i) {
       for (int j = 1; j <= shared->dim_n_infected_to_R_2; ++j) {
         internal.n_infected_to_R[i - 1 + shared->dim_n_infected_to_R_1 * (j - 1)] = dust::random::binomial<real_type>(rng_state, internal.n_infection_end[shared->dim_n_infection_end_1 * (j - 1) + i - 1], internal.p_R[shared->dim_p_R_1 * (j - 1) + i - 1]);
@@ -1725,8 +1957,20 @@ public:
         }
       }
     }
-    for (int i = 1; i <= shared->dim_mild_age; ++i) {
-      state_next[shared->offset_variable_mild_age + i - 1] = mild_age[i - 1] + internal.delta_mild_age[i - 1];
+    for (int i = 1; i <= shared->dim_new_P_H_sev_1; ++i) {
+      for (int j = 1; j <= shared->dim_new_P_H_sev_2; ++j) {
+        for (int k = 1; k <= shared->dim_new_P_H_sev_3; ++k) {
+          internal.new_P_H_sev[i - 1 + shared->dim_new_P_H_sev_1 * (j - 1) + shared->dim_new_P_H_sev_12 * (k - 1)] = P_H_sev_R[shared->dim_P_H_sev_R_12 * (k - 1) + shared->dim_P_H_sev_R_1 * (j - 1) + i - 1] - internal.n_P_H_sev_progress[shared->dim_n_P_H_sev_progress_12 * (k - 1) + shared->dim_n_P_H_sev_progress_1 * (j - 1) + i - 1] + ((k == 1 ? internal.n_I_C_2_to_H_sev[shared->dim_n_I_C_2_to_H_sev_1 * (j - 1) + i - 1] : internal.n_P_H_sev_progress[shared->dim_n_P_H_sev_progress_12 * (k - 1 - 1) + shared->dim_n_P_H_sev_progress_1 * (j - 1) + i - 1]));
+        }
+      }
+    }
+    for (int i = 1; i <= shared->dim_cases_age_severe; ++i) {
+      state_next[shared->offset_variable_cases_age_severe + i - 1] = cases_age_severe[i - 1] + odin_sum2<real_type>(internal.n_I_C_2_to_H_sev.data(), i - 1, i, 0, shared->dim_n_I_C_2_to_H_sev_2, shared->dim_n_I_C_2_to_H_sev_1);
+    }
+    for (int i = 1; i <= shared->dim_delta_hosp_1; ++i) {
+      for (int j = 1; j <= shared->dim_delta_hosp_2; ++j) {
+        internal.delta_hosp[i - 1 + shared->dim_delta_hosp_1 * (j - 1)] = internal.n_I_C_2_to_H_sev[shared->dim_n_I_C_2_to_H_sev_1 * (j - 1) + i - 1] + internal.n_I_C_2_to_G_D_hosp[shared->dim_n_I_C_2_to_G_D_hosp_1 * (j - 1) + i - 1];
+      }
     }
     for (int i = 1; i <= shared->dim_delta_infections_1; ++i) {
       for (int j = 1; j <= shared->dim_delta_infections_2; ++j) {
@@ -1787,6 +2031,18 @@ public:
         internal.new_I_P[i - 1 + shared->dim_new_I_P_1 * (j - 1)] = I_P[shared->dim_I_P_1 * (j - 1) + i - 1] + internal.n_EI_P[shared->dim_n_EI_P_1 * (j - 1) + i - 1] - internal.n_I_P_progress[shared->dim_n_I_P_progress_1 * (j - 1) + i - 1] - internal.n_I_P_next_vacc_class[shared->dim_n_I_P_next_vacc_class_1 * (j - 1) + i - 1] + (j == 1 ? internal.n_I_P_next_vacc_class[shared->dim_n_I_P_next_vacc_class_1 * (shared->n_vacc_classes - 1) + i - 1] : internal.n_I_P_next_vacc_class[shared->dim_n_I_P_next_vacc_class_1 * (j - 1 - 1) + i - 1]);
       }
     }
+    for (int i = 1; i <= shared->dim_new_P_H_sev_D_1; ++i) {
+      for (int j = 1; j <= shared->dim_new_P_H_sev_D_2; ++j) {
+        for (int k = 1; k <= shared->dim_new_P_H_sev_D_3; ++k) {
+          internal.new_P_H_sev_D[i - 1 + shared->dim_new_P_H_sev_D_1 * (j - 1) + shared->dim_new_P_H_sev_D_12 * (k - 1)] = P_H_sev_D[shared->dim_P_H_sev_D_12 * (k - 1) + shared->dim_P_H_sev_D_1 * (j - 1) + i - 1] - internal.n_P_H_sev_D_progress[shared->dim_n_P_H_sev_D_progress_12 * (k - 1) + shared->dim_n_P_H_sev_D_progress_1 * (j - 1) + i - 1] + ((k == 1 ? internal.n_I_C_2_to_G_D_hosp[shared->dim_n_I_C_2_to_G_D_hosp_1 * (j - 1) + i - 1] : internal.n_P_H_sev_D_progress[shared->dim_n_P_H_sev_D_progress_12 * (k - 1 - 1) + shared->dim_n_P_H_sev_D_progress_1 * (j - 1) + i - 1]));
+        }
+      }
+    }
+    for (int i = 1; i <= shared->dim_new_P_mild_1; ++i) {
+      for (int j = 1; j <= shared->dim_new_P_mild_2; ++j) {
+        internal.new_P_mild[i - 1 + shared->dim_new_P_mild_1 * (j - 1)] = P_mild[shared->dim_P_mild_1 * (j - 1) + i - 1] + internal.n_I_C_2_to_mild[shared->dim_n_I_C_2_to_mild_1 * (j - 1) + i - 1];
+      }
+    }
     for (int i = 1; i <= shared->dim_new_T_PCR_pre_1; ++i) {
       for (int j = 1; j <= shared->dim_new_T_PCR_pre_2; ++j) {
         for (int k = 1; k <= shared->dim_new_T_PCR_pre_3; ++k) {
@@ -1801,6 +2057,16 @@ public:
           state_next[shared->offset_variable_G_D + i - 1 + shared->dim_G_D_1 * (j - 1) + shared->dim_G_D_12 * (k - 1)] = internal.new_G_D[shared->dim_new_G_D_12 * (k - 1) + shared->dim_new_G_D_1 * (j - 1) + i - 1];
         }
       }
+    }
+    for (int i = 1; i <= shared->dim_P_H_sev_R_1; ++i) {
+      for (int j = 1; j <= shared->dim_P_H_sev_R_2; ++j) {
+        for (int k = 1; k <= shared->dim_P_H_sev_R_3; ++k) {
+          state_next[shared->offset_variable_P_H_sev_R + i - 1 + shared->dim_P_H_sev_R_1 * (j - 1) + shared->dim_P_H_sev_R_12 * (k - 1)] = internal.new_P_H_sev[shared->dim_new_P_H_sev_12 * (k - 1) + shared->dim_new_P_H_sev_1 * (j - 1) + i - 1];
+        }
+      }
+    }
+    for (int i = 1; i <= shared->dim_cases_age_mild; ++i) {
+      state_next[shared->offset_variable_cases_age_mild + i - 1] = cases_age_mild[i - 1] + odin_sum2<real_type>(internal.n_I_C_2_to_mild.data(), i - 1, i, 0, shared->dim_n_I_C_2_to_mild_2, shared->dim_n_I_C_2_to_mild_1);
     }
     for (int i = 1; i <= shared->dim_cum_n_E_vaccinated_1; ++i) {
       for (int j = 1; j <= shared->dim_cum_n_E_vaccinated_2; ++j) {
@@ -1817,10 +2083,11 @@ public:
         state_next[shared->offset_variable_cum_n_I_P_vaccinated + i - 1 + shared->dim_cum_n_I_P_vaccinated_1 * (j - 1)] = cum_n_I_P_vaccinated[shared->dim_cum_n_I_P_vaccinated_1 * (j - 1) + i - 1] + internal.n_I_P_next_vacc_class[shared->dim_n_I_P_next_vacc_class_1 * (j - 1) + i - 1];
       }
     }
-    for (int i = 1; i <= shared->dim_severe_age; ++i) {
-      state_next[shared->offset_variable_severe_age + i - 1] = severe_age[i - 1] + internal.delta_severe_age[i - 1];
-    }
     real_type delta_admit_conf = odin_sum1<real_type>(internal.n_I_C_2_to_H_D_conf.data(), 0, shared->dim_n_I_C_2_to_H_D_conf) + odin_sum1<real_type>(internal.n_I_C_2_to_H_R_conf.data(), 0, shared->dim_n_I_C_2_to_H_R_conf);
+    for (int i = 1; i <= shared->dim_delta_hosp_age; ++i) {
+      internal.delta_hosp_age[i - 1] = odin_sum2<real_type>(internal.delta_hosp.data(), i - 1, i, 0, shared->dim_delta_hosp_2, shared->dim_delta_hosp_1);
+    }
+    real_type delta_hosp_total = odin_sum1<real_type>(internal.delta_hosp.data(), 0, shared->dim_delta_hosp);
     for (int i = 1; i <= shared->dim_delta_infections_age; ++i) {
       internal.delta_infections_age[i - 1] = odin_sum2<real_type>(internal.delta_infections.data(), i - 1, i, 0, shared->dim_delta_infections_2, shared->dim_delta_infections_1);
     }
@@ -1898,6 +2165,18 @@ public:
         state_next[shared->offset_variable_I_P + i - 1 + shared->dim_I_P_1 * (j - 1)] = internal.new_I_P[shared->dim_new_I_P_1 * (j - 1) + i - 1];
       }
     }
+    for (int i = 1; i <= shared->dim_P_H_sev_D_1; ++i) {
+      for (int j = 1; j <= shared->dim_P_H_sev_D_2; ++j) {
+        for (int k = 1; k <= shared->dim_P_H_sev_D_3; ++k) {
+          state_next[shared->offset_variable_P_H_sev_D + i - 1 + shared->dim_P_H_sev_D_1 * (j - 1) + shared->dim_P_H_sev_D_12 * (k - 1)] = internal.new_P_H_sev_D[shared->dim_new_P_H_sev_D_12 * (k - 1) + shared->dim_new_P_H_sev_D_1 * (j - 1) + i - 1];
+        }
+      }
+    }
+    for (int i = 1; i <= shared->dim_P_mild_1; ++i) {
+      for (int j = 1; j <= shared->dim_P_mild_2; ++j) {
+        state_next[shared->offset_variable_P_mild + i - 1 + shared->dim_P_mild_1 * (j - 1)] = internal.new_P_mild[shared->dim_new_P_mild_1 * (j - 1) + i - 1];
+      }
+    }
     for (int i = 1; i <= shared->dim_T_PCR_pre_1; ++i) {
       for (int j = 1; j <= shared->dim_T_PCR_pre_2; ++j) {
         for (int k = 1; k <= shared->dim_T_PCR_pre_3; ++k) {
@@ -1925,6 +2204,10 @@ public:
       for (int j = 1; j <= shared->dim_eff_sus_S_2; ++j) {
         internal.eff_sus_S[i - 1 + shared->dim_eff_sus_S_1 * (j - 1)] = internal.new_S[shared->dim_new_S_1 * (j - 1) + i - 1] * shared->rel_susceptibility[shared->dim_rel_susceptibility_1 * (j - 1) + i - 1];
       }
+    }
+    real_type new_hosp_inc = (fmodr<real_type>(step, shared->steps_per_day) == 0 ? delta_hosp_total : hosp_inc + delta_hosp_total);
+    for (int i = 1; i <= shared->dim_new_hosp_inc_age; ++i) {
+      internal.new_hosp_inc_age[i - 1] = (fmodr<real_type>(step, shared->steps_per_day) == 0 ? internal.delta_hosp_age[i - 1] : hosp_inc_age[i - 1] + internal.delta_hosp_age[i - 1]);
     }
     real_type new_infections_inc = (fmodr<real_type>(step, shared->steps_per_day) == 0 ? delta_infections_total : infections_inc + delta_infections_total);
     for (int i = 1; i <= shared->dim_new_infections_inc_age; ++i) {
@@ -1982,6 +2265,10 @@ public:
       }
     }
     state_next[30] = odin_sum2<real_type>(internal.eff_sus_S.data(), 0, shared->dim_eff_sus_S_1, 0, shared->dim_eff_sus_S_2, shared->dim_eff_sus_S_1) + odin_sum2<real_type>(internal.eff_sus_R.data(), 0, shared->dim_eff_sus_R_1, 0, shared->dim_eff_sus_R_2, shared->dim_eff_sus_R_1);
+    state_next[35] = new_hosp_inc;
+    for (int i = 1; i <= shared->dim_hosp_inc_age; ++i) {
+      state_next[shared->offset_variable_hosp_inc_age + i - 1] = internal.new_hosp_inc_age[i - 1];
+    }
     state_next[21] = odin_sum1<real_type>(internal.new_IFR_disag_weighted_inc.data(), 0, shared->dim_new_IFR_disag_weighted_inc) / (real_type) new_infections_inc;
     for (int i = 1; i <= shared->dim_ifr_age; ++i) {
       state_next[shared->offset_variable_ifr_age + i - 1] = odin_sum2<real_type>(internal.new_IFR_disag_weighted_inc.data(), i - 1, i, 0, shared->dim_new_IFR_disag_weighted_inc_2, shared->dim_new_IFR_disag_weighted_inc_1) / (real_type) internal.new_infections_inc_age[i - 1];
@@ -2254,6 +2541,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->initial_cum_deaths_hosp = 0;
   shared->initial_effective_susceptible = 0;
   shared->initial_hosp_deaths_inc = 0;
+  shared->initial_hosp_inc = 0;
   shared->initial_inf_cum_15_19 = 0;
   shared->initial_inf_cum_20_29 = 0;
   shared->initial_inf_cum_30_39 = 0;
@@ -2305,6 +2593,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->n_gamma_G_D_steps = NA_INTEGER;
   shared->n_gamma_H_D_steps = NA_INTEGER;
   shared->n_gamma_H_R_steps = NA_INTEGER;
+  shared->n_gamma_H_sev_steps = NA_INTEGER;
   shared->n_gamma_PCR_pos_steps = NA_INTEGER;
   shared->n_gamma_PCR_pre_steps = NA_INTEGER;
   shared->n_gamma_P_steps = NA_INTEGER;
@@ -2313,10 +2602,13 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->n_gamma_sero_pre_steps = NA_INTEGER;
   shared->n_groups = NA_INTEGER;
   shared->n_p_C_steps = NA_INTEGER;
+  shared->n_p_D_hosp_steps = NA_INTEGER;
   shared->n_p_G_D_steps = NA_INTEGER;
   shared->n_p_H_D_steps = NA_INTEGER;
   shared->n_p_H_steps = NA_INTEGER;
   shared->n_p_R_steps = NA_INTEGER;
+  shared->n_p_outpx_steps = NA_INTEGER;
+  shared->n_p_sev_steps = NA_INTEGER;
   shared->n_p_star_steps = NA_INTEGER;
   shared->n_vacc_classes = NA_INTEGER;
   shared->pcr_sensitivity = NA_REAL;
@@ -2368,6 +2660,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->n_gamma_G_D_steps = user_get_scalar<int>(user, "n_gamma_G_D_steps", shared->n_gamma_G_D_steps, NA_INTEGER, NA_INTEGER);
   shared->n_gamma_H_D_steps = user_get_scalar<int>(user, "n_gamma_H_D_steps", shared->n_gamma_H_D_steps, NA_INTEGER, NA_INTEGER);
   shared->n_gamma_H_R_steps = user_get_scalar<int>(user, "n_gamma_H_R_steps", shared->n_gamma_H_R_steps, NA_INTEGER, NA_INTEGER);
+  shared->n_gamma_H_sev_steps = user_get_scalar<int>(user, "n_gamma_H_sev_steps", shared->n_gamma_H_sev_steps, NA_INTEGER, NA_INTEGER);
   shared->n_gamma_PCR_pos_steps = user_get_scalar<int>(user, "n_gamma_PCR_pos_steps", shared->n_gamma_PCR_pos_steps, NA_INTEGER, NA_INTEGER);
   shared->n_gamma_PCR_pre_steps = user_get_scalar<int>(user, "n_gamma_PCR_pre_steps", shared->n_gamma_PCR_pre_steps, NA_INTEGER, NA_INTEGER);
   shared->n_gamma_P_steps = user_get_scalar<int>(user, "n_gamma_P_steps", shared->n_gamma_P_steps, NA_INTEGER, NA_INTEGER);
@@ -2376,10 +2669,13 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->n_gamma_sero_pre_steps = user_get_scalar<int>(user, "n_gamma_sero_pre_steps", shared->n_gamma_sero_pre_steps, NA_INTEGER, NA_INTEGER);
   shared->n_groups = user_get_scalar<int>(user, "n_groups", shared->n_groups, NA_INTEGER, NA_INTEGER);
   shared->n_p_C_steps = user_get_scalar<int>(user, "n_p_C_steps", shared->n_p_C_steps, NA_INTEGER, NA_INTEGER);
+  shared->n_p_D_hosp_steps = user_get_scalar<int>(user, "n_p_D_hosp_steps", shared->n_p_D_hosp_steps, NA_INTEGER, NA_INTEGER);
   shared->n_p_G_D_steps = user_get_scalar<int>(user, "n_p_G_D_steps", shared->n_p_G_D_steps, NA_INTEGER, NA_INTEGER);
   shared->n_p_H_D_steps = user_get_scalar<int>(user, "n_p_H_D_steps", shared->n_p_H_D_steps, NA_INTEGER, NA_INTEGER);
   shared->n_p_H_steps = user_get_scalar<int>(user, "n_p_H_steps", shared->n_p_H_steps, NA_INTEGER, NA_INTEGER);
   shared->n_p_R_steps = user_get_scalar<int>(user, "n_p_R_steps", shared->n_p_R_steps, NA_INTEGER, NA_INTEGER);
+  shared->n_p_outpx_steps = user_get_scalar<int>(user, "n_p_outpx_steps", shared->n_p_outpx_steps, NA_INTEGER, NA_INTEGER);
+  shared->n_p_sev_steps = user_get_scalar<int>(user, "n_p_sev_steps", shared->n_p_sev_steps, NA_INTEGER, NA_INTEGER);
   shared->n_p_star_steps = user_get_scalar<int>(user, "n_p_star_steps", shared->n_p_star_steps, NA_INTEGER, NA_INTEGER);
   shared->n_vacc_classes = user_get_scalar<int>(user, "n_vacc_classes", shared->n_vacc_classes, NA_INTEGER, NA_INTEGER);
   shared->pcr_sensitivity = user_get_scalar<real_type>(user, "pcr_sensitivity", shared->pcr_sensitivity, NA_REAL, NA_REAL);
@@ -2387,6 +2683,9 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->phi_admitted = user_get_scalar<real_type>(user, "phi_admitted", shared->phi_admitted, NA_REAL, NA_REAL);
   shared->phi_death_all = user_get_scalar<real_type>(user, "phi_death_all", shared->phi_death_all, NA_REAL, NA_REAL);
   shared->phi_death_hosp = user_get_scalar<real_type>(user, "phi_death_hosp", shared->phi_death_hosp, NA_REAL, NA_REAL);
+  std::array <int, 1> dim_re_seed_step;
+  shared->re_seed_step = user_get_array_variable<real_type, 1>(user, "re_seed_step", shared->re_seed_step, dim_re_seed_step, NA_REAL, NA_REAL);
+  shared->dim_re_seed_step = shared->re_seed_step.size();
   shared->seed_age_band = user_get_scalar<int>(user, "seed_age_band", shared->seed_age_band, NA_INTEGER, NA_INTEGER);
   shared->seed_step_start = user_get_scalar<real_type>(user, "seed_step_start", shared->seed_step_start, NA_REAL, NA_REAL);
   std::array <int, 1> dim_seed_value;
@@ -2402,6 +2701,15 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_vaccine_dose_step_1 = dim_vaccine_dose_step[0];
   shared->dim_vaccine_dose_step_2 = dim_vaccine_dose_step[1];
   shared->dim_vaccine_dose_step_3 = dim_vaccine_dose_step[2];
+  std::array <int, 1> dim_voc_ve_inf_step;
+  shared->voc_ve_inf_step = user_get_array_variable<real_type, 1>(user, "voc_ve_inf_step", shared->voc_ve_inf_step, dim_voc_ve_inf_step, NA_REAL, NA_REAL);
+  shared->dim_voc_ve_inf_step = shared->voc_ve_inf_step.size();
+  std::array <int, 1> dim_voc_ve_sev_step;
+  shared->voc_ve_sev_step = user_get_array_variable<real_type, 1>(user, "voc_ve_sev_step", shared->voc_ve_sev_step, dim_voc_ve_sev_step, NA_REAL, NA_REAL);
+  shared->dim_voc_ve_sev_step = shared->voc_ve_sev_step.size();
+  std::array <int, 1> dim_voc_ve_symp_step;
+  shared->voc_ve_symp_step = user_get_array_variable<real_type, 1>(user, "voc_ve_symp_step", shared->voc_ve_symp_step, dim_voc_ve_symp_step, NA_REAL, NA_REAL);
+  shared->dim_voc_ve_symp_step = shared->voc_ve_symp_step.size();
   shared->dim_D_1 = shared->n_groups;
   shared->dim_D_2 = shared->n_vacc_classes;
   shared->dim_D_hosp_1 = shared->n_groups;
@@ -2417,6 +2725,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_H_D_conf_1 = shared->n_groups;
   shared->dim_H_D_conf_2 = shared->n_vacc_classes;
   shared->dim_H_D_conf_3 = shared->k_H_D;
+  shared->dim_H_D_occup_1 = shared->n_groups;
+  shared->dim_H_D_occup_2 = shared->n_vacc_classes;
   shared->dim_H_D_unconf_1 = shared->n_groups;
   shared->dim_H_D_unconf_2 = shared->n_vacc_classes;
   shared->dim_H_D_unconf_3 = shared->k_H_D;
@@ -2426,6 +2736,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_H_R_unconf_1 = shared->n_groups;
   shared->dim_H_R_unconf_2 = shared->n_vacc_classes;
   shared->dim_H_R_unconf_3 = shared->k_H_R;
+  shared->dim_H_sev_occup_1 = shared->n_groups;
+  shared->dim_H_sev_occup_2 = shared->n_vacc_classes;
   shared->dim_IFR_disag_1 = shared->n_groups;
   shared->dim_IFR_disag_2 = shared->n_vacc_classes;
   shared->dim_IFR_disag_weighted_inc_1 = shared->n_groups;
@@ -2443,6 +2755,16 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_I_weighted_1 = shared->n_groups;
   shared->dim_I_weighted_2 = shared->n_vacc_classes;
   shared->dim_N_tot = shared->n_groups;
+  shared->dim_P_H_rec_1 = shared->n_groups;
+  shared->dim_P_H_rec_2 = shared->n_vacc_classes;
+  shared->dim_P_H_sev_D_1 = shared->n_groups;
+  shared->dim_P_H_sev_D_2 = shared->n_vacc_classes;
+  shared->dim_P_H_sev_D_3 = shared->k_H_R;
+  shared->dim_P_H_sev_R_1 = shared->n_groups;
+  shared->dim_P_H_sev_R_2 = shared->n_vacc_classes;
+  shared->dim_P_H_sev_R_3 = shared->k_H_R;
+  shared->dim_P_mild_1 = shared->n_groups;
+  shared->dim_P_mild_2 = shared->n_vacc_classes;
   shared->dim_R_1 = shared->n_groups;
   shared->dim_R_2 = shared->n_vacc_classes;
   shared->dim_S_1 = shared->n_groups;
@@ -2475,6 +2797,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_aux_H_R_unconf_1 = shared->n_groups;
   shared->dim_aux_H_R_unconf_2 = shared->n_vacc_classes;
   shared->dim_aux_H_R_unconf_3 = shared->k_H_R;
+  shared->dim_cases_age_mild = shared->n_groups;
+  shared->dim_cases_age_severe = shared->n_groups;
   shared->dim_cum_n_E_vaccinated_1 = shared->n_groups;
   shared->dim_cum_n_E_vaccinated_2 = shared->n_vacc_classes;
   shared->dim_cum_n_I_A_vaccinated_1 = shared->n_groups;
@@ -2491,12 +2815,13 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_delta_D_hosp_disag_2 = shared->n_vacc_classes;
   shared->dim_delta_D_non_hosp_disag_1 = shared->n_groups;
   shared->dim_delta_D_non_hosp_disag_2 = shared->n_vacc_classes;
+  shared->dim_delta_hosp_1 = shared->n_groups;
+  shared->dim_delta_hosp_2 = shared->n_vacc_classes;
+  shared->dim_delta_hosp_age = shared->n_groups;
   shared->dim_delta_infections_1 = shared->n_groups;
   shared->dim_delta_infections_2 = shared->n_vacc_classes;
   shared->dim_delta_infections_age = shared->n_groups;
-  shared->dim_delta_mild_age = shared->n_groups;
   shared->dim_delta_reinfections_age = shared->n_groups;
-  shared->dim_delta_severe_age = shared->n_groups;
   shared->dim_delta_yll_age = shared->n_groups;
   shared->dim_eff_sus_R_1 = shared->n_groups;
   shared->dim_eff_sus_R_2 = shared->n_vacc_classes;
@@ -2509,12 +2834,14 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_gamma_G_D_step = shared->n_gamma_G_D_steps;
   shared->dim_gamma_H_D_step = shared->n_gamma_H_D_steps;
   shared->dim_gamma_H_R_step = shared->n_gamma_H_R_steps;
+  shared->dim_gamma_H_sev_step = shared->n_gamma_H_sev_steps;
   shared->dim_gamma_PCR_pos_step = shared->n_gamma_PCR_pos_steps;
   shared->dim_gamma_PCR_pre_step = shared->n_gamma_PCR_pre_steps;
   shared->dim_gamma_P_step = shared->n_gamma_P_steps;
   shared->dim_gamma_U_step = shared->n_gamma_U_steps;
   shared->dim_gamma_sero_pos_step = shared->n_gamma_sero_pos_steps;
   shared->dim_gamma_sero_pre_step = shared->n_gamma_sero_pre_steps;
+  shared->dim_hosp_inc_age = shared->n_groups;
   shared->dim_ifr_age = shared->n_groups;
   shared->dim_index_dose = shared->n_doses;
   shared->dim_index_dose_inverse = shared->n_vacc_classes;
@@ -2525,7 +2852,6 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_life_exp = shared->n_groups;
   shared->dim_m_1 = shared->n_groups;
   shared->dim_m_2 = shared->n_groups;
-  shared->dim_mild_age = shared->n_groups;
   shared->dim_n_EI_A_1 = shared->n_groups;
   shared->dim_n_EI_A_2 = shared->n_vacc_classes;
   shared->dim_n_EI_P_1 = shared->n_groups;
@@ -2569,6 +2895,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_n_I_C_2_progress_2 = shared->n_vacc_classes;
   shared->dim_n_I_C_2_to_G_D_1 = shared->n_groups;
   shared->dim_n_I_C_2_to_G_D_2 = shared->n_vacc_classes;
+  shared->dim_n_I_C_2_to_G_D_hosp_1 = shared->n_groups;
+  shared->dim_n_I_C_2_to_G_D_hosp_2 = shared->n_vacc_classes;
   shared->dim_n_I_C_2_to_H_D_1 = shared->n_groups;
   shared->dim_n_I_C_2_to_H_D_2 = shared->n_vacc_classes;
   shared->dim_n_I_C_2_to_H_D_conf_1 = shared->n_groups;
@@ -2577,14 +2905,24 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_n_I_C_2_to_H_R_2 = shared->n_vacc_classes;
   shared->dim_n_I_C_2_to_H_R_conf_1 = shared->n_groups;
   shared->dim_n_I_C_2_to_H_R_conf_2 = shared->n_vacc_classes;
+  shared->dim_n_I_C_2_to_H_sev_1 = shared->n_groups;
+  shared->dim_n_I_C_2_to_H_sev_2 = shared->n_vacc_classes;
   shared->dim_n_I_C_2_to_RS_1 = shared->n_groups;
   shared->dim_n_I_C_2_to_RS_2 = shared->n_vacc_classes;
   shared->dim_n_I_C_2_to_hosp_1 = shared->n_groups;
   shared->dim_n_I_C_2_to_hosp_2 = shared->n_vacc_classes;
+  shared->dim_n_I_C_2_to_mild_1 = shared->n_groups;
+  shared->dim_n_I_C_2_to_mild_2 = shared->n_vacc_classes;
   shared->dim_n_I_P_next_vacc_class_1 = shared->n_groups;
   shared->dim_n_I_P_next_vacc_class_2 = shared->n_vacc_classes;
   shared->dim_n_I_P_progress_1 = shared->n_groups;
   shared->dim_n_I_P_progress_2 = shared->n_vacc_classes;
+  shared->dim_n_P_H_sev_D_progress_1 = shared->n_groups;
+  shared->dim_n_P_H_sev_D_progress_2 = shared->n_vacc_classes;
+  shared->dim_n_P_H_sev_D_progress_3 = shared->k_H_R;
+  shared->dim_n_P_H_sev_progress_1 = shared->n_groups;
+  shared->dim_n_P_H_sev_progress_2 = shared->n_vacc_classes;
+  shared->dim_n_P_H_sev_progress_3 = shared->k_H_R;
   shared->dim_n_RE_1 = shared->n_groups;
   shared->dim_n_RE_2 = shared->n_vacc_classes;
   shared->dim_n_RS_1 = shared->n_groups;
@@ -2649,6 +2987,16 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_new_I_P_2 = shared->n_vacc_classes;
   shared->dim_new_I_weighted_1 = shared->n_groups;
   shared->dim_new_I_weighted_2 = shared->n_vacc_classes;
+  shared->dim_new_P_H_rec_1 = shared->n_groups;
+  shared->dim_new_P_H_rec_2 = shared->n_vacc_classes;
+  shared->dim_new_P_H_sev_1 = shared->n_groups;
+  shared->dim_new_P_H_sev_2 = shared->n_vacc_classes;
+  shared->dim_new_P_H_sev_3 = shared->k_H_R;
+  shared->dim_new_P_H_sev_D_1 = shared->n_groups;
+  shared->dim_new_P_H_sev_D_2 = shared->n_vacc_classes;
+  shared->dim_new_P_H_sev_D_3 = shared->k_H_R;
+  shared->dim_new_P_mild_1 = shared->n_groups;
+  shared->dim_new_P_mild_2 = shared->n_vacc_classes;
   shared->dim_new_R_1 = shared->n_groups;
   shared->dim_new_R_2 = shared->n_vacc_classes;
   shared->dim_new_S_1 = shared->n_groups;
@@ -2669,12 +3017,17 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_new_T_sero_pre_1 = shared->n_groups;
   shared->dim_new_T_sero_pre_2 = shared->n_vacc_classes;
   shared->dim_new_T_sero_pre_3 = shared->k_sero_pre;
+  shared->dim_new_hosp_inc_age = shared->n_groups;
   shared->dim_new_infections_inc_age = shared->n_groups;
   shared->dim_new_reinfections_inc_age = shared->n_groups;
   shared->dim_p_C_1 = shared->n_groups;
   shared->dim_p_C_2 = shared->n_vacc_classes;
   shared->dim_p_C_step_1 = shared->n_p_C_steps;
   shared->dim_p_C_step_2 = shared->n_groups;
+  shared->dim_p_D_hosp_1 = shared->n_groups;
+  shared->dim_p_D_hosp_2 = shared->n_vacc_classes;
+  shared->dim_p_D_hosp_step_1 = shared->n_p_D_hosp_steps;
+  shared->dim_p_D_hosp_step_2 = shared->n_groups;
   shared->dim_p_E_next_vacc_class_1 = shared->n_groups;
   shared->dim_p_E_next_vacc_class_2 = shared->n_vacc_classes;
   shared->dim_p_G_D_1 = shared->n_groups;
@@ -2705,8 +3058,15 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_p_SE_2 = shared->n_vacc_classes;
   shared->dim_p_S_next_vacc_class_1 = shared->n_groups;
   shared->dim_p_S_next_vacc_class_2 = shared->n_vacc_classes;
+  shared->dim_p_outpx_1 = shared->n_groups;
+  shared->dim_p_outpx_2 = shared->n_vacc_classes;
+  shared->dim_p_outpx_step_1 = shared->n_p_outpx_steps;
+  shared->dim_p_outpx_step_2 = shared->n_groups;
   shared->dim_p_sero_pos = shared->n_groups;
-  shared->dim_p_sev = shared->n_groups;
+  shared->dim_p_sev_1 = shared->n_groups;
+  shared->dim_p_sev_2 = shared->n_vacc_classes;
+  shared->dim_p_sev_step_1 = shared->n_p_sev_steps;
+  shared->dim_p_sev_step_2 = shared->n_groups;
   shared->dim_p_star = shared->n_groups;
   shared->dim_p_star_step_1 = shared->n_p_star_steps;
   shared->dim_p_star_step_2 = shared->n_groups;
@@ -2717,17 +3077,22 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_rel_p_G_D_2 = shared->n_vacc_classes;
   shared->dim_rel_p_H_D_1 = shared->n_groups;
   shared->dim_rel_p_H_D_2 = shared->n_vacc_classes;
+  shared->dim_rel_p_H_sev_1 = shared->n_groups;
+  shared->dim_rel_p_H_sev_2 = shared->n_vacc_classes;
+  shared->dim_rel_p_H_sev_D_1 = shared->n_groups;
+  shared->dim_rel_p_H_sev_D_2 = shared->n_vacc_classes;
   shared->dim_rel_p_R_1 = shared->n_groups;
   shared->dim_rel_p_R_2 = shared->n_vacc_classes;
   shared->dim_rel_p_hosp_if_sympt_1 = shared->n_groups;
   shared->dim_rel_p_hosp_if_sympt_2 = shared->n_vacc_classes;
+  shared->dim_rel_p_outpx_1 = shared->n_groups;
+  shared->dim_rel_p_outpx_2 = shared->n_vacc_classes;
   shared->dim_rel_p_sympt_1 = shared->n_groups;
   shared->dim_rel_p_sympt_2 = shared->n_vacc_classes;
   shared->dim_rel_susceptibility_1 = shared->n_groups;
   shared->dim_rel_susceptibility_2 = shared->n_vacc_classes;
   shared->dim_s_ij_1 = shared->n_groups;
   shared->dim_s_ij_2 = shared->n_groups;
-  shared->dim_severe_age = shared->n_groups;
   shared->dim_tmp_vaccine_n_candidates_1 = shared->n_groups;
   shared->dim_tmp_vaccine_n_candidates_2 = shared->n_doses;
   shared->dim_tmp_vaccine_probability_1 = shared->n_groups;
@@ -2749,19 +3114,20 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_yll_age = shared->n_groups;
   shared->dt = 1 / (real_type) shared->steps_per_day;
   shared->initial_beta_out = shared->beta_step[0];
+  internal.delta_hosp_age = std::vector<real_type>(shared->dim_delta_hosp_age);
   internal.delta_infections_age = std::vector<real_type>(shared->dim_delta_infections_age);
-  internal.delta_mild_age = std::vector<real_type>(shared->dim_delta_mild_age);
   internal.delta_reinfections_age = std::vector<real_type>(shared->dim_delta_reinfections_age);
-  internal.delta_severe_age = std::vector<real_type>(shared->dim_delta_severe_age);
   internal.delta_yll_age = std::vector<real_type>(shared->dim_delta_yll_age);
   shared->initial_N_tot = std::vector<real_type>(shared->dim_N_tot);
+  shared->initial_cases_age_mild = std::vector<real_type>(shared->dim_cases_age_mild);
+  shared->initial_cases_age_severe = std::vector<real_type>(shared->dim_cases_age_severe);
+  shared->initial_hosp_inc_age = std::vector<real_type>(shared->dim_hosp_inc_age);
   shared->initial_ifr_age = std::vector<real_type>(shared->dim_ifr_age);
   shared->initial_infections_inc_age = std::vector<real_type>(shared->dim_infections_inc_age);
-  shared->initial_mild_age = std::vector<real_type>(shared->dim_mild_age);
   shared->initial_reinfections_inc_age = std::vector<real_type>(shared->dim_reinfections_inc_age);
-  shared->initial_severe_age = std::vector<real_type>(shared->dim_severe_age);
   shared->initial_yll_age = std::vector<real_type>(shared->dim_yll_age);
   internal.lambda = std::vector<real_type>(shared->dim_lambda);
+  internal.new_hosp_inc_age = std::vector<real_type>(shared->dim_new_hosp_inc_age);
   internal.new_infections_inc_age = std::vector<real_type>(shared->dim_new_infections_inc_age);
   internal.new_reinfections_inc_age = std::vector<real_type>(shared->dim_new_reinfections_inc_age);
   internal.p_star = std::vector<real_type>(shared->dim_p_star);
@@ -2774,12 +3140,14 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_G_D_12 = shared->dim_G_D_1 * shared->dim_G_D_2;
   shared->dim_H_D_conf = shared->dim_H_D_conf_1 * shared->dim_H_D_conf_2 * shared->dim_H_D_conf_3;
   shared->dim_H_D_conf_12 = shared->dim_H_D_conf_1 * shared->dim_H_D_conf_2;
+  shared->dim_H_D_occup = shared->dim_H_D_occup_1 * shared->dim_H_D_occup_2;
   shared->dim_H_D_unconf = shared->dim_H_D_unconf_1 * shared->dim_H_D_unconf_2 * shared->dim_H_D_unconf_3;
   shared->dim_H_D_unconf_12 = shared->dim_H_D_unconf_1 * shared->dim_H_D_unconf_2;
   shared->dim_H_R_conf = shared->dim_H_R_conf_1 * shared->dim_H_R_conf_2 * shared->dim_H_R_conf_3;
   shared->dim_H_R_conf_12 = shared->dim_H_R_conf_1 * shared->dim_H_R_conf_2;
   shared->dim_H_R_unconf = shared->dim_H_R_unconf_1 * shared->dim_H_R_unconf_2 * shared->dim_H_R_unconf_3;
   shared->dim_H_R_unconf_12 = shared->dim_H_R_unconf_1 * shared->dim_H_R_unconf_2;
+  shared->dim_H_sev_occup = shared->dim_H_sev_occup_1 * shared->dim_H_sev_occup_2;
   shared->dim_IFR_disag = shared->dim_IFR_disag_1 * shared->dim_IFR_disag_2;
   shared->dim_IFR_disag_weighted_inc = shared->dim_IFR_disag_weighted_inc_1 * shared->dim_IFR_disag_weighted_inc_2;
   shared->dim_I_A = shared->dim_I_A_1 * shared->dim_I_A_2;
@@ -2788,6 +3156,12 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_I_P = shared->dim_I_P_1 * shared->dim_I_P_2;
   shared->dim_I_trans = shared->dim_I_trans_1 * shared->dim_I_trans_2;
   shared->dim_I_weighted = shared->dim_I_weighted_1 * shared->dim_I_weighted_2;
+  shared->dim_P_H_rec = shared->dim_P_H_rec_1 * shared->dim_P_H_rec_2;
+  shared->dim_P_H_sev_D = shared->dim_P_H_sev_D_1 * shared->dim_P_H_sev_D_2 * shared->dim_P_H_sev_D_3;
+  shared->dim_P_H_sev_D_12 = shared->dim_P_H_sev_D_1 * shared->dim_P_H_sev_D_2;
+  shared->dim_P_H_sev_R = shared->dim_P_H_sev_R_1 * shared->dim_P_H_sev_R_2 * shared->dim_P_H_sev_R_3;
+  shared->dim_P_H_sev_R_12 = shared->dim_P_H_sev_R_1 * shared->dim_P_H_sev_R_2;
+  shared->dim_P_mild = shared->dim_P_mild_1 * shared->dim_P_mild_2;
   shared->dim_R = shared->dim_R_1 * shared->dim_R_2;
   shared->dim_S = shared->dim_S_1 * shared->dim_S_2;
   shared->dim_T_PCR_neg = shared->dim_T_PCR_neg_1 * shared->dim_T_PCR_neg_2;
@@ -2816,6 +3190,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_cum_n_vaccinated = shared->dim_cum_n_vaccinated_1 * shared->dim_cum_n_vaccinated_2;
   shared->dim_delta_D_hosp_disag = shared->dim_delta_D_hosp_disag_1 * shared->dim_delta_D_hosp_disag_2;
   shared->dim_delta_D_non_hosp_disag = shared->dim_delta_D_non_hosp_disag_1 * shared->dim_delta_D_non_hosp_disag_2;
+  shared->dim_delta_hosp = shared->dim_delta_hosp_1 * shared->dim_delta_hosp_2;
   shared->dim_delta_infections = shared->dim_delta_infections_1 * shared->dim_delta_infections_2;
   shared->dim_eff_sus_R = shared->dim_eff_sus_R_1 * shared->dim_eff_sus_R_2;
   shared->dim_eff_sus_S = shared->dim_eff_sus_S_1 * shared->dim_eff_sus_S_2;
@@ -2847,14 +3222,21 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_n_I_C_2_NoHosp = shared->dim_n_I_C_2_NoHosp_1 * shared->dim_n_I_C_2_NoHosp_2;
   shared->dim_n_I_C_2_progress = shared->dim_n_I_C_2_progress_1 * shared->dim_n_I_C_2_progress_2;
   shared->dim_n_I_C_2_to_G_D = shared->dim_n_I_C_2_to_G_D_1 * shared->dim_n_I_C_2_to_G_D_2;
+  shared->dim_n_I_C_2_to_G_D_hosp = shared->dim_n_I_C_2_to_G_D_hosp_1 * shared->dim_n_I_C_2_to_G_D_hosp_2;
   shared->dim_n_I_C_2_to_H_D = shared->dim_n_I_C_2_to_H_D_1 * shared->dim_n_I_C_2_to_H_D_2;
   shared->dim_n_I_C_2_to_H_D_conf = shared->dim_n_I_C_2_to_H_D_conf_1 * shared->dim_n_I_C_2_to_H_D_conf_2;
   shared->dim_n_I_C_2_to_H_R = shared->dim_n_I_C_2_to_H_R_1 * shared->dim_n_I_C_2_to_H_R_2;
   shared->dim_n_I_C_2_to_H_R_conf = shared->dim_n_I_C_2_to_H_R_conf_1 * shared->dim_n_I_C_2_to_H_R_conf_2;
+  shared->dim_n_I_C_2_to_H_sev = shared->dim_n_I_C_2_to_H_sev_1 * shared->dim_n_I_C_2_to_H_sev_2;
   shared->dim_n_I_C_2_to_RS = shared->dim_n_I_C_2_to_RS_1 * shared->dim_n_I_C_2_to_RS_2;
   shared->dim_n_I_C_2_to_hosp = shared->dim_n_I_C_2_to_hosp_1 * shared->dim_n_I_C_2_to_hosp_2;
+  shared->dim_n_I_C_2_to_mild = shared->dim_n_I_C_2_to_mild_1 * shared->dim_n_I_C_2_to_mild_2;
   shared->dim_n_I_P_next_vacc_class = shared->dim_n_I_P_next_vacc_class_1 * shared->dim_n_I_P_next_vacc_class_2;
   shared->dim_n_I_P_progress = shared->dim_n_I_P_progress_1 * shared->dim_n_I_P_progress_2;
+  shared->dim_n_P_H_sev_D_progress = shared->dim_n_P_H_sev_D_progress_1 * shared->dim_n_P_H_sev_D_progress_2 * shared->dim_n_P_H_sev_D_progress_3;
+  shared->dim_n_P_H_sev_D_progress_12 = shared->dim_n_P_H_sev_D_progress_1 * shared->dim_n_P_H_sev_D_progress_2;
+  shared->dim_n_P_H_sev_progress = shared->dim_n_P_H_sev_progress_1 * shared->dim_n_P_H_sev_progress_2 * shared->dim_n_P_H_sev_progress_3;
+  shared->dim_n_P_H_sev_progress_12 = shared->dim_n_P_H_sev_progress_1 * shared->dim_n_P_H_sev_progress_2;
   shared->dim_n_RE = shared->dim_n_RE_1 * shared->dim_n_RE_2;
   shared->dim_n_RS = shared->dim_n_RS_1 * shared->dim_n_RS_2;
   shared->dim_n_R_next_vacc_class = shared->dim_n_R_next_vacc_class_1 * shared->dim_n_R_next_vacc_class_2;
@@ -2892,6 +3274,12 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_new_I_C_2 = shared->dim_new_I_C_2_1 * shared->dim_new_I_C_2_2;
   shared->dim_new_I_P = shared->dim_new_I_P_1 * shared->dim_new_I_P_2;
   shared->dim_new_I_weighted = shared->dim_new_I_weighted_1 * shared->dim_new_I_weighted_2;
+  shared->dim_new_P_H_rec = shared->dim_new_P_H_rec_1 * shared->dim_new_P_H_rec_2;
+  shared->dim_new_P_H_sev = shared->dim_new_P_H_sev_1 * shared->dim_new_P_H_sev_2 * shared->dim_new_P_H_sev_3;
+  shared->dim_new_P_H_sev_12 = shared->dim_new_P_H_sev_1 * shared->dim_new_P_H_sev_2;
+  shared->dim_new_P_H_sev_D = shared->dim_new_P_H_sev_D_1 * shared->dim_new_P_H_sev_D_2 * shared->dim_new_P_H_sev_D_3;
+  shared->dim_new_P_H_sev_D_12 = shared->dim_new_P_H_sev_D_1 * shared->dim_new_P_H_sev_D_2;
+  shared->dim_new_P_mild = shared->dim_new_P_mild_1 * shared->dim_new_P_mild_2;
   shared->dim_new_R = shared->dim_new_R_1 * shared->dim_new_R_2;
   shared->dim_new_S = shared->dim_new_S_1 * shared->dim_new_S_2;
   shared->dim_new_T_PCR_neg = shared->dim_new_T_PCR_neg_1 * shared->dim_new_T_PCR_neg_2;
@@ -2906,6 +3294,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_new_T_sero_pre_12 = shared->dim_new_T_sero_pre_1 * shared->dim_new_T_sero_pre_2;
   shared->dim_p_C = shared->dim_p_C_1 * shared->dim_p_C_2;
   shared->dim_p_C_step = shared->dim_p_C_step_1 * shared->dim_p_C_step_2;
+  shared->dim_p_D_hosp = shared->dim_p_D_hosp_1 * shared->dim_p_D_hosp_2;
+  shared->dim_p_D_hosp_step = shared->dim_p_D_hosp_step_1 * shared->dim_p_D_hosp_step_2;
   shared->dim_p_E_next_vacc_class = shared->dim_p_E_next_vacc_class_1 * shared->dim_p_E_next_vacc_class_2;
   shared->dim_p_G_D = shared->dim_p_G_D_1 * shared->dim_p_G_D_2;
   shared->dim_p_G_D_step = shared->dim_p_G_D_step_1 * shared->dim_p_G_D_step_2;
@@ -2921,12 +3311,19 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->dim_p_R_step = shared->dim_p_R_step_1 * shared->dim_p_R_step_2;
   shared->dim_p_SE = shared->dim_p_SE_1 * shared->dim_p_SE_2;
   shared->dim_p_S_next_vacc_class = shared->dim_p_S_next_vacc_class_1 * shared->dim_p_S_next_vacc_class_2;
+  shared->dim_p_outpx = shared->dim_p_outpx_1 * shared->dim_p_outpx_2;
+  shared->dim_p_outpx_step = shared->dim_p_outpx_step_1 * shared->dim_p_outpx_step_2;
+  shared->dim_p_sev = shared->dim_p_sev_1 * shared->dim_p_sev_2;
+  shared->dim_p_sev_step = shared->dim_p_sev_step_1 * shared->dim_p_sev_step_2;
   shared->dim_p_star_step = shared->dim_p_star_step_1 * shared->dim_p_star_step_2;
   shared->dim_rel_infectivity = shared->dim_rel_infectivity_1 * shared->dim_rel_infectivity_2;
   shared->dim_rel_p_G_D = shared->dim_rel_p_G_D_1 * shared->dim_rel_p_G_D_2;
   shared->dim_rel_p_H_D = shared->dim_rel_p_H_D_1 * shared->dim_rel_p_H_D_2;
+  shared->dim_rel_p_H_sev = shared->dim_rel_p_H_sev_1 * shared->dim_rel_p_H_sev_2;
+  shared->dim_rel_p_H_sev_D = shared->dim_rel_p_H_sev_D_1 * shared->dim_rel_p_H_sev_D_2;
   shared->dim_rel_p_R = shared->dim_rel_p_R_1 * shared->dim_rel_p_R_2;
   shared->dim_rel_p_hosp_if_sympt = shared->dim_rel_p_hosp_if_sympt_1 * shared->dim_rel_p_hosp_if_sympt_2;
+  shared->dim_rel_p_outpx = shared->dim_rel_p_outpx_1 * shared->dim_rel_p_outpx_2;
   shared->dim_rel_p_sympt = shared->dim_rel_p_sympt_1 * shared->dim_rel_p_sympt_2;
   shared->dim_rel_susceptibility = shared->dim_rel_susceptibility_1 * shared->dim_rel_susceptibility_2;
   shared->dim_s_ij = shared->dim_s_ij_1 * shared->dim_s_ij_2;
@@ -2947,6 +3344,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->gamma_G_D_step = user_get_array_fixed<real_type, 1>(user, "gamma_G_D_step", shared->gamma_G_D_step, {shared->dim_gamma_G_D_step}, NA_REAL, NA_REAL);
   shared->gamma_H_D_step = user_get_array_fixed<real_type, 1>(user, "gamma_H_D_step", shared->gamma_H_D_step, {shared->dim_gamma_H_D_step}, NA_REAL, NA_REAL);
   shared->gamma_H_R_step = user_get_array_fixed<real_type, 1>(user, "gamma_H_R_step", shared->gamma_H_R_step, {shared->dim_gamma_H_R_step}, NA_REAL, NA_REAL);
+  shared->gamma_H_sev_step = user_get_array_fixed<real_type, 1>(user, "gamma_H_sev_step", shared->gamma_H_sev_step, {shared->dim_gamma_H_sev_step}, NA_REAL, NA_REAL);
   shared->gamma_PCR_pos_step = user_get_array_fixed<real_type, 1>(user, "gamma_PCR_pos_step", shared->gamma_PCR_pos_step, {shared->dim_gamma_PCR_pos_step}, NA_REAL, NA_REAL);
   shared->gamma_PCR_pre_step = user_get_array_fixed<real_type, 1>(user, "gamma_PCR_pre_step", shared->gamma_PCR_pre_step, {shared->dim_gamma_PCR_pre_step}, NA_REAL, NA_REAL);
   shared->gamma_P_step = user_get_array_fixed<real_type, 1>(user, "gamma_P_step", shared->gamma_P_step, {shared->dim_gamma_P_step}, NA_REAL, NA_REAL);
@@ -2958,35 +3356,38 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   for (int i = 1; i <= shared->dim_N_tot; ++i) {
     shared->initial_N_tot[i - 1] = 0;
   }
+  for (int i = 1; i <= shared->dim_cases_age_mild; ++i) {
+    shared->initial_cases_age_mild[i - 1] = 0;
+  }
+  for (int i = 1; i <= shared->dim_cases_age_severe; ++i) {
+    shared->initial_cases_age_severe[i - 1] = 0;
+  }
+  for (int i = 1; i <= shared->dim_hosp_inc_age; ++i) {
+    shared->initial_hosp_inc_age[i - 1] = 0;
+  }
   for (int i = 1; i <= shared->dim_ifr_age; ++i) {
     
   }
   for (int i = 1; i <= shared->dim_infections_inc_age; ++i) {
     shared->initial_infections_inc_age[i - 1] = 0;
   }
-  for (int i = 1; i <= shared->dim_mild_age; ++i) {
-    shared->initial_mild_age[i - 1] = 0;
-  }
   for (int i = 1; i <= shared->dim_reinfections_inc_age; ++i) {
     shared->initial_reinfections_inc_age[i - 1] = shared->n_groups;
-  }
-  for (int i = 1; i <= shared->dim_severe_age; ++i) {
-    shared->initial_severe_age[i - 1] = 0;
   }
   for (int i = 1; i <= shared->dim_yll_age; ++i) {
     shared->initial_yll_age[i - 1] = 0;
   }
   shared->life_exp = user_get_array_fixed<real_type, 1>(user, "life_exp", shared->life_exp, {shared->dim_life_exp}, NA_REAL, NA_REAL);
-  shared->offset_variable_S = shared->dim_N_tot + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_ifr_age = shared->dim_N_tot + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + 35;
-  shared->offset_variable_infections_inc_age = shared->dim_N_tot + 35;
-  shared->offset_variable_mild_age = shared->dim_N_tot + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_reinfections_inc_age = shared->dim_N_tot + shared->dim_infections_inc_age + 35;
-  shared->offset_variable_severe_age = shared->dim_N_tot + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 35;
-  shared->offset_variable_yll_age = shared->dim_N_tot + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + 35;
+  shared->offset_variable_S = shared->dim_N_tot + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cases_age_mild = shared->dim_N_tot + shared->dim_cases_age_severe + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cases_age_severe = shared->dim_N_tot + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_hosp_inc_age = shared->dim_N_tot + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_ifr_age = shared->dim_N_tot + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + 36;
+  shared->offset_variable_infections_inc_age = shared->dim_N_tot + 36;
+  shared->offset_variable_reinfections_inc_age = shared->dim_N_tot + shared->dim_infections_inc_age + 36;
+  shared->offset_variable_yll_age = shared->dim_N_tot + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + 36;
   shared->p_RS = 1 - dust::math::exp(- shared->gamma_R * shared->dt);
   shared->p_sero_pos = user_get_array_fixed<real_type, 1>(user, "p_sero_pos", shared->p_sero_pos, {shared->dim_p_sero_pos}, NA_REAL, NA_REAL);
-  shared->p_sev = user_get_array_fixed<real_type, 1>(user, "p_sev", shared->p_sev, {shared->dim_p_sev}, NA_REAL, NA_REAL);
   shared->seed_step_end = shared->seed_step_start + shared->dim_seed_value;
   internal.IFR_disag = std::vector<real_type>(shared->dim_IFR_disag);
   internal.I_trans = std::vector<real_type>(shared->dim_I_trans);
@@ -2996,6 +3397,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   internal.aux_H_R_unconf = std::vector<real_type>(shared->dim_aux_H_R_unconf);
   internal.delta_D_hosp_disag = std::vector<real_type>(shared->dim_delta_D_hosp_disag);
   internal.delta_D_non_hosp_disag = std::vector<real_type>(shared->dim_delta_D_non_hosp_disag);
+  internal.delta_hosp = std::vector<real_type>(shared->dim_delta_hosp);
   internal.delta_infections = std::vector<real_type>(shared->dim_delta_infections);
   internal.eff_sus_R = std::vector<real_type>(shared->dim_eff_sus_R);
   internal.eff_sus_S = std::vector<real_type>(shared->dim_eff_sus_S);
@@ -3005,15 +3407,21 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   shared->initial_E = std::vector<real_type>(shared->dim_E);
   shared->initial_G_D = std::vector<real_type>(shared->dim_G_D);
   shared->initial_H_D_conf = std::vector<real_type>(shared->dim_H_D_conf);
+  shared->initial_H_D_occup = std::vector<real_type>(shared->dim_H_D_occup);
   shared->initial_H_D_unconf = std::vector<real_type>(shared->dim_H_D_unconf);
   shared->initial_H_R_conf = std::vector<real_type>(shared->dim_H_R_conf);
   shared->initial_H_R_unconf = std::vector<real_type>(shared->dim_H_R_unconf);
+  shared->initial_H_sev_occup = std::vector<real_type>(shared->dim_H_sev_occup);
   shared->initial_IFR_disag_weighted_inc = std::vector<real_type>(shared->dim_IFR_disag_weighted_inc);
   shared->initial_I_A = std::vector<real_type>(shared->dim_I_A);
   shared->initial_I_C_1 = std::vector<real_type>(shared->dim_I_C_1);
   shared->initial_I_C_2 = std::vector<real_type>(shared->dim_I_C_2);
   shared->initial_I_P = std::vector<real_type>(shared->dim_I_P);
   shared->initial_I_weighted = std::vector<real_type>(shared->dim_I_weighted);
+  shared->initial_P_H_rec = std::vector<real_type>(shared->dim_P_H_rec);
+  shared->initial_P_H_sev_D = std::vector<real_type>(shared->dim_P_H_sev_D);
+  shared->initial_P_H_sev_R = std::vector<real_type>(shared->dim_P_H_sev_R);
+  shared->initial_P_mild = std::vector<real_type>(shared->dim_P_mild);
   shared->initial_R = std::vector<real_type>(shared->dim_R);
   shared->initial_S = std::vector<real_type>(shared->dim_S);
   shared->initial_T_PCR_neg = std::vector<real_type>(shared->dim_T_PCR_neg);
@@ -3049,14 +3457,19 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   internal.n_I_C_2_NoHosp = std::vector<real_type>(shared->dim_n_I_C_2_NoHosp);
   internal.n_I_C_2_progress = std::vector<real_type>(shared->dim_n_I_C_2_progress);
   internal.n_I_C_2_to_G_D = std::vector<real_type>(shared->dim_n_I_C_2_to_G_D);
+  internal.n_I_C_2_to_G_D_hosp = std::vector<real_type>(shared->dim_n_I_C_2_to_G_D_hosp);
   internal.n_I_C_2_to_H_D = std::vector<real_type>(shared->dim_n_I_C_2_to_H_D);
   internal.n_I_C_2_to_H_D_conf = std::vector<real_type>(shared->dim_n_I_C_2_to_H_D_conf);
   internal.n_I_C_2_to_H_R = std::vector<real_type>(shared->dim_n_I_C_2_to_H_R);
   internal.n_I_C_2_to_H_R_conf = std::vector<real_type>(shared->dim_n_I_C_2_to_H_R_conf);
+  internal.n_I_C_2_to_H_sev = std::vector<real_type>(shared->dim_n_I_C_2_to_H_sev);
   internal.n_I_C_2_to_RS = std::vector<real_type>(shared->dim_n_I_C_2_to_RS);
   internal.n_I_C_2_to_hosp = std::vector<real_type>(shared->dim_n_I_C_2_to_hosp);
+  internal.n_I_C_2_to_mild = std::vector<real_type>(shared->dim_n_I_C_2_to_mild);
   internal.n_I_P_next_vacc_class = std::vector<real_type>(shared->dim_n_I_P_next_vacc_class);
   internal.n_I_P_progress = std::vector<real_type>(shared->dim_n_I_P_progress);
+  internal.n_P_H_sev_D_progress = std::vector<real_type>(shared->dim_n_P_H_sev_D_progress);
+  internal.n_P_H_sev_progress = std::vector<real_type>(shared->dim_n_P_H_sev_progress);
   internal.n_RE = std::vector<real_type>(shared->dim_n_RE);
   internal.n_RS = std::vector<real_type>(shared->dim_n_RS);
   internal.n_R_next_vacc_class = std::vector<real_type>(shared->dim_n_R_next_vacc_class);
@@ -3084,6 +3497,10 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   internal.new_I_C_2 = std::vector<real_type>(shared->dim_new_I_C_2);
   internal.new_I_P = std::vector<real_type>(shared->dim_new_I_P);
   internal.new_I_weighted = std::vector<real_type>(shared->dim_new_I_weighted);
+  internal.new_P_H_rec = std::vector<real_type>(shared->dim_new_P_H_rec);
+  internal.new_P_H_sev = std::vector<real_type>(shared->dim_new_P_H_sev);
+  internal.new_P_H_sev_D = std::vector<real_type>(shared->dim_new_P_H_sev_D);
+  internal.new_P_mild = std::vector<real_type>(shared->dim_new_P_mild);
   internal.new_R = std::vector<real_type>(shared->dim_new_R);
   internal.new_S = std::vector<real_type>(shared->dim_new_S);
   internal.new_T_PCR_neg = std::vector<real_type>(shared->dim_new_T_PCR_neg);
@@ -3093,6 +3510,7 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   internal.new_T_sero_pos = std::vector<real_type>(shared->dim_new_T_sero_pos);
   internal.new_T_sero_pre = std::vector<real_type>(shared->dim_new_T_sero_pre);
   internal.p_C = std::vector<real_type>(shared->dim_p_C);
+  internal.p_D_hosp = std::vector<real_type>(shared->dim_p_D_hosp);
   internal.p_E_next_vacc_class = std::vector<real_type>(shared->dim_p_E_next_vacc_class);
   internal.p_G_D = std::vector<real_type>(shared->dim_p_G_D);
   internal.p_H = std::vector<real_type>(shared->dim_p_H);
@@ -3104,6 +3522,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   internal.p_R_next_vacc_class = std::vector<real_type>(shared->dim_p_R_next_vacc_class);
   internal.p_SE = std::vector<real_type>(shared->dim_p_SE);
   internal.p_S_next_vacc_class = std::vector<real_type>(shared->dim_p_S_next_vacc_class);
+  internal.p_outpx = std::vector<real_type>(shared->dim_p_outpx);
+  internal.p_sev = std::vector<real_type>(shared->dim_p_sev);
   internal.s_ij = std::vector<real_type>(shared->dim_s_ij);
   internal.total_attempted_doses = std::vector<real_type>(shared->dim_total_attempted_doses);
   internal.vaccine_attempted_doses = std::vector<real_type>(shared->dim_vaccine_attempted_doses);
@@ -3146,6 +3566,11 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
       }
     }
   }
+  for (int i = 1; i <= shared->dim_H_D_occup_1; ++i) {
+    for (int j = 1; j <= shared->dim_H_D_occup_2; ++j) {
+      shared->initial_H_D_occup[i - 1 + shared->dim_H_D_occup_1 * (j - 1)] = 0;
+    }
+  }
   for (int i = 1; i <= shared->dim_H_D_unconf_1; ++i) {
     for (int j = 1; j <= shared->dim_H_D_unconf_2; ++j) {
       for (int k = 1; k <= shared->dim_H_D_unconf_3; ++k) {
@@ -3165,6 +3590,11 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
       for (int k = 1; k <= shared->dim_H_R_unconf_3; ++k) {
         shared->initial_H_R_unconf[i - 1 + shared->dim_H_R_unconf_1 * (j - 1) + shared->dim_H_R_unconf_12 * (k - 1)] = 0;
       }
+    }
+  }
+  for (int i = 1; i <= shared->dim_H_sev_occup_1; ++i) {
+    for (int j = 1; j <= shared->dim_H_sev_occup_2; ++j) {
+      shared->initial_H_sev_occup[i - 1 + shared->dim_H_sev_occup_1 * (j - 1)] = 0;
     }
   }
   for (int i = 1; i <= shared->dim_IFR_disag_weighted_inc_1; ++i) {
@@ -3195,6 +3625,30 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
   for (int i = 1; i <= shared->dim_I_weighted_1; ++i) {
     for (int j = 1; j <= shared->dim_I_weighted_2; ++j) {
       shared->initial_I_weighted[i - 1 + shared->dim_I_weighted_1 * (j - 1)] = 0;
+    }
+  }
+  for (int i = 1; i <= shared->dim_P_H_rec_1; ++i) {
+    for (int j = 1; j <= shared->dim_P_H_rec_2; ++j) {
+      shared->initial_P_H_rec[i - 1 + shared->dim_P_H_rec_1 * (j - 1)] = 0;
+    }
+  }
+  for (int i = 1; i <= shared->dim_P_H_sev_D_1; ++i) {
+    for (int j = 1; j <= shared->dim_P_H_sev_D_2; ++j) {
+      for (int k = 1; k <= shared->dim_P_H_sev_D_3; ++k) {
+        shared->initial_P_H_sev_D[i - 1 + shared->dim_P_H_sev_D_1 * (j - 1) + shared->dim_P_H_sev_D_12 * (k - 1)] = 0;
+      }
+    }
+  }
+  for (int i = 1; i <= shared->dim_P_H_sev_R_1; ++i) {
+    for (int j = 1; j <= shared->dim_P_H_sev_R_2; ++j) {
+      for (int k = 1; k <= shared->dim_P_H_sev_R_3; ++k) {
+        shared->initial_P_H_sev_R[i - 1 + shared->dim_P_H_sev_R_1 * (j - 1) + shared->dim_P_H_sev_R_12 * (k - 1)] = 0;
+      }
+    }
+  }
+  for (int i = 1; i <= shared->dim_P_mild_1; ++i) {
+    for (int j = 1; j <= shared->dim_P_mild_2; ++j) {
+      shared->initial_P_mild[i - 1 + shared->dim_P_mild_1 * (j - 1)] = 0;
     }
   }
   for (int i = 1; i <= shared->dim_R_1; ++i) {
@@ -3291,48 +3745,60 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
     }
   }
   shared->m = user_get_array_fixed<real_type, 2>(user, "m", shared->m, {shared->dim_m_1, shared->dim_m_2}, NA_REAL, NA_REAL);
-  shared->offset_variable_D = shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_D_hosp = shared->dim_D + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_D_non_hosp = shared->dim_D + shared->dim_D_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_E = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_G_D = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_H_D_conf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_H_D_unconf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_conf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_H_R_conf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_H_R_unconf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_R_conf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_IFR_disag_weighted_inc = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_I_A = shared->dim_N_tot + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_I_C_1 = shared->dim_I_A + shared->dim_I_P + shared->dim_N_tot + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_I_C_2 = shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_P + shared->dim_N_tot + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_I_P = shared->dim_I_A + shared->dim_N_tot + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_I_weighted = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_R = shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_T_PCR_neg = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_sero_neg + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_T_PCR_pos = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_T_PCR_pre = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_T_sero_neg = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_T_sero_pos = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_T_sero_pre + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_T_sero_pre = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_cum_n_E_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_cum_n_I_A_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_cum_n_I_P_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_cum_n_R_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_cum_n_S_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_cum_n_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
-  shared->offset_variable_tmp_vaccine_n_candidates = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_tmp_vaccine_probability = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 35;
-  shared->offset_variable_vaccine_missed_doses = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_mild_age + shared->dim_reinfections_inc_age + shared->dim_severe_age + shared->dim_yll_age + 35;
+  shared->offset_variable_D = shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_D_hosp = shared->dim_D + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_D_non_hosp = shared->dim_D + shared->dim_D_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_E = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_H_D_occup + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_G_D = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_H_D_conf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_occup + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_H_D_occup = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_H_D_unconf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_H_R_conf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_occup + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_H_R_unconf = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_H_D_occup + shared->dim_H_R_conf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_H_sev_occup = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_IFR_disag_weighted_inc = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_I_A = shared->dim_N_tot + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_I_C_1 = shared->dim_I_A + shared->dim_I_P + shared->dim_N_tot + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_I_C_2 = shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_P + shared->dim_N_tot + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_I_P = shared->dim_I_A + shared->dim_N_tot + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_I_weighted = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_P_H_rec = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_P_H_sev_D = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_H_sev_R + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pos + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_P_H_sev_R = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pos + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_P_mild = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_R = shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_T_PCR_neg = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_T_PCR_pos = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_PCR_pre + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_T_PCR_pre = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_T_sero_pos + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_T_sero_neg = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_T_sero_pos = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_T_sero_pre + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_T_sero_pre = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_E + shared->dim_G_D + shared->dim_H_D_conf + shared->dim_H_D_occup + shared->dim_H_D_unconf + shared->dim_H_R_conf + shared->dim_H_R_unconf + shared->dim_H_sev_occup + shared->dim_IFR_disag_weighted_inc + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_I_weighted + shared->dim_N_tot + shared->dim_P_H_rec + shared->dim_P_mild + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_tmp_vaccine_probability + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_cum_n_E_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cum_n_I_A_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cum_n_I_P_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cum_n_R_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cum_n_S_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_cum_n_vaccinated = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
+  shared->offset_variable_tmp_vaccine_n_candidates = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_tmp_vaccine_probability = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_tmp_vaccine_n_candidates + shared->dim_vaccine_missed_doses + shared->dim_yll_age + 36;
+  shared->offset_variable_vaccine_missed_doses = shared->dim_D + shared->dim_D_hosp + shared->dim_D_non_hosp + shared->dim_I_A + shared->dim_I_C_1 + shared->dim_I_C_2 + shared->dim_I_P + shared->dim_N_tot + shared->dim_R + shared->dim_S + shared->dim_T_PCR_neg + shared->dim_T_sero_neg + shared->dim_cases_age_mild + shared->dim_cases_age_severe + shared->dim_cum_n_E_vaccinated + shared->dim_cum_n_I_A_vaccinated + shared->dim_cum_n_I_P_vaccinated + shared->dim_cum_n_R_vaccinated + shared->dim_cum_n_S_vaccinated + shared->dim_cum_n_vaccinated + shared->dim_hosp_inc_age + shared->dim_ifr_age + shared->dim_infections_inc_age + shared->dim_reinfections_inc_age + shared->dim_yll_age + 36;
   shared->p_C_step = user_get_array_fixed<real_type, 2>(user, "p_C_step", shared->p_C_step, {shared->dim_p_C_step_1, shared->dim_p_C_step_2}, NA_REAL, NA_REAL);
+  shared->p_D_hosp_step = user_get_array_fixed<real_type, 2>(user, "p_D_hosp_step", shared->p_D_hosp_step, {shared->dim_p_D_hosp_step_1, shared->dim_p_D_hosp_step_2}, NA_REAL, NA_REAL);
   shared->p_G_D_step = user_get_array_fixed<real_type, 2>(user, "p_G_D_step", shared->p_G_D_step, {shared->dim_p_G_D_step_1, shared->dim_p_G_D_step_2}, NA_REAL, NA_REAL);
   shared->p_H_D_step = user_get_array_fixed<real_type, 2>(user, "p_H_D_step", shared->p_H_D_step, {shared->dim_p_H_D_step_1, shared->dim_p_H_D_step_2}, NA_REAL, NA_REAL);
   shared->p_H_step = user_get_array_fixed<real_type, 2>(user, "p_H_step", shared->p_H_step, {shared->dim_p_H_step_1, shared->dim_p_H_step_2}, NA_REAL, NA_REAL);
   shared->p_R_step = user_get_array_fixed<real_type, 2>(user, "p_R_step", shared->p_R_step, {shared->dim_p_R_step_1, shared->dim_p_R_step_2}, NA_REAL, NA_REAL);
+  shared->p_outpx_step = user_get_array_fixed<real_type, 2>(user, "p_outpx_step", shared->p_outpx_step, {shared->dim_p_outpx_step_1, shared->dim_p_outpx_step_2}, NA_REAL, NA_REAL);
+  shared->p_sev_step = user_get_array_fixed<real_type, 2>(user, "p_sev_step", shared->p_sev_step, {shared->dim_p_sev_step_1, shared->dim_p_sev_step_2}, NA_REAL, NA_REAL);
   shared->p_star_step = user_get_array_fixed<real_type, 2>(user, "p_star_step", shared->p_star_step, {shared->dim_p_star_step_1, shared->dim_p_star_step_2}, NA_REAL, NA_REAL);
   shared->rel_infectivity = user_get_array_fixed<real_type, 2>(user, "rel_infectivity", shared->rel_infectivity, {shared->dim_rel_infectivity_1, shared->dim_rel_infectivity_2}, NA_REAL, NA_REAL);
   shared->rel_p_G_D = user_get_array_fixed<real_type, 2>(user, "rel_p_G_D", shared->rel_p_G_D, {shared->dim_rel_p_G_D_1, shared->dim_rel_p_G_D_2}, NA_REAL, NA_REAL);
   shared->rel_p_H_D = user_get_array_fixed<real_type, 2>(user, "rel_p_H_D", shared->rel_p_H_D, {shared->dim_rel_p_H_D_1, shared->dim_rel_p_H_D_2}, NA_REAL, NA_REAL);
+  shared->rel_p_H_sev = user_get_array_fixed<real_type, 2>(user, "rel_p_H_sev", shared->rel_p_H_sev, {shared->dim_rel_p_H_sev_1, shared->dim_rel_p_H_sev_2}, NA_REAL, NA_REAL);
+  shared->rel_p_H_sev_D = user_get_array_fixed<real_type, 2>(user, "rel_p_H_sev_D", shared->rel_p_H_sev_D, {shared->dim_rel_p_H_sev_D_1, shared->dim_rel_p_H_sev_D_2}, NA_REAL, NA_REAL);
   shared->rel_p_R = user_get_array_fixed<real_type, 2>(user, "rel_p_R", shared->rel_p_R, {shared->dim_rel_p_R_1, shared->dim_rel_p_R_2}, NA_REAL, NA_REAL);
   shared->rel_p_hosp_if_sympt = user_get_array_fixed<real_type, 2>(user, "rel_p_hosp_if_sympt", shared->rel_p_hosp_if_sympt, {shared->dim_rel_p_hosp_if_sympt_1, shared->dim_rel_p_hosp_if_sympt_2}, NA_REAL, NA_REAL);
+  shared->rel_p_outpx = user_get_array_fixed<real_type, 2>(user, "rel_p_outpx", shared->rel_p_outpx, {shared->dim_rel_p_outpx_1, shared->dim_rel_p_outpx_2}, NA_REAL, NA_REAL);
   shared->rel_p_sympt = user_get_array_fixed<real_type, 2>(user, "rel_p_sympt", shared->rel_p_sympt, {shared->dim_rel_p_sympt_1, shared->dim_rel_p_sympt_2}, NA_REAL, NA_REAL);
   shared->rel_susceptibility = user_get_array_fixed<real_type, 2>(user, "rel_susceptibility", shared->rel_susceptibility, {shared->dim_rel_susceptibility_1, shared->dim_rel_susceptibility_2}, NA_REAL, NA_REAL);
   shared->vaccine_progression_rate_base = user_get_array_fixed<real_type, 2>(user, "vaccine_progression_rate_base", shared->vaccine_progression_rate_base, {shared->dim_vaccine_progression_rate_base_1, shared->dim_vaccine_progression_rate_base_2}, NA_REAL, NA_REAL);
@@ -3341,8 +3807,8 @@ dust::pars_type<ZamCovid> dust_pars<ZamCovid>(cpp11::list user) {
 template <>
 cpp11::sexp dust_info<ZamCovid>(const dust::pars_type<ZamCovid>& pars) {
   const std::shared_ptr<const ZamCovid::shared_type> shared = pars.shared;
-  cpp11::writable::strings nms({"time", "beta_out", "susceptible", "N_tot_sero", "N_tot_PCR", "infections_inc", "reinfections_inc", "sero_pos_all", "sero_pos_over15", "sero_pos_15_19", "sero_pos_20_29", "sero_pos_30_39", "sero_pos_40_49", "sero_pos_50_plus", "inf_cum_all", "inf_cum_over15", "inf_cum_15_19", "inf_cum_20_29", "inf_cum_30_39", "inf_cum_40_49", "inf_cum_50_plus", "ifr", "cum_admit_conf", "admit_conf_inc", "cum_deaths_hosp", "hosp_deaths_inc", "cum_deaths_comm", "comm_deaths_inc", "base_death_inc", "all_deaths_inc", "effective_susceptible", "protected_S_vaccinated", "protected_R_unvaccinated", "protected_R_vaccinated", "yll_tot", "N_tot", "infections_inc_age", "reinfections_inc_age", "ifr_age", "yll_age", "severe_age", "mild_age", "S", "I_A", "I_P", "I_C_1", "I_C_2", "R", "D", "D_hosp", "D_non_hosp", "T_sero_neg", "T_PCR_neg", "cum_n_vaccinated", "cum_n_S_vaccinated", "cum_n_E_vaccinated", "cum_n_I_A_vaccinated", "cum_n_I_P_vaccinated", "cum_n_R_vaccinated", "vaccine_missed_doses", "tmp_vaccine_n_candidates", "tmp_vaccine_probability", "I_weighted", "IFR_disag_weighted_inc", "E", "H_R_conf", "H_R_unconf", "H_D_conf", "H_D_unconf", "G_D", "T_sero_pre", "T_sero_pos", "T_PCR_pre", "T_PCR_pos"});
-  cpp11::writable::list dim(74);
+  cpp11::writable::strings nms({"time", "beta_out", "susceptible", "N_tot_sero", "N_tot_PCR", "infections_inc", "reinfections_inc", "sero_pos_all", "sero_pos_over15", "sero_pos_15_19", "sero_pos_20_29", "sero_pos_30_39", "sero_pos_40_49", "sero_pos_50_plus", "inf_cum_all", "inf_cum_over15", "inf_cum_15_19", "inf_cum_20_29", "inf_cum_30_39", "inf_cum_40_49", "inf_cum_50_plus", "ifr", "cum_admit_conf", "admit_conf_inc", "cum_deaths_hosp", "hosp_deaths_inc", "cum_deaths_comm", "comm_deaths_inc", "base_death_inc", "all_deaths_inc", "effective_susceptible", "protected_S_vaccinated", "protected_R_unvaccinated", "protected_R_vaccinated", "yll_tot", "hosp_inc", "N_tot", "infections_inc_age", "reinfections_inc_age", "ifr_age", "yll_age", "cases_age_severe", "cases_age_mild", "hosp_inc_age", "S", "I_A", "I_P", "I_C_1", "I_C_2", "R", "D", "D_hosp", "D_non_hosp", "T_sero_neg", "T_PCR_neg", "cum_n_vaccinated", "cum_n_S_vaccinated", "cum_n_E_vaccinated", "cum_n_I_A_vaccinated", "cum_n_I_P_vaccinated", "cum_n_R_vaccinated", "vaccine_missed_doses", "tmp_vaccine_n_candidates", "tmp_vaccine_probability", "I_weighted", "IFR_disag_weighted_inc", "P_H_rec", "P_mild", "H_sev_occup", "H_D_occup", "E", "H_R_conf", "H_R_unconf", "H_D_conf", "H_D_unconf", "G_D", "T_sero_pre", "T_sero_pos", "T_PCR_pre", "T_PCR_pos", "P_H_sev_R", "P_H_sev_D"});
+  cpp11::writable::list dim(82);
   dim[0] = cpp11::writable::integers({1});
   dim[1] = cpp11::writable::integers({1});
   dim[2] = cpp11::writable::integers({1});
@@ -3378,47 +3844,55 @@ cpp11::sexp dust_info<ZamCovid>(const dust::pars_type<ZamCovid>& pars) {
   dim[32] = cpp11::writable::integers({1});
   dim[33] = cpp11::writable::integers({1});
   dim[34] = cpp11::writable::integers({1});
-  dim[35] = cpp11::writable::integers({shared->dim_N_tot});
-  dim[36] = cpp11::writable::integers({shared->dim_infections_inc_age});
-  dim[37] = cpp11::writable::integers({shared->dim_reinfections_inc_age});
-  dim[38] = cpp11::writable::integers({shared->dim_ifr_age});
-  dim[39] = cpp11::writable::integers({shared->dim_yll_age});
-  dim[40] = cpp11::writable::integers({shared->dim_severe_age});
-  dim[41] = cpp11::writable::integers({shared->dim_mild_age});
-  dim[42] = cpp11::writable::integers({shared->dim_S_1, shared->dim_S_2});
-  dim[43] = cpp11::writable::integers({shared->dim_I_A_1, shared->dim_I_A_2});
-  dim[44] = cpp11::writable::integers({shared->dim_I_P_1, shared->dim_I_P_2});
-  dim[45] = cpp11::writable::integers({shared->dim_I_C_1_1, shared->dim_I_C_1_2});
-  dim[46] = cpp11::writable::integers({shared->dim_I_C_2_1, shared->dim_I_C_2_2});
-  dim[47] = cpp11::writable::integers({shared->dim_R_1, shared->dim_R_2});
-  dim[48] = cpp11::writable::integers({shared->dim_D_1, shared->dim_D_2});
-  dim[49] = cpp11::writable::integers({shared->dim_D_hosp_1, shared->dim_D_hosp_2});
-  dim[50] = cpp11::writable::integers({shared->dim_D_non_hosp_1, shared->dim_D_non_hosp_2});
-  dim[51] = cpp11::writable::integers({shared->dim_T_sero_neg_1, shared->dim_T_sero_neg_2});
-  dim[52] = cpp11::writable::integers({shared->dim_T_PCR_neg_1, shared->dim_T_PCR_neg_2});
-  dim[53] = cpp11::writable::integers({shared->dim_cum_n_vaccinated_1, shared->dim_cum_n_vaccinated_2});
-  dim[54] = cpp11::writable::integers({shared->dim_cum_n_S_vaccinated_1, shared->dim_cum_n_S_vaccinated_2});
-  dim[55] = cpp11::writable::integers({shared->dim_cum_n_E_vaccinated_1, shared->dim_cum_n_E_vaccinated_2});
-  dim[56] = cpp11::writable::integers({shared->dim_cum_n_I_A_vaccinated_1, shared->dim_cum_n_I_A_vaccinated_2});
-  dim[57] = cpp11::writable::integers({shared->dim_cum_n_I_P_vaccinated_1, shared->dim_cum_n_I_P_vaccinated_2});
-  dim[58] = cpp11::writable::integers({shared->dim_cum_n_R_vaccinated_1, shared->dim_cum_n_R_vaccinated_2});
-  dim[59] = cpp11::writable::integers({shared->dim_vaccine_missed_doses_1, shared->dim_vaccine_missed_doses_2});
-  dim[60] = cpp11::writable::integers({shared->dim_tmp_vaccine_n_candidates_1, shared->dim_tmp_vaccine_n_candidates_2});
-  dim[61] = cpp11::writable::integers({shared->dim_tmp_vaccine_probability_1, shared->dim_tmp_vaccine_probability_2});
-  dim[62] = cpp11::writable::integers({shared->dim_I_weighted_1, shared->dim_I_weighted_2});
-  dim[63] = cpp11::writable::integers({shared->dim_IFR_disag_weighted_inc_1, shared->dim_IFR_disag_weighted_inc_2});
-  dim[64] = cpp11::writable::integers({shared->dim_E_1, shared->dim_E_2, shared->dim_E_3});
-  dim[65] = cpp11::writable::integers({shared->dim_H_R_conf_1, shared->dim_H_R_conf_2, shared->dim_H_R_conf_3});
-  dim[66] = cpp11::writable::integers({shared->dim_H_R_unconf_1, shared->dim_H_R_unconf_2, shared->dim_H_R_unconf_3});
-  dim[67] = cpp11::writable::integers({shared->dim_H_D_conf_1, shared->dim_H_D_conf_2, shared->dim_H_D_conf_3});
-  dim[68] = cpp11::writable::integers({shared->dim_H_D_unconf_1, shared->dim_H_D_unconf_2, shared->dim_H_D_unconf_3});
-  dim[69] = cpp11::writable::integers({shared->dim_G_D_1, shared->dim_G_D_2, shared->dim_G_D_3});
-  dim[70] = cpp11::writable::integers({shared->dim_T_sero_pre_1, shared->dim_T_sero_pre_2, shared->dim_T_sero_pre_3});
-  dim[71] = cpp11::writable::integers({shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_2, shared->dim_T_sero_pos_3});
-  dim[72] = cpp11::writable::integers({shared->dim_T_PCR_pre_1, shared->dim_T_PCR_pre_2, shared->dim_T_PCR_pre_3});
-  dim[73] = cpp11::writable::integers({shared->dim_T_PCR_pos_1, shared->dim_T_PCR_pos_2, shared->dim_T_PCR_pos_3});
+  dim[35] = cpp11::writable::integers({1});
+  dim[36] = cpp11::writable::integers({shared->dim_N_tot});
+  dim[37] = cpp11::writable::integers({shared->dim_infections_inc_age});
+  dim[38] = cpp11::writable::integers({shared->dim_reinfections_inc_age});
+  dim[39] = cpp11::writable::integers({shared->dim_ifr_age});
+  dim[40] = cpp11::writable::integers({shared->dim_yll_age});
+  dim[41] = cpp11::writable::integers({shared->dim_cases_age_severe});
+  dim[42] = cpp11::writable::integers({shared->dim_cases_age_mild});
+  dim[43] = cpp11::writable::integers({shared->dim_hosp_inc_age});
+  dim[44] = cpp11::writable::integers({shared->dim_S_1, shared->dim_S_2});
+  dim[45] = cpp11::writable::integers({shared->dim_I_A_1, shared->dim_I_A_2});
+  dim[46] = cpp11::writable::integers({shared->dim_I_P_1, shared->dim_I_P_2});
+  dim[47] = cpp11::writable::integers({shared->dim_I_C_1_1, shared->dim_I_C_1_2});
+  dim[48] = cpp11::writable::integers({shared->dim_I_C_2_1, shared->dim_I_C_2_2});
+  dim[49] = cpp11::writable::integers({shared->dim_R_1, shared->dim_R_2});
+  dim[50] = cpp11::writable::integers({shared->dim_D_1, shared->dim_D_2});
+  dim[51] = cpp11::writable::integers({shared->dim_D_hosp_1, shared->dim_D_hosp_2});
+  dim[52] = cpp11::writable::integers({shared->dim_D_non_hosp_1, shared->dim_D_non_hosp_2});
+  dim[53] = cpp11::writable::integers({shared->dim_T_sero_neg_1, shared->dim_T_sero_neg_2});
+  dim[54] = cpp11::writable::integers({shared->dim_T_PCR_neg_1, shared->dim_T_PCR_neg_2});
+  dim[55] = cpp11::writable::integers({shared->dim_cum_n_vaccinated_1, shared->dim_cum_n_vaccinated_2});
+  dim[56] = cpp11::writable::integers({shared->dim_cum_n_S_vaccinated_1, shared->dim_cum_n_S_vaccinated_2});
+  dim[57] = cpp11::writable::integers({shared->dim_cum_n_E_vaccinated_1, shared->dim_cum_n_E_vaccinated_2});
+  dim[58] = cpp11::writable::integers({shared->dim_cum_n_I_A_vaccinated_1, shared->dim_cum_n_I_A_vaccinated_2});
+  dim[59] = cpp11::writable::integers({shared->dim_cum_n_I_P_vaccinated_1, shared->dim_cum_n_I_P_vaccinated_2});
+  dim[60] = cpp11::writable::integers({shared->dim_cum_n_R_vaccinated_1, shared->dim_cum_n_R_vaccinated_2});
+  dim[61] = cpp11::writable::integers({shared->dim_vaccine_missed_doses_1, shared->dim_vaccine_missed_doses_2});
+  dim[62] = cpp11::writable::integers({shared->dim_tmp_vaccine_n_candidates_1, shared->dim_tmp_vaccine_n_candidates_2});
+  dim[63] = cpp11::writable::integers({shared->dim_tmp_vaccine_probability_1, shared->dim_tmp_vaccine_probability_2});
+  dim[64] = cpp11::writable::integers({shared->dim_I_weighted_1, shared->dim_I_weighted_2});
+  dim[65] = cpp11::writable::integers({shared->dim_IFR_disag_weighted_inc_1, shared->dim_IFR_disag_weighted_inc_2});
+  dim[66] = cpp11::writable::integers({shared->dim_P_H_rec_1, shared->dim_P_H_rec_2});
+  dim[67] = cpp11::writable::integers({shared->dim_P_mild_1, shared->dim_P_mild_2});
+  dim[68] = cpp11::writable::integers({shared->dim_H_sev_occup_1, shared->dim_H_sev_occup_2});
+  dim[69] = cpp11::writable::integers({shared->dim_H_D_occup_1, shared->dim_H_D_occup_2});
+  dim[70] = cpp11::writable::integers({shared->dim_E_1, shared->dim_E_2, shared->dim_E_3});
+  dim[71] = cpp11::writable::integers({shared->dim_H_R_conf_1, shared->dim_H_R_conf_2, shared->dim_H_R_conf_3});
+  dim[72] = cpp11::writable::integers({shared->dim_H_R_unconf_1, shared->dim_H_R_unconf_2, shared->dim_H_R_unconf_3});
+  dim[73] = cpp11::writable::integers({shared->dim_H_D_conf_1, shared->dim_H_D_conf_2, shared->dim_H_D_conf_3});
+  dim[74] = cpp11::writable::integers({shared->dim_H_D_unconf_1, shared->dim_H_D_unconf_2, shared->dim_H_D_unconf_3});
+  dim[75] = cpp11::writable::integers({shared->dim_G_D_1, shared->dim_G_D_2, shared->dim_G_D_3});
+  dim[76] = cpp11::writable::integers({shared->dim_T_sero_pre_1, shared->dim_T_sero_pre_2, shared->dim_T_sero_pre_3});
+  dim[77] = cpp11::writable::integers({shared->dim_T_sero_pos_1, shared->dim_T_sero_pos_2, shared->dim_T_sero_pos_3});
+  dim[78] = cpp11::writable::integers({shared->dim_T_PCR_pre_1, shared->dim_T_PCR_pre_2, shared->dim_T_PCR_pre_3});
+  dim[79] = cpp11::writable::integers({shared->dim_T_PCR_pos_1, shared->dim_T_PCR_pos_2, shared->dim_T_PCR_pos_3});
+  dim[80] = cpp11::writable::integers({shared->dim_P_H_sev_R_1, shared->dim_P_H_sev_R_2, shared->dim_P_H_sev_R_3});
+  dim[81] = cpp11::writable::integers({shared->dim_P_H_sev_D_1, shared->dim_P_H_sev_D_2, shared->dim_P_H_sev_D_3});
   dim.names() = nms;
-  cpp11::writable::list index(74);
+  cpp11::writable::list index(82);
   index[0] = cpp11::writable::integers({1});
   index[1] = cpp11::writable::integers({2});
   index[2] = cpp11::writable::integers({3});
@@ -3454,47 +3928,55 @@ cpp11::sexp dust_info<ZamCovid>(const dust::pars_type<ZamCovid>& pars) {
   index[32] = cpp11::writable::integers({33});
   index[33] = cpp11::writable::integers({34});
   index[34] = cpp11::writable::integers({35});
-  index[35] = integer_sequence(36, shared->dim_N_tot);
-  index[36] = integer_sequence(shared->offset_variable_infections_inc_age + 1, shared->dim_infections_inc_age);
-  index[37] = integer_sequence(shared->offset_variable_reinfections_inc_age + 1, shared->dim_reinfections_inc_age);
-  index[38] = integer_sequence(shared->offset_variable_ifr_age + 1, shared->dim_ifr_age);
-  index[39] = integer_sequence(shared->offset_variable_yll_age + 1, shared->dim_yll_age);
-  index[40] = integer_sequence(shared->offset_variable_severe_age + 1, shared->dim_severe_age);
-  index[41] = integer_sequence(shared->offset_variable_mild_age + 1, shared->dim_mild_age);
-  index[42] = integer_sequence(shared->offset_variable_S + 1, shared->dim_S);
-  index[43] = integer_sequence(shared->offset_variable_I_A + 1, shared->dim_I_A);
-  index[44] = integer_sequence(shared->offset_variable_I_P + 1, shared->dim_I_P);
-  index[45] = integer_sequence(shared->offset_variable_I_C_1 + 1, shared->dim_I_C_1);
-  index[46] = integer_sequence(shared->offset_variable_I_C_2 + 1, shared->dim_I_C_2);
-  index[47] = integer_sequence(shared->offset_variable_R + 1, shared->dim_R);
-  index[48] = integer_sequence(shared->offset_variable_D + 1, shared->dim_D);
-  index[49] = integer_sequence(shared->offset_variable_D_hosp + 1, shared->dim_D_hosp);
-  index[50] = integer_sequence(shared->offset_variable_D_non_hosp + 1, shared->dim_D_non_hosp);
-  index[51] = integer_sequence(shared->offset_variable_T_sero_neg + 1, shared->dim_T_sero_neg);
-  index[52] = integer_sequence(shared->offset_variable_T_PCR_neg + 1, shared->dim_T_PCR_neg);
-  index[53] = integer_sequence(shared->offset_variable_cum_n_vaccinated + 1, shared->dim_cum_n_vaccinated);
-  index[54] = integer_sequence(shared->offset_variable_cum_n_S_vaccinated + 1, shared->dim_cum_n_S_vaccinated);
-  index[55] = integer_sequence(shared->offset_variable_cum_n_E_vaccinated + 1, shared->dim_cum_n_E_vaccinated);
-  index[56] = integer_sequence(shared->offset_variable_cum_n_I_A_vaccinated + 1, shared->dim_cum_n_I_A_vaccinated);
-  index[57] = integer_sequence(shared->offset_variable_cum_n_I_P_vaccinated + 1, shared->dim_cum_n_I_P_vaccinated);
-  index[58] = integer_sequence(shared->offset_variable_cum_n_R_vaccinated + 1, shared->dim_cum_n_R_vaccinated);
-  index[59] = integer_sequence(shared->offset_variable_vaccine_missed_doses + 1, shared->dim_vaccine_missed_doses);
-  index[60] = integer_sequence(shared->offset_variable_tmp_vaccine_n_candidates + 1, shared->dim_tmp_vaccine_n_candidates);
-  index[61] = integer_sequence(shared->offset_variable_tmp_vaccine_probability + 1, shared->dim_tmp_vaccine_probability);
-  index[62] = integer_sequence(shared->offset_variable_I_weighted + 1, shared->dim_I_weighted);
-  index[63] = integer_sequence(shared->offset_variable_IFR_disag_weighted_inc + 1, shared->dim_IFR_disag_weighted_inc);
-  index[64] = integer_sequence(shared->offset_variable_E + 1, shared->dim_E);
-  index[65] = integer_sequence(shared->offset_variable_H_R_conf + 1, shared->dim_H_R_conf);
-  index[66] = integer_sequence(shared->offset_variable_H_R_unconf + 1, shared->dim_H_R_unconf);
-  index[67] = integer_sequence(shared->offset_variable_H_D_conf + 1, shared->dim_H_D_conf);
-  index[68] = integer_sequence(shared->offset_variable_H_D_unconf + 1, shared->dim_H_D_unconf);
-  index[69] = integer_sequence(shared->offset_variable_G_D + 1, shared->dim_G_D);
-  index[70] = integer_sequence(shared->offset_variable_T_sero_pre + 1, shared->dim_T_sero_pre);
-  index[71] = integer_sequence(shared->offset_variable_T_sero_pos + 1, shared->dim_T_sero_pos);
-  index[72] = integer_sequence(shared->offset_variable_T_PCR_pre + 1, shared->dim_T_PCR_pre);
-  index[73] = integer_sequence(shared->offset_variable_T_PCR_pos + 1, shared->dim_T_PCR_pos);
+  index[35] = cpp11::writable::integers({36});
+  index[36] = integer_sequence(37, shared->dim_N_tot);
+  index[37] = integer_sequence(shared->offset_variable_infections_inc_age + 1, shared->dim_infections_inc_age);
+  index[38] = integer_sequence(shared->offset_variable_reinfections_inc_age + 1, shared->dim_reinfections_inc_age);
+  index[39] = integer_sequence(shared->offset_variable_ifr_age + 1, shared->dim_ifr_age);
+  index[40] = integer_sequence(shared->offset_variable_yll_age + 1, shared->dim_yll_age);
+  index[41] = integer_sequence(shared->offset_variable_cases_age_severe + 1, shared->dim_cases_age_severe);
+  index[42] = integer_sequence(shared->offset_variable_cases_age_mild + 1, shared->dim_cases_age_mild);
+  index[43] = integer_sequence(shared->offset_variable_hosp_inc_age + 1, shared->dim_hosp_inc_age);
+  index[44] = integer_sequence(shared->offset_variable_S + 1, shared->dim_S);
+  index[45] = integer_sequence(shared->offset_variable_I_A + 1, shared->dim_I_A);
+  index[46] = integer_sequence(shared->offset_variable_I_P + 1, shared->dim_I_P);
+  index[47] = integer_sequence(shared->offset_variable_I_C_1 + 1, shared->dim_I_C_1);
+  index[48] = integer_sequence(shared->offset_variable_I_C_2 + 1, shared->dim_I_C_2);
+  index[49] = integer_sequence(shared->offset_variable_R + 1, shared->dim_R);
+  index[50] = integer_sequence(shared->offset_variable_D + 1, shared->dim_D);
+  index[51] = integer_sequence(shared->offset_variable_D_hosp + 1, shared->dim_D_hosp);
+  index[52] = integer_sequence(shared->offset_variable_D_non_hosp + 1, shared->dim_D_non_hosp);
+  index[53] = integer_sequence(shared->offset_variable_T_sero_neg + 1, shared->dim_T_sero_neg);
+  index[54] = integer_sequence(shared->offset_variable_T_PCR_neg + 1, shared->dim_T_PCR_neg);
+  index[55] = integer_sequence(shared->offset_variable_cum_n_vaccinated + 1, shared->dim_cum_n_vaccinated);
+  index[56] = integer_sequence(shared->offset_variable_cum_n_S_vaccinated + 1, shared->dim_cum_n_S_vaccinated);
+  index[57] = integer_sequence(shared->offset_variable_cum_n_E_vaccinated + 1, shared->dim_cum_n_E_vaccinated);
+  index[58] = integer_sequence(shared->offset_variable_cum_n_I_A_vaccinated + 1, shared->dim_cum_n_I_A_vaccinated);
+  index[59] = integer_sequence(shared->offset_variable_cum_n_I_P_vaccinated + 1, shared->dim_cum_n_I_P_vaccinated);
+  index[60] = integer_sequence(shared->offset_variable_cum_n_R_vaccinated + 1, shared->dim_cum_n_R_vaccinated);
+  index[61] = integer_sequence(shared->offset_variable_vaccine_missed_doses + 1, shared->dim_vaccine_missed_doses);
+  index[62] = integer_sequence(shared->offset_variable_tmp_vaccine_n_candidates + 1, shared->dim_tmp_vaccine_n_candidates);
+  index[63] = integer_sequence(shared->offset_variable_tmp_vaccine_probability + 1, shared->dim_tmp_vaccine_probability);
+  index[64] = integer_sequence(shared->offset_variable_I_weighted + 1, shared->dim_I_weighted);
+  index[65] = integer_sequence(shared->offset_variable_IFR_disag_weighted_inc + 1, shared->dim_IFR_disag_weighted_inc);
+  index[66] = integer_sequence(shared->offset_variable_P_H_rec + 1, shared->dim_P_H_rec);
+  index[67] = integer_sequence(shared->offset_variable_P_mild + 1, shared->dim_P_mild);
+  index[68] = integer_sequence(shared->offset_variable_H_sev_occup + 1, shared->dim_H_sev_occup);
+  index[69] = integer_sequence(shared->offset_variable_H_D_occup + 1, shared->dim_H_D_occup);
+  index[70] = integer_sequence(shared->offset_variable_E + 1, shared->dim_E);
+  index[71] = integer_sequence(shared->offset_variable_H_R_conf + 1, shared->dim_H_R_conf);
+  index[72] = integer_sequence(shared->offset_variable_H_R_unconf + 1, shared->dim_H_R_unconf);
+  index[73] = integer_sequence(shared->offset_variable_H_D_conf + 1, shared->dim_H_D_conf);
+  index[74] = integer_sequence(shared->offset_variable_H_D_unconf + 1, shared->dim_H_D_unconf);
+  index[75] = integer_sequence(shared->offset_variable_G_D + 1, shared->dim_G_D);
+  index[76] = integer_sequence(shared->offset_variable_T_sero_pre + 1, shared->dim_T_sero_pre);
+  index[77] = integer_sequence(shared->offset_variable_T_sero_pos + 1, shared->dim_T_sero_pos);
+  index[78] = integer_sequence(shared->offset_variable_T_PCR_pre + 1, shared->dim_T_PCR_pre);
+  index[79] = integer_sequence(shared->offset_variable_T_PCR_pos + 1, shared->dim_T_PCR_pos);
+  index[80] = integer_sequence(shared->offset_variable_P_H_sev_R + 1, shared->dim_P_H_sev_R);
+  index[81] = integer_sequence(shared->offset_variable_P_H_sev_D + 1, shared->dim_P_H_sev_D);
   index.names() = nms;
-  size_t len = shared->offset_variable_T_PCR_pos + shared->dim_T_PCR_pos;
+  size_t len = shared->offset_variable_P_H_sev_D + shared->dim_P_H_sev_D;
   using namespace cpp11::literals;
   return cpp11::writable::list({
            "dim"_nm = dim,

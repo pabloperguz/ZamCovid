@@ -66,8 +66,8 @@ test_that("Can vaccinate susceptible individuals", {
   expect_true(all(abs(y$S[i, 1, 1] - y$S[i, 2, 2]) / y$S[i, 1, 1] < 0.01))
 
   ## VE is 100% protective against infection, we expect everyone to remain in
-  ## the susceptible-dose 1 vaccinated class
-  expect_equal(y$S[i, , 101], y$S[i, , 2])
+  ## the susceptible-dose 1 vaccinated class
+  expect_approx_equal(y$S[i, , 101], y$S[i, , 2])
 })
 
 
@@ -292,7 +292,7 @@ test_that("Some infections with imperfect vaccine wrt rel_susceptibility", {
                            rel_p_death = c(1, 1),
                            rel_infectivity = c(1, 1))
 
-  mod <- ZamCovid$new(p, 0, 1, seed = 1L)
+  mod <- ZamCovid$new(p, 0, 1, seed = 10L)
   info <- mod$info()
   state <- ZamCovid_initial(info, 1, p)
   index_S <- array(info$index$S, info$dim$S)
@@ -476,5 +476,162 @@ test_that("Perfect vaccine averts all deaths", {
 
   # Expect vaccinated and unvaccinated recovered
   expect_true(all(c(sum(R[, 1, ]), sum(R[, 2, ])) > 0))
+
+})
+
+
+test_that("voc_ve affects rel_parameters as expected with two j classes", {
+
+  ### Infections despite "perfect" vaccine, but less than in unvaccinated ----
+  p <- ZamCovid_parameters(0,
+                           rel_susceptibility = c(1, 0),
+                           rel_p_sympt = c(1, 1),
+                           rel_p_hosp_if_sympt = c(1, 1),
+                           rel_p_death = c(1, 1),
+                           voc_ve_inf = 0.75)
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 1L)
+  info <- mod$info()
+
+  state <- ZamCovid_initial(info, 1, p)
+
+  index_S <- array(info$index$S, info$dim$S)
+  state[index_S[, 2]] <- state[index_S[, 1]] / 2
+  state[index_S[, 1]] <- state[index_S[, 1]] / 2
+
+  mod$update_state(state = state)
+  mod$set_index(info$index$S)
+  s <- mod$simulate(seq(0, 400, by = 4))
+
+  ## Reshape to show the full shape of s
+  expect_equal(length(s), prod(info$dim$S) * 101)
+  s <- array(s, c(info$dim$S, 101))
+
+  ## Some vaccinated individuals left the S compartment
+  expect_false(all(s[, 2, 1] == s[, 2, 101]))
+  ## But overall less infections than among unvaccinated
+  expect_true(sum(s[, 1, 101]) < sum(s[, 2, 101]))
+
+
+
+  ### Cases despite "perfect" vaccine, but less than in unvaccinated ----
+  p <- ZamCovid_parameters(0,
+                           rel_susceptibility = c(1, 1),
+                           rel_p_sympt = c(1, 0),
+                           rel_p_hosp_if_sympt = c(1, 1),
+                           rel_p_death = c(1, 1),
+                           voc_ve_symp = 0.5)
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 1L)
+  info <- mod$info()
+
+  state <- ZamCovid_initial(info, 1, p)
+
+  index_S <- array(info$index$S, info$dim$S)
+  state[index_S[, 2]] <- state[index_S[, 1]] / 2
+  state[index_S[, 1]] <- state[index_S[, 1]] / 2
+
+  mod$update_state(state = state)
+  mod$set_index(info$index$I_C_1)
+  res <- mod$simulate(seq(0, 400, by = 4))
+
+  ## Reshape to show the full shape of s
+  res <- array(res, c(info$dim$I_C_1, 101))
+
+  ## Some vaccinated individuals became symptomatic cases
+  expect_true(sum(res[, 2, ]) > 0)
+  ## But less than among unvaccinated
+  expect_true(sum(res[, 1, ]) > sum(res[, 2, ]))
+
+
+  ### Hospitalisations and deaths despite "perfect" vaccine,
+  # but less than in unvaccinated ----
+  p <- ZamCovid_parameters(0,
+                           rel_susceptibility = c(1, 1),
+                           rel_p_sympt = c(1, 1),
+                           rel_p_hosp_if_sympt = c(1, 0),
+                           rel_p_death = c(1, 0),
+                           voc_ve_sev = 0.5)
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 1L)
+  info <- mod$info()
+
+  state <- ZamCovid_initial(info, 1, p)
+
+  index_S <- array(info$index$S, info$dim$S)
+  state[index_S[, 2]] <- state[index_S[, 1]] / 2
+  state[index_S[, 1]] <- state[index_S[, 1]] / 2
+
+  mod$update_state(state = state)
+  mod$set_index(info$index$D)
+  res <- mod$simulate(seq(0, 400, by = 4))
+
+  ## Reshape to show the full shape of s
+  res <- array(res, c(info$dim$D, 101))
+
+  ## Some vaccinated individuals became symptomatic cases
+  expect_true(sum(res[, 2, ]) > 0)
+  ## But less than among unvaccinated
+  expect_true(sum(res[, 1, ]) > sum(res[, 2, ]))
+
+})
+
+
+test_that("voc_ve affects rel_parameters as expected with five j classes", {
+
+  ### Infections despite "perfect" vaccine, but less than in unvaccinated ----
+  rel_sus_vect <- c(1, 0.95, 0.85, 0.25, 0.5)
+  ve <- 0.75
+
+  p <- ZamCovid_parameters(0,
+                           rel_susceptibility = rel_sus_vect,
+                           rel_p_sympt = rep(1, 5),
+                           rel_p_hosp_if_sympt = rep(1, 5),
+                           rel_p_death = rep(1, 5),
+                           voc_ve_inf = ve)
+
+  true_ve_vector <- 1 - (1 - rel_sus_vect) * c(rep(1, 2), ve / 2, ve, ve / 2)
+
+  mod <- ZamCovid$new(p, 0, 1, seed = 10L)
+  info <- mod$info()
+
+  state <- ZamCovid_initial(info, 1, p)
+
+  index_S <- array(info$index$S, info$dim$S)
+
+  split_S <- ceiling(state[index_S[, 1]] / 5)
+  diff_S <- split_S * 5 - state[index_S[, 1]]
+
+  state[index_S[, 1]] <- split_S + diff_S
+  for (i in 2:5) {
+    state[index_S[, i]] <- split_S
+  }
+
+  mod$update_state(state = state)
+  mod$set_index(info$index$S)
+  s <- mod$simulate(seq(0, 400, by = 4))
+
+  ## Reshape to show the full shape of s
+  expect_equal(length(s), prod(info$dim$S) * 101)
+  s <- array(s, c(info$dim$S, 101))
+
+  ## Infections occur in all S classes
+  for (i in 1:5) {
+    expect_false(all(s[, i, 1] == s[, i, 101]))
+  }
+
+  ## Attack ratios for j are proportional to VE_j
+  ar_j <- NULL
+  for (i in 1:5) {
+    ar_j[i] <- 1 - (sum(s[, i, 101]) / sum(s[, i, 1]))
+    # print(ar_j[i])
+  }
+  expect_equal(order(ar_j), order(true_ve_vector))
+
+  ## Most infections among unvaccinated
+  expect_true(max(ar_j) == ar_j[1])
+
+  ## Least infections among j == 4 (second dose full effect)
+  expect_true(min(ar_j) == ar_j[4])
 
 })

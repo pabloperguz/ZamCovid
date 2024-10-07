@@ -12,7 +12,7 @@ test_that("can run ZamCovid model", {
   mod$update_state(state = initial)
 
   res <- mod$run(end)
-  expect_equal(c(819, 5), dim(res))
+  expect_equal(c(932, 5), dim(res))
 
   index <- ZamCovid_index(info)$run
 
@@ -20,33 +20,34 @@ test_that("can run ZamCovid model", {
   res <- mod$run(end)
 
   expected <- rbind(
-    time =             c(274.0,      274,      274,      274,      274),
-    infections_inc =     c(0.0,      441,      414,      236,      300),
-    reinfections_inc =   c(0.0,       19,       24,       14,       20),
-    admitted_inc =       c(0.0,        1,        2,        0,        0),
-    deaths_hosp_inc =    c(0.0,        8,        2,        5,        2),
-    deaths_comm_inc =    c(0.0,       90,       96,       46,       63),
-    base_death_inc =     c(0.0,        0,        0,        0,        0),
-    deaths_all_inc =     c(0.0,       70,       72,       42,       46),
-    deaths_cum_hosp =    c(0.0,    14374,    14578,    14644,    14736),
-    deaths_cum_comm =    c(0.0,   990537,   991458,   990996,   991855),
-    sero_pos_all =       c(0.0,  2578183,  2580027,  2093048,  2227440),
-    sero_pos_over15 =    c(0.0,  1500464,  1499770,  1215733,  1294641),
-    sero_pos_15_19 =     c(0.0,   308283,   307152,   249633,   265300),
-    sero_pos_20_29 =     c(0.0,   446149,   446504,   361405,   385586),
-    sero_pos_30_39 =     c(0.0,   329893,   329645,   267284,   285029),
-    sero_pos_40_49 =     c(0.0,   213917,   214045,   172901,   184010),
-    sero_pos_50_plus =   c(0.0,   202222,   202424,   164510,   174716),
-    inf_cum_all =       c(82.0, 29505030, 29506753, 29510743, 29509910),
-    inf_cum_over15 =    c(57.0, 17309032, 17304941, 17310664, 17308576),
-    inf_cum_15_19 =     c(43.0,  3531419,  3528091,  3530500,  3530431),
-    inf_cum_20_29 =      c(7.0,  5090923,  5092265,  5089952,  5086009),
-    inf_cum_30_39 =      c(5.0,  3831326,  3831126,  3831118,  3834269),
-    inf_cum_40_49 =      c(0.0,  2499790,  2499633,  2499643,  2501890),
-    inf_cum_50_plus =    c(2.0,  2355574,  2353826,  2359451,  2355977),
-    immune_S_vacc =      c(0.0,        0,        0,        0,        0),
-    immune_R_vacc =      c(0.0,        0,        0,        0,        0),
-    immune_R_unvacc =   c(22.8,  9453252,  9453460,  9383739,  9405667))
+    time =                  c(274,      274,      274,      274,      274),
+    infections_inc =       c(8435,      251,     3298,      228,      252),
+    reinfections_inc =      c(587,       20,      242,       11,       12),
+    hosp_inc =              c(304,        9,       95,        6,        5),
+    admitted_inc =           c(12,        0,        5,        0,        0),
+    deaths_hosp_inc =        c(50,        0,       20,        2,        1),
+    deaths_comm_inc =      c(1861,       51,      686,       47,       49),
+    base_death_inc =          c(0,        0,        0,        0,        0),
+    deaths_all_inc =       c(1438,       35,      517,       42,       38),
+    deaths_cum_hosp =     c(13701,    14697,    14500,    14709,    14661),
+    deaths_cum_comm =    c(970545,   987774,   986790,   990061,   992018),
+    sero_pos_all =      c(5183117,  1998387,  4388864,  2039129,  2092334),
+    sero_pos_over15 =   c(3031613,  1160838,  2560974,  1184134,  1215783),
+    sero_pos_15_19 =     c(619864,   239112,   523476,   242727,   248705),
+    sero_pos_20_29 =     c(893945,   345388,   758181,   352520,   361808),
+    sero_pos_30_39 =     c(670298,   254398,   565229,   261177,   267346),
+    sero_pos_40_49 =     c(436732,   165261,   367256,   167976,   173343),
+    sero_pos_50_plus =   c(410774,   156679,   346832,   159734,   164581),
+    inf_cum_all =      c(29275139, 29471071, 29439930, 29519482, 29513891),
+    inf_cum_over15 =   c(17172239, 17284775, 17264676, 17314559, 17306170),
+    inf_cum_15_19 =     c(3499062,  3525771,  3516340,  3531173,  3526723),
+    inf_cum_20_29 =     c(5046915,  5080656,  5076318,  5088291,  5084757),
+    inf_cum_30_39 =     c(3805080,  3828396,  3823880,  3835279,  3837186),
+    inf_cum_40_49 =     c(2482226,  2496447,  2496716,  2500531,  2501333),
+    inf_cum_50_plus =   c(2338956,  2353505,  2351422,  2359285,  2356171),
+    immune_S_vacc =           c(0,        0,        0,        0,        0),
+    immune_R_vacc =           c(0,        0,        0,        0,        0),
+    immune_R_unvacc =   c(9652708,  9358293,  9631820,  9381036,  9386076))
 
   expect_equal(floor(res), floor(expected))
 })
@@ -232,6 +233,71 @@ test_that("Can calculate YLL", {
     all(round(res["D_65", ] * p$life_exp[14]) == round(res["yll_age_65", ])))
 
 })
+
+
+test_that("can re-seed other waves", {
+
+  ## Only one wave with initial seed
+  start_date <- numeric_date("2020-01-01")
+  n_particles <- 10
+  p <- ZamCovid_parameters(start_date)
+  mod <- ZamCovid$new(p, 4, n_particles)
+  end <- numeric_date("2021-12-31") / p$dt
+
+  info <- mod$info()
+
+  initial <- ZamCovid_initial(info, n_particles, p)
+  mod$update_state(state = initial)
+
+  t <- seq(4, end, by = 4)
+  res <- mod$simulate(t)
+
+  n_E <- res[info$index$E, , ]
+  n_E <- apply(n_E, 3, mean)
+
+  expect_true(sum(n_E[360:length(n_E)]) < 1e1)
+
+
+  ## Can seed a second wave
+  p <- ZamCovid_parameters(start_date,
+                           re_seed_date = c(0, 360),
+                           re_seed_value = c(0, 10))
+
+  mod <- ZamCovid$new(p, 4, n_particles)
+  end <- numeric_date("2021-12-31") / p$dt
+
+  initial <- ZamCovid_initial(mod$info(), n_particles, p)
+  mod$update_state(state = initial)
+
+  t <- seq(4, end, by = 4)
+  res <- mod$simulate(t)
+
+  n_E <- res[info$index$E, , ]
+  n_E <- apply(n_E, 3, mean)
+
+  expect_true(sum(n_E[360:length(n_E)]) > 1e3)
+
+
+  ## Can seed multiple waves
+  p <- ZamCovid_parameters(start_date,
+                           re_seed_date = c(0, 250, 500),
+                           re_seed_value = c(0, 10, 10))
+
+  mod <- ZamCovid$new(p, 4, n_particles)
+  end <- numeric_date("2021-12-31") / p$dt
+
+  initial <- ZamCovid_initial(mod$info(), n_particles, p)
+  mod$update_state(state = initial)
+
+  t <- seq(4, end, by = 4)
+  res <- mod$simulate(t)
+
+  n_E <- res[info$index$E, , ]
+  n_E <- apply(n_E, 3, mean)
+
+  expect_true(sum(n_E[500:length(n_E)]) > 1e3)
+})
+
 
 test_that("can run the particle filter on the model", {
 

@@ -14,6 +14,7 @@ ZamCovid_index <- function(info) {
   # Model states required for the particle filter to run:
   index_core <- c(infections_inc = index[["infections_inc"]],
                   reinfections_inc = index[["reinfections_inc"]],
+                  hosp_inc = index[["hosp_inc"]],
                   admitted_inc = index[["admit_conf_inc"]],
                   deaths_hosp_inc = index[["hosp_deaths_inc"]],
                   deaths_comm_inc = index[["comm_deaths_inc"]],
@@ -67,6 +68,9 @@ ZamCovid_index <- function(info) {
   index_reinf_inc_age <- calculate_index(index, "reinfections_inc_age",
                                        list(), age_suffix)
 
+  index_hosp_inc_age <- calculate_index(index, "hosp_inc_age",
+                                        list(), age_suffix)
+
   index_severity <- c(ifr = index[["ifr"]],
                       calculate_index(index, "ifr_age",
                                       list(), age_suffix))
@@ -75,10 +79,21 @@ ZamCovid_index <- function(info) {
                  calculate_index(index, "yll_age",
                                  list(), age_suffix))
 
-  index_cases <- c(calculate_index(index, "severe_age",
-                                   list(), age_suffix),
-                   calculate_index(index, "mild_age",
-                                   list(), age_suffix))
+  index_H_sev <- calculate_index(index, "H_sev_occup",
+                                 list(n_vacc_classes), age_suffix)
+
+  index_cases_sev <- calculate_index(index, "cases_age_severe",
+                                     list(), age_suffix)
+
+  index_cases_mild <- calculate_index(index, "cases_age_mild",
+                                      list(), age_suffix)
+
+  index_H_D <- calculate_index(index, "H_D_occup",
+                               list(n_vacc_classes), age_suffix)
+
+  index_outpx <- calculate_index(index, "P_mild",
+                                 list(n_vacc_classes), age_suffix)
+
 
   index_vaccinated <- calculate_index(index, "cum_n_vaccinated",
                                       list(n_vacc_classes), age_suffix)
@@ -86,7 +101,9 @@ ZamCovid_index <- function(info) {
   index_state <- c(index_core, index_save, index_S, index_R, index_D,
                    index_severity, index_vaccinated,
                    index_inf_inc_age, index_reinf_inc_age,
-                   index_yll, index_cases)
+                   index_hosp_inc_age,
+                   index_yll, index_H_sev, index_H_D, index_outpx,
+                   index_cases_sev, index_cases_mild)
 
   list(run = index_run, state = index_state)
 }

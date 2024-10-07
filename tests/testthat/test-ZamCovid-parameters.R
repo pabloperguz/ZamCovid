@@ -51,7 +51,8 @@ test_that("ZamCovid_parameters returns a list of parameters", {
       "N_tot_over15",        "N_tot_15_19",        "N_tot_20_29",
       "N_tot_30_39",         "N_tot_40_49",        "N_tot_50_plus",
       "rel_p_H_D",           "rel_p_G_D",          "rel_p_R",
-      "p_sev",               "life_exp"))
+      "rel_p_H_sev",         "rel_p_outpx",        "rel_p_H_sev_D",
+      "life_exp"))
 })
 
 
@@ -154,7 +155,8 @@ test_that("All ZamCovid progression parameters are returned as default", {
       "gamma_PCR_pre_step",     "n_gamma_PCR_pre_steps",  "gamma_PCR_pos_step",
       "n_gamma_PCR_pos_steps",  "gamma_sero_pos_step",
       "n_gamma_sero_pos_steps", "gamma_sero_pre_step",
-      "n_gamma_sero_pre_steps"))
+      "n_gamma_sero_pre_steps", "gamma_H_sev_step",        "n_gamma_H_sev_steps"
+      ))
 })
 
 
@@ -284,15 +286,17 @@ test_that("ZamCovid check severity works as expected", {
   )), "Parameter 'rel_p_hosp_if_sympt' is missing", fixed = TRUE)
 
   ## check on required parameters
-  steps <- c("p_C_step", "p_H_step", "p_H_D_step", "p_G_D_step", "p_R_step")
-  rels <- c(
-    "rel_p_sympt", "rel_p_hosp_if_sympt", "rel_p_H_D", "rel_p_G_D", "rel_p_R")
+  steps <- c("p_C_step", "p_H_step", "p_H_D_step", "p_G_D_step", "p_R_step",
+             "p_sev_step", "p_outpx_step", "p_D_hosp_step")
+  rels <- c("rel_p_sympt", "rel_p_hosp_if_sympt", "rel_p_H_D",
+            "rel_p_G_D", "rel_p_R", "rel_p_H_sev", "rel_p_outpx",
+            "rel_p_H_sev_D")
 
-  p <- vector("list", 10)
+  p <- vector("list", 16)
   names(p) <- c(steps, rels)
   ## 16 groups, 3 vacc classes
-  p[1:5] <- list(matrix(0.5, ncol = 16))
-  p[6:10] <- list(array(1, c(16, 1, 3)))
+  p[1:8] <- list(matrix(0.5, ncol = 16))
+  p[9:16] <- list(array(1, c(16, 1, 3)))
 
   p$n_groups <- 16
 

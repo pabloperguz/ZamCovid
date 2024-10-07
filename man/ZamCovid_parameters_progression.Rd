@@ -11,6 +11,7 @@ ZamCovid_parameters_progression(
   gamma_P = NULL,
   gamma_C_1 = NULL,
   gamma_C_2 = NULL,
+  gamma_H_sev = NULL,
   gamma_H_D = NULL,
   gamma_H_R = NULL,
   gamma_G_D = NULL,

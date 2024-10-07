@@ -280,24 +280,75 @@ n_p_R_steps <- user()
 
 
 p_C[, ] <- if (as.integer(step) >= n_p_C_steps)
-  min(p_C_step[n_p_C_steps, i] * rel_p_sympt[i, j], as.numeric(1)) else
-    min(p_C_step[step + 1, i] * rel_p_sympt[i, j], as.numeric(1))
+  min(p_C_step[n_p_C_steps, i] *
+        # rel_p_sympt[i, j],
+        if (j > 1) 1 - (1 - rel_p_sympt[i, j]) * voc_ve_symp else 1,
+      as.numeric(1)) else
+    min(p_C_step[step + 1, i] *
+          # rel_p_sympt[i, j],
+          if (j > 1) 1 - (1 - rel_p_sympt[i, j]) * voc_ve_symp else 1,
+        as.numeric(1))
 
 p_H[, ] <- if (as.integer(step) >= n_p_H_steps)
-  min(p_H_step[n_p_H_steps, i] * rel_p_hosp_if_sympt[i, j], as.numeric(1)) else
-    min(p_H_step[step + 1, i] * rel_p_hosp_if_sympt[i, j], as.numeric(1))
+  min(p_H_step[n_p_H_steps, i] *
+        # rel_p_hosp_if_sympt[i, j],
+        if (j > 1) 1 - (1 - rel_p_hosp_if_sympt[i, j]) * voc_ve_sev else 1,
+      as.numeric(1)) else
+    min(p_H_step[step + 1, i] *
+          # rel_p_hosp_if_sympt[i, j],
+          if (j > 1) 1 - (1 - rel_p_hosp_if_sympt[i, j]) * voc_ve_sev else 1,
+        as.numeric(1))
+
+# p_C[, ] <- if (as.integer(step) >= n_p_C_steps)
+#   min(p_C_step[n_p_C_steps, i] *
+#         if (j == 3||5) 1 - (1 - rel_p_sympt[i, j]) * voc_ve_symp / 2 else
+#           if (j == 4) 1 - (1 - rel_p_sympt[i, j]) * voc_ve_symp else 1,
+#       as.numeric(1)) else
+#         min(p_C_step[step + 1, i] *
+#               if (j == 3||5) 1 - (1 - rel_p_sympt[i, j]) * voc_ve_symp / 2 else
+#                 if (j == 4) 1 - (1 - rel_p_sympt[i, j]) * voc_ve_symp else 1,
+#             as.numeric(1))
+#
+# p_H[, ] <- if (as.integer(step) >= n_p_H_steps)
+#   min(p_H_step[n_p_H_steps, i] *
+#         if (j == 3||5) 1 - (1 - rel_p_hosp_if_sympt[i, j]) *
+#         voc_ve_sev / 2 else
+#           if (j == 4) 1 - (1 - rel_p_hosp_if_sympt[i, j]) * voc_ve_sev else 1,
+#       as.numeric(1)) else
+#         min(p_H_step[step + 1, i] *
+#               if (j == 3||5) 1 - (1 - rel_p_hosp_if_sympt[i, j]) *
+#               voc_ve_sev / 2 else
+#                 if (j == 4) 1 - (1 - rel_p_hosp_if_sympt[i, j]) *
+#               voc_ve_sev else 1,
+#             as.numeric(1))
 
 p_H_D[, ] <- if (as.integer(step) >= n_p_H_D_steps)
-  min(p_H_D_step[n_p_H_D_steps, i] * rel_p_H_D[i, j], as.numeric(1)) else
-    min(p_H_D_step[step + 1, i] * rel_p_H_D[i, j], as.numeric(1))
+  min(p_H_D_step[n_p_H_D_steps, i] *
+        # rel_p_H_D[i, j],
+      if (j > 1) 1 - (1 - rel_p_H_D[i, j]) * voc_ve_sev else 1,
+      as.numeric(1)) else
+    min(p_H_D_step[step + 1, i] *
+          # rel_p_H_D[i, j],
+          if (j > 1) 1 - (1 - rel_p_H_D[i, j]) * voc_ve_sev else 1,
+        as.numeric(1))
 
 p_G_D[, ] <- if (as.integer(step) >= n_p_G_D_steps)
-  min(p_G_D_step[n_p_G_D_steps, i] * rel_p_G_D[i, j], as.numeric(1)) else
-    min(p_G_D_step[step + 1, i] * rel_p_G_D[i, j], as.numeric(1))
+  min(p_G_D_step[n_p_G_D_steps, i] *
+        # rel_p_G_D[i, j],
+        if (j > 1) 1 - (1 - rel_p_G_D[i, j]) * voc_ve_sev else 1,
+      as.numeric(1)) else
+    min(p_G_D_step[step + 1, i] *
+          # rel_p_G_D[i, j],
+          if (j > 1) 1 - (1 - rel_p_G_D[i, j]) * voc_ve_sev else 1,
+        as.numeric(1))
 
 p_R[, ] <- if (as.integer(step) >= n_p_R_steps)
-  min(p_R_step[n_p_R_steps, i] * rel_p_R[i, j], as.numeric(1)) else
-    min(p_R_step[step + 1, i] * rel_p_R[i, j], as.numeric(1))
+  min(p_R_step[n_p_R_steps, i] *
+        rel_p_R[i, j],
+      as.numeric(1)) else
+    min(p_R_step[step + 1, i] *
+          rel_p_R[i, j],
+        as.numeric(1))
 
 p_star[] <- if (as.integer(step) >= n_p_star_steps)
   p_star_step[n_p_star_steps, i] else p_star_step[step + 1, i]
@@ -309,6 +360,24 @@ dim(cross_immunity_step) <- user()
 cross_immunity <- if (step >= length(cross_immunity_step))
   cross_immunity_step[length(cross_immunity_step)] else
     cross_immunity_step[step + 1]
+
+## Proxy Omicron VE multiplier for j = 3 (second dose protection)
+voc_ve_inf_step[] <- user()
+dim(voc_ve_inf_step) <- user()
+voc_ve_symp_step[] <- user()
+dim(voc_ve_symp_step) <- user()
+voc_ve_sev_step[] <- user()
+dim(voc_ve_sev_step) <- user()
+
+voc_ve_inf <- if (step >= length(voc_ve_inf_step))
+  voc_ve_inf_step[length(voc_ve_inf_step)] else
+    voc_ve_inf_step[step + 1]
+voc_ve_symp <- if (step >= length(voc_ve_symp_step))
+  voc_ve_symp_step[length(voc_ve_symp_step)] else
+    voc_ve_symp_step[step + 1]
+voc_ve_sev <- if (step >= length(voc_ve_sev_step))
+  voc_ve_sev_step[length(voc_ve_sev_step)] else
+    voc_ve_sev_step[step + 1]
 
 
 ## Seeding model for first epidemic wave
@@ -324,6 +393,19 @@ dim(seed_value) <- user()
 
 n_S_progress[seed_age_band, 1] <- n_S_progress[seed_age_band, 1] +
   min(S[seed_age_band, 1], seed)
+
+
+
+## Seeding other waves
+re_seed_step[] <- user()
+dim(re_seed_step) <- user()
+re_seed_rate <- if (step >= length(re_seed_step))
+  re_seed_step[length(re_seed_step)] else re_seed_step[step + 1]
+re_seed <- rpois(re_seed_rate)
+
+n_S_progress[seed_age_band, 1] <- n_S_progress[seed_age_band, 1] +
+  min(S[seed_age_band, 1], re_seed)
+
 
 
 ## Force of infection - depends on: contact matrix (m), relative infectivity
@@ -351,7 +433,12 @@ I_trans[, ] <- rel_infectivity[i, j] *
 
 s_ij[, ] <- m[i, j] * sum(I_trans[j, ])
 lambda[] <- beta * sum(s_ij[i, ])
-lambda_susc[, ] <- lambda[i] * rel_susceptibility[i, j]
+# lambda_susc[, ] <- lambda[i] * #rel_susceptibility[i, j] *
+#   if (j > 1) 1 - (1 - rel_susceptibility[i, j]) * voc_ve_inf else 1
+
+lambda_susc[, ] <- lambda[i] *
+  if (j == 3||5) 1 - (1 - rel_susceptibility[i, j]) * voc_ve_inf / 2 else
+    if (j == 4) 1 - (1 - rel_susceptibility[i, j]) * voc_ve_inf else 1
 
 beta_step[] <- user()
 dim(beta_step) <- user()
@@ -874,6 +961,9 @@ update(inf_cum_50_plus) <- inf_cum_50_plus +
   sum(infections_inc_age[11:n_groups]) - sum(reinfections_inc_age[11:n_groups])
 
 
+
+# Effective IFR inference -------------------------------------------------
+
 ## IFR trajectories
 dim(IFR_disag) <- c(n_groups, n_vacc_classes)
 dim(IFR_disag_weighted_inc) <- c(n_groups, n_vacc_classes)
@@ -901,7 +991,9 @@ update(ifr_age[]) <- sum(new_IFR_disag_weighted_inc[i, ]) /
   new_infections_inc_age[i]
 
 
-## Confirmed hospital admissions
+
+# Other state variables for post-processing -------------------------------
+
 initial(cum_admit_conf) <- 0
 delta_admit_conf <- sum(n_I_C_2_to_H_D_conf) + sum(n_I_C_2_to_H_R_conf)
 update(cum_admit_conf) <- cum_admit_conf + delta_admit_conf
@@ -910,8 +1002,6 @@ initial(admit_conf_inc) <- 0
 update(admit_conf_inc) <- if (step %% steps_per_day == 0)
   delta_admit_conf else admit_conf_inc + delta_admit_conf
 
-
-## Other state variables for post-processing
 initial(cum_deaths_hosp) <- 0
 delta_deaths_hosp <- sum(delta_D_hosp_disag)
 update(cum_deaths_hosp) <- cum_deaths_hosp + delta_deaths_hosp
@@ -930,7 +1020,9 @@ update(comm_deaths_inc) <- if (step %% steps_per_day == 0)
 
 
 
-## Baseline deaths
+
+# Model baseline mortality ------------------------------------------------
+
 base_death_step[] <- user()
 dim(base_death_step) <- user()
 base_death <- if (step >= length(base_death_step))
@@ -943,7 +1035,8 @@ initial(all_deaths_inc) <- 0
 update(all_deaths_inc) <- base_death_inc + hosp_deaths_inc + comm_deaths_inc
 
 
-## Calculate effective immunity
+# Calculate effective immunity --------------------------------------------
+
 # Weight each person in S/R by their relative susceptibility. For those in R,
 # we will further account for cross immunity.
 dim(eff_sus_S) <- c(n_groups, n_vacc_classes)
@@ -963,7 +1056,10 @@ update(protected_R_unvaccinated) <- sum(new_R[, 1]) - sum(eff_sus_R[, 1])
 update(protected_R_vaccinated) <- sum(new_R) - sum(new_R[, 1]) -
   (sum(eff_sus_R) - sum(eff_sus_R[, 1]))
 
-## Calculate years of life lost
+
+
+# Calculate years of life lost --------------------------------------------
+
 life_exp[] <- user()
 dim(life_exp) <- n_groups
 dim(delta_yll_age) <- n_groups
@@ -978,20 +1074,148 @@ delta_yll_age[] <- (sum(delta_D_hosp_disag[i, ]) +
 update(yll_age[]) <- yll_age[i] + delta_yll_age[i]
 update(yll_tot) <- yll_tot + sum(delta_yll_age[])
 
-## Calculate severe/mild for downstream YLD and cost calculation
-p_sev[] <- user()
-dim(p_sev) <- n_groups
-dim(delta_severe_age) <- n_groups
-dim(delta_mild_age) <- n_groups
-dim(severe_age) <- n_groups
-dim(mild_age) <- n_groups
 
-initial(severe_age[]) <- 0
-initial(mild_age[]) <- 0
 
-delta_severe_age[] <- sum(n_I_C_2_to_RS[i, ]) * p_sev[i] +
-  sum(n_I_C_2_to_H_R[i, ])
-delta_mild_age[] <- sum(n_I_C_2_to_RS[i, ]) * (1 - p_sev[i])
+# Healthcare parallel flow ------------------------------------------------
 
-update(severe_age[]) <- severe_age[i] + delta_severe_age[i]
-update(mild_age[]) <- mild_age[i] + delta_mild_age[i]
+## 1. Declare state variables
+update(P_H_sev_R[, , ]) <- new_P_H_sev[i, j, k]
+update(P_H_sev_D[, ,]) <- new_P_H_sev_D[i, j, k]
+update(P_H_rec[, ]) <- new_P_H_rec[i, j]
+update(P_mild[, ]) <- new_P_mild[i, j]
+
+
+## 2. Handle flows
+new_P_H_sev[, , ] <- P_H_sev_R[i, j, k] - n_P_H_sev_progress[i, j, k] +
+  (if (k == 1) n_I_C_2_to_H_sev[i, j] else n_P_H_sev_progress[i, j, k - 1])
+new_P_H_sev_D[, , ] <- P_H_sev_D[i, j, k] - n_P_H_sev_D_progress[i, j, k] +
+  (if (k == 1) n_I_C_2_to_G_D_hosp[i, j] else n_P_H_sev_D_progress[i, j, k - 1])
+new_P_H_rec[, ] <- P_H_rec[i, j] + n_P_H_sev_progress[i, j, k_H_R]
+new_P_mild[, ] <- P_mild[i, j] + n_I_C_2_to_mild[i, j]
+
+n_P_H_sev_progress[, , ] <- rbinom(P_H_sev_R[i, j, k], p_H_sev_progress)
+n_I_C_2_to_H_sev[, ] <- rbinom(n_I_C_2_to_RS[i, j], p_sev[i, j])
+n_P_H_sev_D_progress[, , ] <- rbinom(P_H_sev_D[i, j, k], p_H_D_progress)
+n_I_C_2_to_G_D_hosp[, ] <- rbinom(n_I_C_2_to_G_D[i, j], p_D_hosp[i, j])
+n_I_C_2_to_mild[, ] <- rbinom(n_I_C_2_to_RS[i, j] - n_I_C_2_to_H_sev[i, j],
+                              p_outpx[i, j])
+
+
+## 3. Calculate probabilities and gammas
+p_H_sev_progress <- 1 - exp(-gamma_H_sev * dt)
+gamma_H_sev <- if (as.integer(step) >= n_gamma_H_sev_steps)
+  gamma_H_sev_step[n_gamma_H_sev_steps] else gamma_H_sev_step[step + 1]
+
+p_sev[, ] <- if (as.integer(step) >= n_p_sev_steps)
+  min(p_sev_step[n_p_sev_steps, i] * rel_p_H_sev[i, j], as.numeric(1)) else
+    min(p_sev_step[step + 1, i] * rel_p_H_sev[i, j], as.numeric(1))
+
+p_outpx[, ] <- if(as.integer(step) >= n_p_outpx_steps)
+  min(p_outpx_step[n_p_outpx_steps, i] * rel_p_outpx[i, j], as.numeric(1)) else
+    min(p_outpx_step[step + 1, i] * rel_p_outpx[i, j], as.numeric(1))
+
+p_D_hosp[,] <- if (as.integer(step) >= n_p_D_hosp_steps)
+  min(p_D_hosp_step[n_p_D_hosp_steps, i] * rel_p_H_sev_D[i, j],
+      as.numeric(1)) else
+    min(p_D_hosp_step[step + 1, i] * rel_p_H_sev_D[i, j], as.numeric(1))
+
+
+## 4. Initialise state variables
+initial(P_H_sev_R[, , ]) <- 0
+initial(P_H_sev_D[, , ]) <- 0
+initial(P_H_rec[, ]) <- 0
+initial(P_mild[, ]) <- 0
+
+
+## 5. Declare user-user defined parameters
+gamma_H_sev_step[] <- user()
+n_gamma_H_sev_steps <- user()
+
+p_sev_step[, ] <- user()
+n_p_sev_steps <- user()
+rel_p_H_sev[, ] <- user()
+
+p_outpx_step[, ] <- user()
+n_p_outpx_steps <- user()
+rel_p_outpx[, ] <- user()
+
+p_D_hosp_step[, ] <- user()
+n_p_D_hosp_steps <- user()
+rel_p_H_sev_D[, ] <- user()
+
+
+## 6. Declare dimensions
+dim(P_H_sev_R) <- c(n_groups, n_vacc_classes, k_H_R)
+dim(new_P_H_sev) <- c(n_groups, n_vacc_classes, k_H_R)
+dim(n_P_H_sev_progress) <- c(n_groups, n_vacc_classes, k_H_R)
+dim(n_I_C_2_to_H_sev) <- c(n_groups, n_vacc_classes)
+
+dim(P_H_sev_D) <- c(n_groups, n_vacc_classes, k_H_R)
+dim(new_P_H_sev_D) <- c(n_groups, n_vacc_classes, k_H_R)
+dim(n_P_H_sev_D_progress) <- c(n_groups, n_vacc_classes, k_H_R)
+dim(n_I_C_2_to_G_D_hosp) <- c(n_groups, n_vacc_classes)
+
+dim(P_H_rec) <- c(n_groups, n_vacc_classes)
+dim(new_P_H_rec) <- c(n_groups, n_vacc_classes)
+
+dim(P_mild) <- c(n_groups, n_vacc_classes)
+dim(new_P_mild) <- c(n_groups, n_vacc_classes)
+dim(n_I_C_2_to_mild) <- c(n_groups, n_vacc_classes)
+
+dim(gamma_H_sev_step) <- n_gamma_H_sev_steps
+dim(p_D_hosp) <- c(n_groups, n_vacc_classes)
+dim(p_D_hosp_step) <- c(n_p_D_hosp_steps, n_groups)
+dim(rel_p_H_sev_D) <- c(n_groups, n_vacc_classes)
+dim(p_sev) <- c(n_groups, n_vacc_classes)
+dim(p_sev_step) <- c(n_p_sev_steps, n_groups)
+dim(rel_p_H_sev) <- c(n_groups, n_vacc_classes)
+dim(p_outpx) <- c(n_groups, n_vacc_classes)
+dim(p_outpx_step) <- c(n_p_outpx_steps, n_groups)
+dim(rel_p_outpx) <- c(n_groups, n_vacc_classes)
+
+
+## 7. Aggregate into disag and agg trajectories for post-processing
+initial(H_sev_occup[, ]) <- 0
+dim(H_sev_occup) <- c(n_groups, n_vacc_classes)
+update(H_sev_occup[, ]) <- P_H_sev_R[i, j, 1] + if (k_H_R > 1)
+  P_H_sev_R[i, j, k_H_R] else 0
+
+initial(H_D_occup[, ]) <- 0
+dim(H_D_occup) <- c(n_groups, n_vacc_classes)
+update(H_D_occup[, ]) <- P_H_sev_D[i, j, 1] + if (k_H_R > 1)
+  P_H_sev_D[i, j, k_H_R] else 0
+
+initial(cases_age_severe[]) <- 0
+dim(cases_age_severe) <- n_groups
+update(cases_age_severe[]) <- cases_age_severe[i] + sum(n_I_C_2_to_H_sev[i, ])
+
+initial(cases_age_mild[]) <- 0
+dim(cases_age_mild) <- n_groups
+update(cases_age_mild[]) <- cases_age_mild[i] + sum(n_I_C_2_to_mild[i, ])
+
+
+## 8. Output all new hospitalisations
+initial(hosp_inc) <- 0
+new_hosp_inc <- if (step %% steps_per_day == 0)
+  delta_hosp_total else hosp_inc + delta_hosp_total
+update(hosp_inc) <- new_hosp_inc
+
+
+delta_hosp[, ] <- n_I_C_2_to_H_sev[i, j] + n_I_C_2_to_G_D_hosp[i, j]
+dim(delta_hosp) <- c(n_groups, n_vacc_classes)
+delta_hosp_total <- sum(delta_hosp)
+
+
+dim(hosp_inc_age) <- n_groups
+dim(delta_hosp_age) <- n_groups
+dim(new_hosp_inc_age) <- n_groups
+
+initial(hosp_inc_age[]) <- 0
+delta_hosp_age[] <- sum(delta_hosp[i, ])
+new_hosp_inc_age[] <-
+  if (step %% steps_per_day == 0)
+    delta_hosp_age[i] else
+      hosp_inc_age[i] + delta_hosp_age[i]
+update(hosp_inc_age[]) <- new_hosp_inc_age[i]
+
+

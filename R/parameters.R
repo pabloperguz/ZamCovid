@@ -80,14 +80,19 @@ ZamCovid_parameters <- function(start_date,
                                 beta_value = NULL,
                                 base_death_date = NULL,
                                 base_death_value = NULL,
+                                re_seed_date = NULL,
+                                re_seed_value = NULL,
                                 cross_immunity_date = NULL,
                                 cross_immunity_value = NULL,
+                                voc_ve_inf = NULL,
+                                voc_ve_symp = NULL,
+                                voc_ve_sev = NULL,
+                                voc_ve_date = NULL,
                                 population = NULL,
                                 contact_matrix = NULL,
                                 N_tot = NULL,
                                 n_groups = NULL,
                                 severity = NULL,
-                                p_sev = NULL,
                                 life_exp = NULL,
                                 # disab_weight_mild = NULL,
                                 # disab_weight_sev = NULL,
@@ -185,11 +190,32 @@ ZamCovid_parameters <- function(start_date,
                                                    base_death_value %||% 0,
                                                    dt)
 
+  ## Make piece-wise constant step-function for re-seeding epidemic waves
+  re_seed_step <- parameters_piecewise_constant(re_seed_date,
+                                                re_seed_value %||% 0,
+                                                dt)
+
   ## Make piece-wise linear function of cross_immunity (proxy for VOC emergence)
   cross_immunity_step <-
     parameters_piecewise_linear(cross_immunity_date,
                                 cross_immunity_value %||% 0.95,
                                 dt)
+
+  voc_ve_inf_step <-
+    parameters_piecewise_linear(voc_ve_date,
+                                voc_ve_inf %||% 1,
+                                dt)
+
+  voc_ve_symp_step <-
+    parameters_piecewise_linear(voc_ve_date,
+                                voc_ve_symp %||% 1,
+                                dt)
+
+  voc_ve_sev_step <-
+    parameters_piecewise_linear(voc_ve_date,
+                                voc_ve_sev %||% 1,
+                                dt)
+
 
   ## Default parameters
   ret <- list(
@@ -197,7 +223,12 @@ ZamCovid_parameters <- function(start_date,
     dt = dt,
     beta_step = beta_step,
     base_death_step = base_death_step,
+    re_seed_step = re_seed_step,
     cross_immunity_step = cross_immunity_step,
+
+    voc_ve_inf_step = voc_ve_inf_step,
+    voc_ve_symp_step = voc_ve_symp_step,
+    voc_ve_sev_step = voc_ve_sev_step,
 
     m = contact_matrix,
     n_groups = n_groups, #  16 n_groups (5 year age bands and 75+)
@@ -255,21 +286,11 @@ ZamCovid_parameters <- function(start_date,
   ret$rel_p_G_D <- rel_p_death
   ret$rel_p_R <- array(1, c(ret$n_groups, vaccination$n_vacc_classes))
 
+  ret$rel_p_H_sev <- ret$rel_p_hosp_if_sympt
+  ret$rel_p_outpx <- ret$rel_p_sympt
+  ret$rel_p_H_sev_D <- array(1, c(ret$n_groups, vaccination$n_vacc_classes))
+
   ## Add pars to calculate YLL and YLD
-  if(is.null(p_sev)) {
-    ret$p_sev <- c(0.00446541463823346, 0.000799855237393074,
-                   0.000995168786628034, 0.00195362151389054,
-                   0.00386009161526863, 0.00570852834531752,
-                   0.00803051786136823, 0.00762024179033717,
-                   0.00859488534589212, 0.010046317721102,
-                   0.0169734086438121, 0.0229916518340002,
-                   0.0321514851105156, 0.0407796929489422,
-                   0.0733279215949092, 0.126136731554533)
-  } else {
-    ret$p_sev <- p_sev
-  }
-
-
   if(is.null(life_exp)) {
     ret$life_exp <- c(63.40, 61.59, 56.99, 52.22, 47.62, 43.14, 38.73,
                       34.50, 30.46, 26.66, 23.03, 19.62, 16.39, 13.41,
@@ -287,6 +308,7 @@ ZamCovid_parameters <- function(start_date,
   #                                 0.051,
   #                                 disab_weight_mild)
 
+  # browser()
   check_severity(ret)
 }
 
@@ -357,6 +379,7 @@ ZamCovid_parameters_progression <- function(dt,
                                             gamma_P = NULL,
                                             gamma_C_1 = NULL,
                                             gamma_C_2 = NULL,
+                                            gamma_H_sev = NULL,
                                             gamma_H_D = NULL,
                                             gamma_H_R = NULL,
                                             gamma_G_D = NULL,
@@ -386,6 +409,7 @@ ZamCovid_parameters_progression <- function(dt,
               gamma_C_2 = 1 / 1.86,
               gamma_H_D = 1 / 5.2,
               gamma_H_R = 1 / 10.7,
+              gamma_H_sev = 1 / 10.7,
               gamma_G_D = 1 / (3 / 2),
               gamma_R = 1 / (3 * 365),
               gamma_U = 3 / 10,
@@ -402,6 +426,7 @@ ZamCovid_parameters_progression <- function(dt,
                               C_2 = gamma_C_2,
                               H_D = gamma_H_D,
                               H_R = gamma_H_R,
+                              H_sev = gamma_H_sev,
                               G_D = gamma_G_D,
                               U = gamma_U,
                               PCR_pre = gamma_PCR_pre,
@@ -518,7 +543,7 @@ ZamCovid_parameters_observation <- function(exp_noise = 1e6) {
   ## Note alphas should be fitted observation probabilities; so 1 / alpha in
   ## dnbinom will be `size` (i.e. we assume overdispersion, hence not using
   ## Poisson for observation counts).
-  ## Also note we assume perfect reporting here (phis = 1), but "inflate" counts
+  ## Also note we assume perfect reporting here (phis = 1), but "inflate" counts
   ## were relevant in ZamCovid-outputs/src/ZamCovid_parameters for now
   list(
     phi_death_all = 1,
@@ -582,7 +607,10 @@ ZamCovid_parameters_severity <- function(dt,
                                          p_G_D = NULL,
                                          p_R = NULL,
                                          p_star = NULL,
-                                         p_sero_pos = NULL) {
+                                         p_sero_pos = NULL,
+                                         p_sev = NULL,
+                                         p_outpx = NULL,
+                                         p_D_hosp = NULL) {
 
   severity <- process_parameters_severity(severity)
 
@@ -591,7 +619,10 @@ ZamCovid_parameters_severity <- function(dt,
                                 H_D = p_H_D,
                                 G_D = p_G_D,
                                 R = p_R,
-                                star = p_star)
+                                star = p_star,
+                                sev = p_sev,
+                                outpx = p_outpx,
+                                D_hosp = p_D_hosp)
 
   get_p_step <- function(x, name) {
 
@@ -1114,7 +1145,10 @@ process_parameters_severity <- function(params) {
     p_sero_pos = "p_sero_pos",
     p_G_D = "p_G_D",
     p_R = "p_R",
-    p_star = "p_star")
+    p_star = "p_star",
+    p_sev = "p_sev",
+    p_outpx = "p_outpx",
+    p_D_hosp = "p_D_hosp")
   data <- rename(data, required, names(required))
 
   list(
@@ -1124,7 +1158,10 @@ process_parameters_severity <- function(params) {
     p_H_D = data[["p_H_D"]],
     p_sero_pos = data[["p_sero_pos"]],
     p_H = data[["p_H"]],
-    p_R = data[["p_R"]])
+    p_R = data[["p_R"]],
+    p_sev = data[["p_sev"]],
+    p_outpx = data[["p_outpx"]],
+    p_D_hosp = data[["p_D_hosp"]])
 }
 
 
@@ -1144,9 +1181,11 @@ check_severity <- function(pars) {
     assert_non_negative(pars[[p_step]], p_step)
   }
 
-  step_pars <- c("p_C_step", "p_H_step", "p_H_D_step", "p_G_D_step", "p_R_step")
+  step_pars <- c("p_C_step", "p_H_step", "p_H_D_step", "p_G_D_step", "p_R_step",
+                 "p_sev_step", "p_outpx_step", "p_D_hosp_step")
   rel_pars <- c("rel_p_sympt", "rel_p_hosp_if_sympt", "rel_p_H_D",
-                "rel_p_G_D", "rel_p_R")
+                "rel_p_G_D", "rel_p_R", "rel_p_H_sev", "rel_p_outpx",
+                "rel_p_H_sev_D")
 
   Map(check_parameters,
       p_step = step_pars,
